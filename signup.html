@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create Account — VORNIX</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;500;600;700;900&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+.auth-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:80px var(--gutter) 48px}
+.auth-card{width:100%;max-width:480px;background:var(--bg-card);border:1px solid var(--b-1);backdrop-filter:blur(20px);position:relative;z-index:10}
+.auth-card::before{content:'';position:absolute;inset:0;top:auto;height:2px;background:linear-gradient(90deg,transparent,var(--cr),transparent)}
+.auth-head{padding:28px 32px 20px;border-bottom:1px solid var(--b-1);text-align:center}
+.auth-logotype{font-family:var(--ff-display);font-size:24px;letter-spacing:4px;color:var(--t-white)}
+.auth-logotype span{color:var(--cr)}
+.auth-tag{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--t-3);font-family:var(--ff-ui);margin-top:4px}
+.auth-body{padding:28px 32px 32px}
+.auth-eyebrow{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--cr);font-family:var(--ff-ui);margin-bottom:8px}
+.auth-heading{font-family:var(--ff-display);font-size:32px;letter-spacing:2px;color:var(--t-white);margin-bottom:6px;line-height:1}
+.auth-sub{font-size:13px;color:var(--t-2);margin-bottom:24px;line-height:1.6}
+.f-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.f-group{margin-bottom:16px}
+.f-label{display:block;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--t-2);font-family:var(--ff-ui);margin-bottom:7px}
+.f-input{width:100%;background:var(--bg-2);border:1px solid var(--b-1);color:var(--t-1);font-family:var(--ff-body);font-size:14px;padding:12px 14px;outline:none;transition:border-color .2s}
+.f-input:focus{border-color:rgba(184,0,15,.4)}
+.f-input::placeholder{color:var(--t-3)}
+.f-input.err{border-color:var(--cr)}
+select.f-input{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='%23343654'%3E%3Cpath d='M0 0l5 6 5-6z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;-webkit-appearance:none;appearance:none}
+.a-btn{width:100%;background:var(--cr);color:#fff;border:none;font-family:var(--ff-ui);font-size:14px;font-weight:700;letter-spacing:3px;text-transform:uppercase;padding:15px;cursor:pointer;transition:background .2s;margin-top:6px;clip-path:polygon(10px 0%,100% 0%,calc(100% - 10px) 100%,0% 100%)}
+.a-btn:hover:not(:disabled){background:var(--cr-hi)}
+.a-btn:disabled{opacity:.5;cursor:not-allowed}
+.a-sep{text-align:center;font-size:11px;color:var(--t-3);margin:16px 0;position:relative}
+.a-sep::before,.a-sep::after{content:'';position:absolute;top:50%;width:44%;height:1px;background:var(--b-1)}
+.a-sep::before{left:0}.a-sep::after{right:0}
+.a-foot{text-align:center;font-size:13px;color:var(--t-2);margin-top:12px}
+.a-foot a{color:var(--cr);text-decoration:none}
+.a-foot a:hover{text-decoration:underline}
+.msg{font-size:13px;padding:12px 16px;margin-bottom:14px;display:none;line-height:1.5}
+.msg.show{display:block}
+.msg-err{background:rgba(184,0,15,.1);border:1px solid rgba(184,0,15,.25);color:#ff8080}
+.msg-ok{background:rgba(23,149,106,.1);border:1px solid rgba(23,149,106,.25);color:#4ade80}
+.terms-line{font-size:11px;color:var(--t-3);text-align:center;margin-top:14px;line-height:1.6}
+.terms-line a{color:var(--t-2)}
+.pw-strength{height:3px;background:var(--bg-3);margin-top:6px;overflow:hidden}
+.pw-bar{height:100%;width:0;transition:width .3s,background .3s}
+.ref-badge{background:rgba(23,149,106,.1);border:1px solid rgba(23,149,106,.25);color:#4ade80;font-size:11px;padding:6px 12px;margin-bottom:14px;display:none;font-family:var(--ff-mono)}
+.ref-badge.show{display:block}
+.perks{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:22px}
+.perk{background:var(--bg-2);border:1px solid var(--b-1);padding:10px 12px;font-size:11px;color:var(--t-2);font-family:var(--ff-ui);letter-spacing:.5px}
+.perk strong{display:block;font-size:14px;color:var(--t-white);font-family:var(--ff-display);letter-spacing:2px;margin-bottom:2px}
+@keyframes ld{0%,100%{opacity:1}50%{opacity:.3}}
+.spin::after{content:'...';display:inline-block;animation:ld 1s infinite}
+@media(max-width:480px){.f-row{grid-template-columns:1fr}.perks{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="cursor" aria-hidden="true"></div>
+<div class="cursor-ring" aria-hidden="true"></div>
+<canvas id="bg-canvas" aria-hidden="true"></canvas>
+<div id="bg-veil" aria-hidden="true"></div>
+
+<nav class="nav" role="navigation">
+  <div class="nav__logo" onclick="location.href='index.html'" role="button" tabindex="0">
+    <svg class="nav__logo-svg" viewBox="0 0 172 38" fill="none">
+      <defs>
+        <linearGradient id="lw" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FFF" stop-opacity=".95"/><stop offset="100%" stop-color="#8890AA"/></linearGradient>
+        <linearGradient id="lr" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#E8001A"/><stop offset="100%" stop-color="#7A0008"/></linearGradient>
+        <linearGradient id="lgr" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#22B972"/><stop offset="100%" stop-color="#0E5E3A"/></linearGradient>
+        <filter id="gr"><feGaussianBlur stdDeviation="1" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      </defs>
+      <g filter="url(#gr)">
+        <rect x="1" y="14" width="5" height="13" fill="url(#lr)" rx=".3"/>
+        <line x1="3.5" y1="8" x2="3.5" y2="14" stroke="#B8000F" stroke-width="1.2" opacity=".7"/>
+        <line x1="3.5" y1="27" x2="3.5" y2="32" stroke="#B8000F" stroke-width="1.2" opacity=".5"/>
+        <rect x="9" y="18" width="5" height="7" fill="rgba(255,255,255,.08)" rx=".3"/>
+        <rect x="17" y="11" width="5" height="14" fill="url(#lgr)" rx=".3"/>
+      </g>
+      <path d="M30 7L38 31L46 7" stroke="url(#lw)" stroke-width="2.8" stroke-linecap="round" fill="none"/>
+      <ellipse cx="56.5" cy="19" rx="7" ry="12" stroke="url(#lw)" stroke-width="2.7" fill="none"/>
+      <path d="M68 7v24M68 7h9c3 0 5 2.5 5 6s-2 6-5 6H68M76 19l7.5 12" stroke="url(#lw)" stroke-width="2.7" stroke-linecap="round" fill="none"/>
+      <path d="M88 31V7L102 31V7" stroke="url(#lw)" stroke-width="2.7" stroke-linecap="round" fill="none"/>
+      <line x1="108" y1="7" x2="108" y2="31" stroke="url(#lw)" stroke-width="2.7" stroke-linecap="round"/>
+      <path d="M114 7l13 24M127 7l-13 24" stroke="url(#lr)" stroke-width="2.8" stroke-linecap="round" filter="url(#gr)"/>
+      <line x1="30" y1="36" x2="72" y2="36" stroke="rgba(184,0,15,.7)" stroke-width="1.4"/>
+    </svg>
+  </div>
+  <div class="nav__right">
+    <a href="login.html" style="font-family:var(--ff-ui);font-size:12px;letter-spacing:2px;color:var(--t-2);text-decoration:none;text-transform:uppercase;margin-right:20px">Sign In</a>
+    <button class="nav__cta" onclick="location.href='index.html#challenges'">View Plans</button>
+  </div>
+</nav>
+
+<div class="auth-wrap">
+  <div class="auth-card">
+    <div class="auth-head">
+      <div class="auth-logotype">VORN<span>IX</span></div>
+      <div class="auth-tag">Create Your Trader Account</div>
+    </div>
+    <div class="auth-body">
+      <div class="auth-eyebrow">// New Account</div>
+      <div class="auth-heading">JOIN VORNIX</div>
+      <div class="auth-sub">Get funded up to $100,000. Keep up to 95% of your profits.</div>
+
+      <!-- Perks strip -->
+      <div class="perks">
+        <div class="perk"><strong>95%</strong>Max profit split</div>
+        <div class="perk"><strong>$100K</strong>Max capital</div>
+        <div class="perk"><strong>Day 1</strong>Withdrawals</div>
+        <div class="perk"><strong>4</strong>Challenge types</div>
+      </div>
+
+      <!-- Affiliate referral badge -->
+      <div class="ref-badge" id="ref-badge"></div>
+
+      <div class="msg msg-err" id="err"></div>
+      <div class="msg msg-ok"  id="ok"></div>
+
+      <div class="f-row">
+        <div class="f-group">
+          <label class="f-label" for="fn">First Name</label>
+          <input class="f-input" type="text" id="fn" placeholder="Jatin" autocomplete="given-name">
+        </div>
+        <div class="f-group">
+          <label class="f-label" for="ln">Last Name</label>
+          <input class="f-input" type="text" id="ln" placeholder="Sharma" autocomplete="family-name">
+        </div>
+      </div>
+
+      <div class="f-group">
+        <label class="f-label" for="em">Email Address</label>
+        <input class="f-input" type="email" id="em" placeholder="trader@email.com" autocomplete="email">
+      </div>
+
+      <div class="f-group">
+        <label class="f-label" for="country">Country</label>
+        <select class="f-input" id="country">
+          <option value="">Select your country</option>
+          <option value="IN" selected>India</option>
+          <option value="PK">Pakistan</option>
+          <option value="BD">Bangladesh</option>
+          <option value="NG">Nigeria</option>
+          <option value="PH">Philippines</option>
+          <option value="ID">Indonesia</option>
+          <option value="BR">Brazil</option>
+          <option value="EG">Egypt</option>
+          <option value="KE">Kenya</option>
+          <option value="ZA">South Africa</option>
+          <option value="GH">Ghana</option>
+          <option value="MY">Malaysia</option>
+          <option value="TH">Thailand</option>
+          <option value="VN">Vietnam</option>
+          <option value="AE">UAE</option>
+          <option value="SA">Saudi Arabia</option>
+          <option value="GB">United Kingdom</option>
+          <option value="US">United States</option>
+          <option value="CA">Canada</option>
+          <option value="AU">Australia</option>
+          <option value="DE">Germany</option>
+          <option value="FR">France</option>
+          <option value="OTHER">Other</option>
+        </select>
+      </div>
+
+      <div class="f-group">
+        <label class="f-label" for="pw">Password</label>
+        <input class="f-input" type="password" id="pw" placeholder="Minimum 8 characters" autocomplete="new-password" oninput="checkPw(this.value)">
+        <div class="pw-strength"><div class="pw-bar" id="pw-bar"></div></div>
+      </div>
+
+      <div class="f-group">
+        <label class="f-label" for="pw2">Confirm Password</label>
+        <input class="f-input" type="password" id="pw2" placeholder="Repeat password" autocomplete="new-password">
+      </div>
+
+      <div class="f-group">
+        <label class="f-label" for="ref">Referral Code (optional)</label>
+        <input class="f-input" type="text" id="ref" placeholder="e.g. AB12CD34" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase()">
+      </div>
+
+      <button class="a-btn" id="btn" onclick="doSignup()">Create Account →</button>
+
+      <div class="terms-line">
+        By registering you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+      </div>
+      <div class="a-sep">or</div>
+      <div class="a-foot">Already have an account? <a href="login.html">Sign in →</a></div>
+      <div class="a-foot" style="margin-top:10px"><a href="index.html" style="color:var(--t-3);font-size:12px">← Back to website</a></div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="supabase.js"></script>
+<script src="app.js"></script>
+<script>
+// Redirect if already logged in
+(async()=>{ if(await VornixDB.Auth.isLoggedIn()) location.href='dashboard.html'; })();
+
+// Show referral badge if came via affiliate link
+const refCode = VornixDB.Affiliates.captureRef() || new URLSearchParams(location.search).get('ref');
+if(refCode){
+  const badge = document.getElementById('ref-badge');
+  badge.textContent = '✓ Referral code applied: ' + refCode;
+  badge.classList.add('show');
+  document.getElementById('ref').value = refCode;
+}
+
+function checkPw(v){
+  const bar = document.getElementById('pw-bar');
+  let strength = 0;
+  if(v.length >= 8)  strength++;
+  if(v.length >= 12) strength++;
+  if(/[A-Z]/.test(v)) strength++;
+  if(/[0-9]/.test(v)) strength++;
+  if(/[^A-Za-z0-9]/.test(v)) strength++;
+  const pct   = (strength / 5) * 100;
+  const color = strength <= 1 ? '#B8000F' : strength <= 3 ? '#C4982A' : '#17956A';
+  bar.style.width    = pct + '%';
+  bar.style.background = color;
+}
+
+async function doSignup(){
+  const fn   = document.getElementById('fn').value.trim();
+  const ln   = document.getElementById('ln').value.trim();
+  const em   = document.getElementById('em').value.trim();
+  const cty  = document.getElementById('country').value;
+  const pw   = document.getElementById('pw').value;
+  const pw2  = document.getElementById('pw2').value;
+  const ref  = document.getElementById('ref').value.trim();
+  const btn  = document.getElementById('btn');
+  const err  = document.getElementById('err');
+  const ok   = document.getElementById('ok');
+  err.classList.remove('show'); ok.classList.remove('show');
+
+  // Validation
+  if(!fn||!ln)   { showErr(err,'Please enter your full name.'); return; }
+  if(!em)        { showErr(err,'Please enter your email address.'); return; }
+  if(!cty)       { showErr(err,'Please select your country.'); return; }
+  if(pw.length<8){ showErr(err,'Password must be at least 8 characters.'); return; }
+  if(pw!==pw2)   { showErr(err,'Passwords do not match.'); return; }
+
+  btn.disabled=true; btn.innerHTML='<span class="spin">Creating account</span>';
+
+  const fullName = fn + ' ' + ln;
+  const { data, error } = await VornixDB.Auth.signUp(em, pw, fullName);
+
+  if(error){
+    btn.disabled=false; btn.innerHTML='Create Account →';
+    const m = error.message.includes('already') ? 'An account with this email already exists. <a href="login.html" style="color:#ff8080">Sign in instead →</a>' : error.message;
+    err.innerHTML = m; err.classList.add('show'); return;
+  }
+
+  // Update profile with extra fields
+  if(data?.user){
+    await VornixDB.Profiles.update(data.user.id, {
+      full_name:    fullName,
+      country:      cty,
+      referred_by:  ref || null,
+    });
+  }
+
+  btn.disabled=false; btn.innerHTML='✓ Account Created!';
+  ok.innerHTML = 'Account created! <strong>Check your email</strong> to confirm your address, then <a href="login.html" style="color:#4ade80">sign in here →</a>';
+  ok.classList.add('show');
+
+  // Auto-redirect after 4s if email confirmation not required
+  setTimeout(async()=>{
+    if(await VornixDB.Auth.isLoggedIn()) location.href='dashboard.html';
+  }, 2000);
+}
+
+function showErr(el,msg){ el.innerHTML=msg; el.classList.add('show'); }
+</script>
+</body>
+</html>

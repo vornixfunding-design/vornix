@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login — VORNIX</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;500;600;700;900&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+.auth-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:80px var(--gutter) 48px}
+.auth-card{width:100%;max-width:440px;background:var(--bg-card);border:1px solid var(--b-1);backdrop-filter:blur(20px);position:relative;z-index:10}
+.auth-card::before{content:'';position:absolute;inset:0;top:auto;height:2px;background:linear-gradient(90deg,transparent,var(--cr),transparent)}
+.auth-head{padding:32px 32px 24px;border-bottom:1px solid var(--b-1);text-align:center}
+.auth-logotype{font-family:var(--ff-display);font-size:26px;letter-spacing:4px;color:var(--t-white)}
+.auth-logotype span{color:var(--cr)}
+.auth-tag{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--t-3);font-family:var(--ff-ui);margin-top:4px}
+.auth-body{padding:32px}
+.auth-eyebrow{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--cr);font-family:var(--ff-ui);margin-bottom:10px}
+.auth-heading{font-family:var(--ff-display);font-size:34px;letter-spacing:2px;color:var(--t-white);margin-bottom:28px;line-height:1}
+.f-group{margin-bottom:18px}
+.f-label{display:block;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--t-2);font-family:var(--ff-ui);margin-bottom:7px}
+.f-input{width:100%;background:var(--bg-2);border:1px solid var(--b-1);color:var(--t-1);font-family:var(--ff-body);font-size:14px;padding:13px 16px;outline:none;transition:border-color .2s;-webkit-appearance:none}
+.f-input:focus{border-color:rgba(184,0,15,.4)}
+.f-input::placeholder{color:var(--t-3)}
+.f-input.err{border-color:var(--cr)}
+.f-hint{font-size:11px;color:var(--t-3);margin-top:5px;text-align:right;cursor:pointer}
+.f-hint:hover{color:var(--cr)}
+.a-btn{width:100%;background:var(--cr);color:#fff;border:none;font-family:var(--ff-ui);font-size:14px;font-weight:700;letter-spacing:3px;text-transform:uppercase;padding:15px;cursor:pointer;transition:background .2s;margin-top:8px;clip-path:polygon(10px 0%,100% 0%,calc(100% - 10px) 100%,0% 100%)}
+.a-btn:hover:not(:disabled){background:var(--cr-hi)}
+.a-btn:disabled{opacity:.5;cursor:not-allowed}
+.a-sep{text-align:center;font-size:11px;color:var(--t-3);margin:18px 0;position:relative}
+.a-sep::before,.a-sep::after{content:'';position:absolute;top:50%;width:44%;height:1px;background:var(--b-1)}
+.a-sep::before{left:0}.a-sep::after{right:0}
+.a-foot{text-align:center;font-size:13px;color:var(--t-2);margin-top:14px}
+.a-foot a{color:var(--cr);text-decoration:none}
+.a-foot a:hover{color:var(--cr-hi);text-decoration:underline}
+.msg{font-size:13px;padding:12px 16px;margin-bottom:16px;display:none;line-height:1.5}
+.msg.show{display:block}
+.msg-err{background:rgba(184,0,15,.1);border:1px solid rgba(184,0,15,.25);color:#ff8080}
+.msg-ok{background:rgba(23,149,106,.1);border:1px solid rgba(23,149,106,.25);color:#4ade80}
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;align-items:center;justify-content:center;padding:20px}
+.overlay.show{display:flex}
+@keyframes ld{0%,100%{opacity:1}50%{opacity:.3}}
+.spin::after{content:'...';display:inline-block;animation:ld 1s infinite}
+</style>
+</head>
+<body>
+<div class="cursor" aria-hidden="true"></div>
+<div class="cursor-ring" aria-hidden="true"></div>
+<canvas id="bg-canvas" aria-hidden="true"></canvas>
+<div id="bg-veil" aria-hidden="true"></div>
+
+<nav class="nav" role="navigation">
+  <div class="nav__logo" onclick="location.href='index.html'" role="button" tabindex="0">
+    <svg class="nav__logo-svg" viewBox="0 0 172 38" fill="none">
+      <defs>
+        <linearGradient id="lw" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FFF" stop-opacity=".95"/><stop offset="100%" stop-color="#8890AA"/></linearGradient>
+        <linearGradient id="lr" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#E8001A"/><stop offset="100%" stop-color="#7A0008"/></linearGradient>
+        <linearGradient id="lgr" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#22B972"/><stop offset="100%" stop-color="#0E5E3A"/></linearGradient>
+        <filter id="gr"><feGaussianBlur stdDeviation="1" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      </defs>
+      <g filter="url(#gr)">
+        <rect x="1" y="14" width="5" height="13" fill="url(#lr)" rx=".3"/>
+        <line x1="3.5" y1="8" x2="3.5" y2="14" stroke="#B8000F" stroke-width="1.2" opacity=".7"/>
+        <line x1="3.5" y1="27" x2="3.5" y2="32" stroke="#B8000F" stroke-width="1.2" opacity=".5"/>
+        <rect x="9" y="18" width="5" height="7" fill="rgba(255,255,255,.08)" rx=".3"/>
+        <rect x="17" y="11" width="5" height="14" fill="url(#lgr)" rx=".3"/>
+      </g>
+      <path d="M30 7L38 31L46 7" stroke="url(#lw)" stroke-width="2.8" stroke-linecap="round" fill="none"/>
+      <ellipse cx="56.5" cy="19" rx="7" ry="12" stroke="url(#lw)" stroke-width="2.7" fill="none"/>
+      <path d="M68 7v24M68 7h9c3 0 5 2.5 5 6s-2 6-5 6H68M76 19l7.5 12" stroke="url(#lw)" stroke-width="2.7" stroke-linecap="round" fill="none"/>
+      <path d="M88 31V7L102 31V7" stroke="url(#lw)" stroke-width="2.7" stroke-linecap="round" fill="none"/>
+      <line x1="108" y1="7" x2="108" y2="31" stroke="url(#lw)" stroke-width="2.7" stroke-linecap="round"/>
+      <path d="M114 7l13 24M127 7l-13 24" stroke="url(#lr)" stroke-width="2.8" stroke-linecap="round" filter="url(#gr)"/>
+      <line x1="30" y1="36" x2="72" y2="36" stroke="rgba(184,0,15,.7)" stroke-width="1.4"/>
+    </svg>
+  </div>
+  <div class="nav__right">
+    <a href="signup.html" style="font-family:var(--ff-ui);font-size:12px;letter-spacing:2px;color:var(--t-2);text-decoration:none;text-transform:uppercase;margin-right:24px;display:none" id="hdr-signup">New Account</a>
+    <button class="nav__cta" onclick="location.href='signup.html'">Get Funded</button>
+  </div>
+</nav>
+
+<div class="auth-wrap">
+  <div class="auth-card">
+    <div class="auth-head">
+      <div class="auth-logotype">VORN<span>IX</span></div>
+      <div class="auth-tag">Trader Portal Access</div>
+    </div>
+    <div class="auth-body">
+      <div class="auth-eyebrow">// Sign In</div>
+      <div class="auth-heading">WELCOME BACK</div>
+
+      <div class="msg msg-err" id="err"></div>
+      <div class="msg msg-ok"  id="ok"></div>
+
+      <div class="f-group">
+        <label class="f-label" for="em">Email Address</label>
+        <input class="f-input" type="email" id="em" placeholder="trader@email.com" autocomplete="email">
+      </div>
+      <div class="f-group">
+        <label class="f-label" for="pw">Password</label>
+        <input class="f-input" type="password" id="pw" placeholder="••••••••" autocomplete="current-password">
+        <div class="f-hint" onclick="showReset()">Forgot password?</div>
+      </div>
+
+      <button class="a-btn" id="btn" onclick="doLogin()">Sign In →</button>
+
+      <div class="a-sep">or</div>
+      <div class="a-foot">No account yet? <a href="signup.html">Register free →</a></div>
+      <div class="a-foot" style="margin-top:10px"><a href="index.html" style="color:var(--t-3);font-size:12px">← Back to website</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- Reset Password Overlay -->
+<div class="overlay" id="reset-overlay">
+  <div class="auth-card" style="max-width:400px">
+    <div class="auth-head">
+      <div class="auth-logotype" style="font-size:20px">Reset Password</div>
+    </div>
+    <div class="auth-body">
+      <p style="font-size:13px;color:var(--t-2);margin-bottom:18px;line-height:1.6">Enter your email address and we'll send you a password reset link.</p>
+      <div class="msg msg-err" id="r-err"></div>
+      <div class="msg msg-ok"  id="r-ok"></div>
+      <div class="f-group">
+        <label class="f-label" for="r-em">Email Address</label>
+        <input class="f-input" type="email" id="r-em" placeholder="trader@email.com">
+      </div>
+      <button class="a-btn" id="r-btn" onclick="doReset()">Send Reset Link →</button>
+      <div class="a-foot" style="margin-top:14px"><a onclick="hideReset()" style="color:var(--t-3);cursor:pointer;font-size:12px">← Cancel</a></div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="supabase.js"></script>
+<script src="app.js"></script>
+<script>
+(async()=>{ if(await VornixDB.Auth.isLoggedIn()) location.href='dashboard.html'; })();
+document.getElementById('hdr-signup').style.display='block';
+
+document.addEventListener('DOMContentLoaded',()=>{
+  document.getElementById('pw')?.addEventListener('keydown',e=>{ if(e.key==='Enter') doLogin(); });
+  document.getElementById('em')?.addEventListener('keydown',e=>{ if(e.key==='Enter') document.getElementById('pw').focus(); });
+  document.getElementById('r-em')?.addEventListener('keydown',e=>{ if(e.key==='Enter') doReset(); });
+});
+
+async function doLogin(){
+  const em=document.getElementById('em').value.trim();
+  const pw=document.getElementById('pw').value;
+  const btn=document.getElementById('btn');
+  const err=document.getElementById('err');
+  err.classList.remove('show');
+  if(!em||!pw){ showErr(err,'Please enter your email and password.'); return; }
+  btn.disabled=true; btn.innerHTML='<span class="spin">Signing in</span>';
+  const {data,error}=await VornixDB.Auth.signIn(em,pw);
+  if(error){
+    btn.disabled=false; btn.innerHTML='Sign In →';
+    const m=error.message.toLowerCase().includes('invalid')?'Incorrect email or password.':error.message;
+    showErr(err,m); return;
+  }
+  btn.innerHTML='✓ Success — Redirecting...';
+  location.href='dashboard.html';
+}
+
+function showReset(){ document.getElementById('reset-overlay').classList.add('show'); }
+function hideReset(){ document.getElementById('reset-overlay').classList.remove('show'); document.getElementById('r-err').classList.remove('show'); document.getElementById('r-ok').classList.remove('show'); }
+
+async function doReset(){
+  const em=document.getElementById('r-em').value.trim();
+  const btn=document.getElementById('r-btn');
+  const err=document.getElementById('r-err'); const ok=document.getElementById('r-ok');
+  err.classList.remove('show'); ok.classList.remove('show');
+  if(!em){ showErr(err,'Please enter your email address.'); return; }
+  btn.disabled=true; btn.innerHTML='<span class="spin">Sending</span>';
+  const {error}=await VornixDB.Auth.resetPassword(em);
+  btn.disabled=false; btn.innerHTML='Send Reset Link →';
+  if(error){ showErr(err,error.message); return; }
+  ok.textContent='Reset link sent! Check your email inbox (and spam folder).';
+  ok.classList.add('show');
+}
+function showErr(el,msg){ el.textContent=msg; el.classList.add('show'); }
+</script>
+</body>
+</html>

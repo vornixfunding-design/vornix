@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard — VORNIX</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;500;600;700;900&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+/* ── Layout ── */
+.db-wrap{min-height:100vh;padding-top:var(--nav-h)}
+.db-inner{max-width:1200px;margin:0 auto;padding:var(--s4) var(--gutter) var(--s8)}
+
+/* ── Top bar ── */
+.db-topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--s4);flex-wrap:wrap;gap:var(--s2)}
+.db-greet{font-family:var(--ff-display);font-size:28px;letter-spacing:2px;color:var(--t-white)}
+.db-greet span{color:var(--cr)}
+.db-date{font-size:11px;color:var(--t-3);font-family:var(--ff-mono);letter-spacing:1px}
+
+/* ── Tabs ── */
+.db-tabs{display:flex;gap:2px;margin-bottom:var(--s4);border-bottom:1px solid var(--b-1)}
+.db-tab{font-family:var(--ff-ui);font-size:12px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--t-3);padding:10px 18px;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .2s}
+.db-tab:hover{color:var(--t-2)}
+.db-tab.active{color:var(--cr);border-bottom-color:var(--cr)}
+.db-panel{display:none}.db-panel.active{display:block}
+
+/* ── Stat cards ── */
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--s2);margin-bottom:var(--s4)}
+.stat-card{background:var(--bg-card);border:1px solid var(--b-1);padding:var(--s2) var(--s3);position:relative;overflow:hidden}
+.stat-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--cr-border)}
+.stat-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--t-3);font-family:var(--ff-ui);margin-bottom:8px}
+.stat-value{font-family:var(--ff-display);font-size:28px;letter-spacing:1px;color:var(--t-white);line-height:1}
+.stat-value.pos{color:var(--pos)}
+.stat-value.neg{color:var(--cr)}
+.stat-sub{font-size:11px;color:var(--t-3);margin-top:5px;font-family:var(--ff-mono)}
+
+/* ── Challenge cards ── */
+.ch-grid{display:grid;gap:var(--s2)}
+.ch-card{background:var(--bg-card);border:1px solid var(--b-1);padding:var(--s3);position:relative}
+.ch-card.active-ch{border-color:rgba(23,149,106,.3)}
+.ch-card.active-ch::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--pos)}
+.ch-card.funded-ch{border-color:rgba(196,152,42,.3)}
+.ch-card.funded-ch::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--gd)}
+.ch-card.failed-ch{border-color:rgba(184,0,15,.2)}
+.ch-card.failed-ch::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--cr)}
+.ch-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:var(--s2);gap:var(--s2);flex-wrap:wrap}
+.ch-title{font-family:var(--ff-display);font-size:20px;letter-spacing:2px;color:var(--t-white)}
+.ch-meta{font-size:11px;color:var(--t-3);font-family:var(--ff-mono);margin-top:4px}
+.badge{display:inline-block;font-family:var(--ff-ui);font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:4px 10px}
+.badge-active{background:rgba(23,149,106,.15);color:#4ade80;border:1px solid rgba(23,149,106,.3)}
+.badge-pending{background:rgba(196,152,42,.1);color:#f4c430;border:1px solid rgba(196,152,42,.25)}
+.badge-funded{background:rgba(196,152,42,.15);color:var(--gd);border:1px solid var(--gd-border)}
+.badge-failed{background:rgba(184,0,15,.1);color:#ff8080;border:1px solid var(--cr-border)}
+.badge-waiting{background:rgba(255,255,255,.05);color:var(--t-2);border:1px solid var(--b-1)}
+.ch-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--s1);margin-bottom:var(--s2)}
+.ch-stat{background:var(--bg-2);padding:10px 12px}
+.ch-stat-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--t-3);font-family:var(--ff-ui);margin-bottom:4px}
+.ch-stat-val{font-family:var(--ff-mono);font-size:14px;color:var(--t-1)}
+.ch-stat-val.pos{color:var(--pos)}.ch-stat-val.neg{color:var(--cr)}
+.phase-track{display:flex;gap:6px;margin-bottom:var(--s2);align-items:center;flex-wrap:wrap}
+.phase-pill{font-family:var(--ff-ui);font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;padding:5px 12px;border:1px solid var(--b-1);color:var(--t-3)}
+.phase-pill.done{background:rgba(23,149,106,.1);border-color:rgba(23,149,106,.3);color:#4ade80}
+.phase-pill.current{background:rgba(184,0,15,.08);border-color:var(--cr-border);color:var(--cr)}
+.phase-arrow{color:var(--t-3);font-size:10px}
+.ch-actions{display:flex;gap:var(--s1);flex-wrap:wrap}
+.btn-sm{font-family:var(--ff-ui);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:8px 18px;cursor:pointer;transition:all .2s;border:1px solid var(--b-2);background:transparent;color:var(--t-1)}
+.btn-sm:hover{background:var(--bg-3)}
+.btn-sm.primary{background:var(--cr);border-color:var(--cr);color:#fff}
+.btn-sm.primary:hover{background:var(--cr-hi)}
+.btn-sm:disabled{opacity:.4;cursor:not-allowed}
+
+/* ── Payout section ── */
+.payout-card{background:var(--bg-card);border:1px solid var(--b-1);padding:var(--s3);margin-bottom:var(--s2)}
+.payout-title{font-family:var(--ff-display);font-size:18px;letter-spacing:2px;color:var(--t-white);margin-bottom:var(--s2)}
+.f-group{margin-bottom:var(--s2)}
+.f-label{display:block;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--t-2);font-family:var(--ff-ui);margin-bottom:7px}
+.f-input{width:100%;background:var(--bg-2);border:1px solid var(--b-1);color:var(--t-1);font-family:var(--ff-body);font-size:14px;padding:11px 14px;outline:none;transition:border-color .2s}
+.f-input:focus{border-color:rgba(184,0,15,.4)}
+.f-input::placeholder{color:var(--t-3)}
+select.f-input{cursor:pointer;-webkit-appearance:none;appearance:none}
+.payout-table{width:100%;border-collapse:collapse;font-size:13px}
+.payout-table th{font-family:var(--ff-ui);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--t-3);padding:8px 12px;text-align:left;border-bottom:1px solid var(--b-1)}
+.payout-table td{padding:12px 12px;border-bottom:1px solid var(--b-1);color:var(--t-2);font-family:var(--ff-mono);font-size:12px;vertical-align:middle}
+.payout-table tr:last-child td{border-bottom:none}
+.empty-state{text-align:center;padding:var(--s5) var(--s3);color:var(--t-3)}
+.empty-state-icon{font-size:32px;margin-bottom:var(--s2);opacity:.4}
+.empty-state-text{font-size:13px;color:var(--t-3)}
+.empty-state-text a{color:var(--cr);text-decoration:none}
+
+/* ── Profile ── */
+.profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--s3)}
+.profile-section{background:var(--bg-card);border:1px solid var(--b-1);padding:var(--s3)}
+.profile-section-title{font-family:var(--ff-display);font-size:16px;letter-spacing:2px;color:var(--t-white);margin-bottom:var(--s2);padding-bottom:var(--s1);border-bottom:1px solid var(--b-1)}
+.avatar{width:56px;height:56px;background:var(--cr-lo);border:1px solid var(--cr-border);display:flex;align-items:center;justify-content:center;font-family:var(--ff-display);font-size:20px;color:var(--cr);margin-bottom:var(--s2)}
+
+/* ── Crypto payment panel ── */
+.crypto-card{background:var(--bg-card);border:1px solid var(--b-1);padding:var(--s3)}
+.wallet-address{background:var(--bg-2);border:1px solid var(--b-1);padding:12px 14px;font-family:var(--ff-mono);font-size:12px;color:var(--t-1);word-break:break-all;cursor:pointer;transition:border-color .2s}
+.wallet-address:hover{border-color:var(--cr-border)}
+.copy-hint{font-size:11px;color:var(--t-3);margin-top:5px}
+.network-select{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:var(--s2)}
+.net-btn{font-family:var(--ff-ui);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;padding:6px 14px;border:1px solid var(--b-1);background:transparent;color:var(--t-3);cursor:pointer;transition:all .2s}
+.net-btn.active{border-color:var(--cr-border);color:var(--cr);background:var(--cr-lo)}
+
+/* ── Misc ── */
+.section-title{font-family:var(--ff-display);font-size:18px;letter-spacing:2px;color:var(--t-white);margin-bottom:var(--s2)}
+.info-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--b-1);font-size:13px}
+.info-row:last-child{border-bottom:none}
+.info-key{color:var(--t-3);font-family:var(--ff-ui);font-size:11px;letter-spacing:1px;text-transform:uppercase}
+.info-val{color:var(--t-1);font-family:var(--ff-mono);font-size:12px}
+.msg{font-size:13px;padding:12px 16px;margin-bottom:14px;display:none}
+.msg.show{display:block}
+.msg-err{background:rgba(184,0,15,.1);border:1px solid rgba(184,0,15,.25);color:#ff8080}
+.msg-ok{background:rgba(23,149,106,.1);border:1px solid rgba(23,149,106,.25);color:#4ade80}
+.loading{text-align:center;padding:var(--s5);color:var(--t-3);font-family:var(--ff-mono);font-size:13px}
+@keyframes ld{0%,100%{opacity:1}50%{opacity:.3}}
+.spin::after{content:'...';display:inline-block;animation:ld 1s infinite}
+@media(max-width:768px){
+  .stat-grid{grid-template-columns:repeat(2,1fr)}
+  .ch-stats{grid-template-columns:repeat(2,1fr)}
+  .profile-grid{grid-template-columns:1fr}
+}
+@media(max-width:480px){
+  .stat-grid{grid-template-columns:1fr 1fr}
+  .db-tabs{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .db-tab{white-space:nowrap}
+}
+</style>
+</head>
+<body>
+<div class="cursor" aria-hidden="true"></div>
+<div class="cursor-ring" aria-hidden="true"></div>
+<canvas id="bg-canvas" aria-hidden="true"></canvas>
+<div id="bg-veil" aria-hidden="true"></div>
+
+<!-- Nav -->
+<nav class="nav" role="navigation">
+  <div class="nav__logo" onclick="location.href='index.html'" role="button" tabindex="0">
+    <svg class="nav__logo-svg" viewBox="0 0 172 38" fill="none">
+      <defs>
+        <linearGradient id="lw" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FFF" stop-opacity=".95"/><stop offset="100%" stop-color="#8890AA"/></linearGradient>
+        <linearGradient id="lr" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#E8001A"/><stop offset="100%" stop-color="#7A0008"/></linearGradient>
+        <linearGradient id="lgr" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#22B972"/><stop offset="100%" stop-color="#0E5E3A"/></linearGradient>
+        <filter id="gr"><feGaussianBlur stdDeviation="1" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      </defs>
+      <g filter="url(#gr)">
+        <rect x="1" y="14" width="5" height="13" fill="url(#lr)" rx=".3"/>
+        <line x1="3.5" y1="8" x2="3.5" y2="14" stroke="#B8000F" stroke-width="1.2" opacity=".7"/>
+        <line x1="3.5" y1="27" x2="3.5" y2="32" stroke="#B8000F" stroke-width="1.2" opacity=".5"/>
+        <rect x="9" y="18" width="5" height="7" fill="rgba(255,255,255,.08)" rx=".3"/>
+        <rect x="17" y="11" width="5" height="14" fill="url(#lgr)" rx=".3"/>
+      </g>
+      <path d="M30 7L38 31L46 7" stroke="url(#lw)" stroke-width="2.8" stroke-linecap="round" fill="none"/>
+      <ellipse cx="56.5" cy="19" rx="7" ry="12" stroke="url(#lw)" stroke-width="2.7" fill="none"/>
+      <path d="M68 7v24M68 7h9c3 0 5 2.5 5 6s-2 6-5 6H68M76 19l7.5 12" stroke="url(#lw)" stroke-width="2.7" stroke-linecap="round" fill="none"/>
+      <path d="M88 31V7L102 31V7" stroke="url(#lw)" stroke-width="2.7" stroke-linecap="round" fill="none"/>
+      <line x1="108" y1="7" x2="108" y2="31" stroke="url(#lw)" stroke-width="2.7" stroke-linecap="round"/>
+      <path d="M114 7l13 24M127 7l-13 24" stroke="url(#lr)" stroke-width="2.8" stroke-linecap="round" filter="url(#gr)"/>
+      <line x1="30" y1="36" x2="72" y2="36" stroke="rgba(184,0,15,.7)" stroke-width="1.4"/>
+    </svg>
+  </div>
+  <div class="nav__right">
+    <span id="nav-name" style="font-family:var(--ff-mono);font-size:12px;color:var(--t-2);margin-right:16px"></span>
+    <button class="nav__cta" onclick="doLogout()" style="background:transparent;border:1px solid var(--b-2);color:var(--t-2);font-size:12px;padding:8px 16px">Sign Out</button>
+  </div>
+</nav>
+
+<!-- Dashboard -->
+<div class="db-wrap">
+  <div class="db-inner">
+
+    <!-- Top bar -->
+    <div class="db-topbar">
+      <div>
+        <div class="db-greet" id="greet">WELCOME BACK, <span id="greet-name">TRADER</span></div>
+        <div class="db-date" id="db-date"></div>
+      </div>
+      <button class="btn-sm primary" onclick="showTab('buy')">+ New Challenge</button>
+    </div>
+
+    <!-- Tabs -->
+    <div class="db-tabs" role="tablist">
+      <div class="db-tab active" onclick="showTab('overview')" id="tab-overview">Overview</div>
+      <div class="db-tab" onclick="showTab('challenges')" id="tab-challenges">My Challenges</div>
+      <div class="db-tab" onclick="showTab('payouts')" id="tab-payouts">Payouts</div>
+      <div class="db-tab" onclick="showTab('buy')" id="tab-buy">Buy Challenge</div>
+      <div class="db-tab" onclick="showTab('profile')" id="tab-profile">Profile</div>
+    </div>
+
+    <!-- ── OVERVIEW ── -->
+    <div class="db-panel active" id="panel-overview">
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="stat-label">Active Challenges</div>
+          <div class="stat-value" id="ov-active">—</div>
+          <div class="stat-sub">Currently trading</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Total Earned</div>
+          <div class="stat-value pos" id="ov-earned">—</div>
+          <div class="stat-sub">After profit split</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Pending Payout</div>
+          <div class="stat-value" id="ov-pending">—</div>
+          <div class="stat-sub">Awaiting release</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Funded Accounts</div>
+          <div class="stat-value pos" id="ov-funded">—</div>
+          <div class="stat-sub">Live funded status</div>
+        </div>
+      </div>
+
+      <div class="section-title">Recent Challenges</div>
+      <div class="ch-grid" id="ov-challenges">
+        <div class="loading"><span class="spin">Loading</span></div>
+      </div>
+    </div>
+
+    <!-- ── MY CHALLENGES ── -->
+    <div class="db-panel" id="panel-challenges">
+      <div class="ch-grid" id="all-challenges">
+        <div class="loading"><span class="spin">Loading</span></div>
+      </div>
+    </div>
+
+    <!-- ── PAYOUTS ── -->
+    <div class="db-panel" id="panel-payouts">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--s3);margin-bottom:var(--s3)" id="payout-form-wrap">
+        <div class="payout-card">
+          <div class="payout-title">REQUEST PAYOUT</div>
+          <div class="msg msg-err" id="pay-err"></div>
+          <div class="msg msg-ok"  id="pay-ok"></div>
+          <div class="f-group">
+            <label class="f-label">Funded Challenge</label>
+            <select class="f-input" id="pay-challenge">
+              <option value="">Select challenge...</option>
+            </select>
+          </div>
+          <div class="f-group">
+            <label class="f-label">Amount (USD)</label>
+            <input class="f-input" type="number" id="pay-amount" placeholder="e.g. 500" min="50">
+          </div>
+          <div class="f-group">
+            <label class="f-label">Payment Method</label>
+            <select class="f-input" id="pay-method" onchange="togglePayDetails()">
+              <option value="crypto">Crypto (USDT)</option>
+              <option value="wise">Wise Transfer</option>
+              <option value="bank">Bank Transfer</option>
+            </select>
+          </div>
+          <div class="f-group" id="pay-wallet-wrap">
+            <label class="f-label">Wallet Address (USDT)</label>
+            <input class="f-input" type="text" id="pay-wallet" placeholder="Your USDT wallet address">
+          </div>
+          <div class="f-group" id="pay-bank-wrap" style="display:none">
+            <label class="f-label">Bank / Wise Details</label>
+            <input class="f-input" type="text" id="pay-bank" placeholder="Account number, IFSC, name...">
+          </div>
+          <button class="btn-sm primary" style="width:100%;padding:12px" onclick="requestPayout()">Request Payout →</button>
+        </div>
+        <div class="payout-card">
+          <div class="payout-title">PAYOUT INFO</div>
+          <div class="info-row"><span class="info-key">Processing time</span><span class="info-val">1–3 business days</span></div>
+          <div class="info-row"><span class="info-key">Minimum payout</span><span class="info-val">$50</span></div>
+          <div class="info-row"><span class="info-key">Methods</span><span class="info-val">Crypto / Wise / Bank</span></div>
+          <div class="info-row"><span class="info-key">Available from</span><span class="info-val">Day 1 of funded</span></div>
+          <div class="info-row"><span class="info-key">Split (1-Step)</span><span class="info-val">95% to trader</span></div>
+          <div class="info-row"><span class="info-key">Split (2-Step)</span><span class="info-val">90% to trader</span></div>
+          <div class="info-row"><span class="info-key">Split (3-Step)</span><span class="info-val">80–90% to trader</span></div>
+        </div>
+      </div>
+      <div class="payout-card">
+        <div class="payout-title">PAYOUT HISTORY</div>
+        <div id="payout-history"><div class="loading"><span class="spin">Loading</span></div></div>
+      </div>
+    </div>
+
+    <!-- ── BUY CHALLENGE ── -->
+    <div class="db-panel" id="panel-buy">
+      <div class="crypto-card">
+        <div class="section-title" style="margin-bottom:var(--s1)">SELECT A CHALLENGE PLAN</div>
+        <p style="font-size:13px;color:var(--t-2);margin-bottom:var(--s3);line-height:1.6">Choose your plan and account size. You'll receive a USDT wallet address to send payment to. Once confirmed by admin (1–4 hours), your MT5 account credentials will be emailed to you.</p>
+
+        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:var(--s2);margin-bottom:var(--s3)" id="plan-grid">
+          <div class="ch-card" id="pl-one_step" onclick="selectPlan('one_step')" style="cursor:pointer">
+            <div class="ch-title">1-STEP</div>
+            <div class="ch-meta">10% target · 95% split · No min days</div>
+            <div style="margin-top:8px;font-size:11px;color:var(--t-3)">From $49</div>
+          </div>
+          <div class="ch-card" id="pl-two_step" onclick="selectPlan('two_step')" style="cursor:pointer">
+            <div class="ch-title">2-STEP</div>
+            <div class="ch-meta">10%+5% targets · 90% split · From $1K</div>
+            <div style="margin-top:8px;font-size:11px;color:var(--t-3)">From $15</div>
+          </div>
+          <div class="ch-card" id="pl-three_step" onclick="selectPlan('three_step')" style="cursor:pointer">
+            <div class="ch-title">3-STEP</div>
+            <div class="ch-meta">8%+5%+4% targets · 80–90% split</div>
+            <div style="margin-top:8px;font-size:11px;color:var(--t-3)">From $12</div>
+          </div>
+          <div class="ch-card" id="pl-partial" onclick="selectPlan('partial')" style="cursor:pointer">
+            <div class="ch-title">PARTIAL PAY</div>
+            <div class="ch-meta">35% upfront · 65% from profits</div>
+            <div style="margin-top:8px;font-size:11px;color:var(--t-3)">From $7 upfront</div>
+          </div>
+        </div>
+
+        <div id="buy-step2" style="display:none">
+          <div style="height:1px;background:var(--b-1);margin-bottom:var(--s3)"></div>
+          <div class="f-group">
+            <label class="f-label">Account Size</label>
+            <select class="f-input" id="buy-size" onchange="updatePrice()">
+              <option value="">Select size...</option>
+            </select>
+          </div>
+          <div id="price-display" style="background:var(--bg-2);border:1px solid var(--b-1);padding:14px 16px;margin-bottom:var(--s2);display:none">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <span style="font-size:12px;color:var(--t-3);font-family:var(--ff-ui);letter-spacing:1px;text-transform:uppercase">Total Fee</span>
+              <span style="font-family:var(--ff-display);font-size:24px;color:var(--t-white)" id="price-val">—</span>
+            </div>
+            <div id="partial-note" style="font-size:11px;color:var(--gd);margin-top:6px;display:none"></div>
+          </div>
+          <div class="f-group">
+            <label class="f-label">Payment Network</label>
+            <div class="network-select">
+              <button class="net-btn active" onclick="selectNet('USDT_BEP20',this)">USDT BEP20</button>
+              <button class="net-btn" onclick="selectNet('USDT_TRC20',this)">USDT TRC20</button>
+              <button class="net-btn" onclick="selectNet('USDT_ERC20',this)">USDT ERC20</button>
+            </div>
+          </div>
+          <div class="msg msg-err" id="buy-err"></div>
+          <div class="msg msg-ok"  id="buy-ok"></div>
+          <button class="btn-sm primary" style="padding:14px 32px" onclick="initiatePurchase()">Proceed to Payment →</button>
+        </div>
+
+        <!-- Payment instructions (shown after initiate) -->
+        <div id="buy-step3" style="display:none">
+          <div style="height:1px;background:var(--b-1);margin:var(--s3) 0"></div>
+          <div style="margin-bottom:var(--s2)">
+            <div class="f-label" style="margin-bottom:8px">Send exactly this amount:</div>
+            <div style="font-family:var(--ff-display);font-size:36px;color:var(--cr)" id="pay-amount-display">—</div>
+            <div style="font-size:12px;color:var(--t-3);font-family:var(--ff-mono);margin-top:4px" id="pay-ref-display"></div>
+          </div>
+          <div class="f-group">
+            <label class="f-label">Send to this wallet address (click to copy):</label>
+            <div class="wallet-address" id="pay-wallet-display" onclick="copyWallet()">—</div>
+            <div class="copy-hint" id="copy-hint">Click to copy address</div>
+          </div>
+          <div style="background:var(--bg-2);border:1px solid var(--b-1);padding:12px 16px;margin-bottom:var(--s2)">
+            <div style="font-size:11px;color:var(--t-3);font-family:var(--ff-ui);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">Instructions</div>
+            <ol id="pay-instructions" style="font-size:13px;color:var(--t-2);padding-left:18px;line-height:2"></ol>
+          </div>
+          <div class="f-group">
+            <label class="f-label">After sending — paste your TX Hash here:</label>
+            <input class="f-input" type="text" id="tx-hash" placeholder="0x1a2b3c4d... or TRC20 hash">
+          </div>
+          <div class="msg msg-err" id="tx-err"></div>
+          <div class="msg msg-ok"  id="tx-ok"></div>
+          <button class="btn-sm primary" style="padding:14px 32px" onclick="submitTx()">I've Sent Payment →</button>
+          <button class="btn-sm" style="padding:14px 20px;margin-left:8px" onclick="resetBuy()">Start Over</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PROFILE ── -->
+    <div class="db-panel" id="panel-profile">
+      <div class="profile-grid">
+        <div class="profile-section">
+          <div style="display:flex;align-items:center;gap:var(--s2);margin-bottom:var(--s2)">
+            <div class="avatar" id="prof-avatar">V</div>
+            <div>
+              <div style="font-family:var(--ff-display);font-size:20px;letter-spacing:2px;color:var(--t-white)" id="prof-name">—</div>
+              <div style="font-size:11px;color:var(--t-3);font-family:var(--ff-mono)" id="prof-email">—</div>
+            </div>
+          </div>
+          <div class="profile-section-title">ACCOUNT DETAILS</div>
+          <div class="info-row"><span class="info-key">Member since</span><span class="info-val" id="prof-joined">—</span></div>
+          <div class="info-row"><span class="info-key">Country</span><span class="info-val" id="prof-country">—</span></div>
+          <div class="info-row"><span class="info-key">Account ID</span><span class="info-val" id="prof-id">—</span></div>
+        </div>
+        <div class="profile-section">
+          <div class="profile-section-title">UPDATE DETAILS</div>
+          <div class="msg msg-err" id="prof-err"></div>
+          <div class="msg msg-ok"  id="prof-ok"></div>
+          <div class="f-group">
+            <label class="f-label">Full Name</label>
+            <input class="f-input" type="text" id="prof-name-input">
+          </div>
+          <div class="f-group">
+            <label class="f-label">Country</label>
+            <select class="f-input" id="prof-country-input">
+              <option value="IN">India</option><option value="PK">Pakistan</option>
+              <option value="NG">Nigeria</option><option value="PH">Philippines</option>
+              <option value="GB">United Kingdom</option><option value="US">United States</option>
+              <option value="AE">UAE</option><option value="OTHER">Other</option>
+            </select>
+          </div>
+          <button class="btn-sm primary" onclick="saveProfile()">Save Changes →</button>
+          <div style="margin-top:var(--s3);padding-top:var(--s2);border-top:1px solid var(--b-1)">
+            <button class="btn-sm" style="color:#ff8080;border-color:rgba(184,0,15,.2)" onclick="doLogout()">Sign Out →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="supabase.js"></script>
+<script src="app.js"></script>
+<script>
+// ── State ────────────────────────────────────────────────
+let user = null, profile = null, challenges = [], payouts = [];
+let selectedPlan = null, selectedNet = 'USDT_BEP20', currentPaymentId = null;
+
+const PRICES = {
+  one_step:   {5000:49,10000:89,25000:189,50000:289,100000:489},
+  two_step:   {1000:15,2500:29,5000:49,10000:79,25000:169,50000:259,100000:429},
+  three_step: {1000:12,2500:24,5000:39,10000:69,25000:139,50000:229,100000:389},
+  partial:    {1000:20,2500:35,5000:55,10000:95,25000:195,50000:299,100000:489},
+};
+const SIZES = {
+  one_step:[5000,10000,25000,50000,100000],
+  two_step:[1000,2500,5000,10000,25000,50000,100000],
+  three_step:[1000,2500,5000,10000,25000,50000,100000],
+  partial:[1000,2500,5000,10000,25000,50000,100000],
+};
+
+// ── Boot ─────────────────────────────────────────────────
+(async()=>{
+  const loggedIn = await VornixDB.Auth.isLoggedIn();
+  if(!loggedIn){ location.href='login.html'; return; }
+  user = await VornixDB.Auth.getUser();
+  await loadProfile();
+  await loadChallenges();
+  await loadPayouts();
+  setDate();
+})();
+
+function setDate(){
+  const d = new Date();
+  document.getElementById('db-date').textContent =
+    d.toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'}).toUpperCase();
+}
+
+async function loadProfile(){
+  const {data} = await VornixDB.Profiles.get(user.id);
+  profile = data;
+  const name = profile?.full_name || user.email.split('@')[0];
+  const initials = name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+  document.getElementById('nav-name').textContent    = name.split(' ')[0].toUpperCase();
+  document.getElementById('greet-name').textContent  = name.split(' ')[0].toUpperCase();
+  document.getElementById('prof-name').textContent   = name;
+  document.getElementById('prof-email').textContent  = user.email;
+  document.getElementById('prof-joined').textContent = VornixDB.Utils.formatDate(user.created_at);
+  document.getElementById('prof-country').textContent= profile?.country || '—';
+  document.getElementById('prof-id').textContent     = user.id.slice(0,8).toUpperCase();
+  document.getElementById('prof-avatar').textContent = initials;
+  document.getElementById('prof-name-input').value   = name;
+  if(profile?.country) document.getElementById('prof-country-input').value = profile.country;
+}
+
+async function loadChallenges(){
+  const {data} = await VornixDB.Challenges.getMyAll();
+  challenges = data || [];
+  renderOverview();
+  renderChallenges('ov-challenges', challenges.slice(0,3));
+  renderChallenges('all-challenges', challenges);
+  populateFundedDropdown();
+}
+
+async function loadPayouts(){
+  const {data} = await VornixDB.Payouts.getMy();
+  payouts = data || [];
+  renderPayoutHistory();
+}
+
+function renderOverview(){
+  const active  = challenges.filter(c=>c.status==='active').length;
+  const funded  = challenges.filter(c=>c.status==='funded').length;
+  const earned  = challenges.reduce((s,c)=>s+(c.total_earned||0),0);
+  const pending = payouts.filter(p=>p.status==='pending').reduce((s,p)=>s+(p.amount_requested||0),0);
+  document.getElementById('ov-active').textContent  = active;
+  document.getElementById('ov-funded').textContent  = funded;
+  document.getElementById('ov-earned').textContent  = VornixDB.Utils.formatCurrency(earned);
+  document.getElementById('ov-pending').textContent = VornixDB.Utils.formatCurrency(pending);
+}
+
+function renderChallenges(containerId, list){
+  const el = document.getElementById(containerId);
+  if(!list||!list.length){
+    el.innerHTML = `<div class="empty-state"><div class="empty-state-icon">◈</div><div class="empty-state-text">No challenges yet.<br><a onclick="showTab('buy')">Purchase your first challenge →</a></div></div>`;
+    return;
+  }
+  el.innerHTML = list.map(ch=>{
+    const cls  = ch.status==='funded'?'funded-ch':ch.status==='active'?'active-ch':ch.status==='failed'?'failed-ch':'';
+    const bdg  = {active:'badge-active',funded:'badge-funded',failed:'badge-failed',pending:'badge-pending',evaluation:'badge-active'}[ch.status]||'badge-waiting';
+    const phases = (ch.phases||[]).sort((a,b)=>a.phase_number-b.phase_number);
+    const phasePills = phases.map((p,i)=>{
+      const pcls = p.status==='passed'?'done':p.status==='active'?'current':'';
+      return `${i>0?'<span class="phase-arrow">›</span>':''}<span class="phase-pill ${pcls}">Phase ${p.phase_number}: ${p.status}</span>`;
+    }).join('');
+    return `
+    <div class="ch-card ${cls}">
+      <div class="ch-header">
+        <div>
+          <div class="ch-title">${VornixDB.Utils.planName(ch.plan)} — $${Number(ch.current_size||ch.account_size).toLocaleString()}</div>
+          <div class="ch-meta">Started: ${VornixDB.Utils.formatDate(ch.start_date)} · ID: ${ch.id.slice(0,8).toUpperCase()}</div>
+        </div>
+        <span class="badge ${bdg}">${ch.status.toUpperCase()}</span>
+      </div>
+      ${phasePills?`<div class="phase-track">${phasePills}</div>`:''}
+      <div class="ch-stats">
+        <div class="ch-stat"><div class="ch-stat-label">Account Size</div><div class="ch-stat-val">$${Number(ch.current_size||ch.account_size).toLocaleString()}</div></div>
+        <div class="ch-stat"><div class="ch-stat-label">Total P&L</div><div class="ch-stat-val ${(ch.total_pnl||0)>=0?'pos':'neg'}">${(ch.total_pnl||0)>=0?'+':''}$${(ch.total_pnl||0).toFixed(2)}</div></div>
+        <div class="ch-stat"><div class="ch-stat-label">Profit Split</div><div class="ch-stat-val">${VornixDB.Utils.profitSplit(ch.plan)}%</div></div>
+        <div class="ch-stat"><div class="ch-stat-label">Total Earned</div><div class="ch-stat-val pos">$${(ch.total_earned||0).toFixed(2)}</div></div>
+      </div>
+      ${ch.mt_login?`<div class="ch-actions"><button class="btn-sm" onclick="copyMT('${ch.mt_login}','${ch.mt_password||''}','${ch.mt_server||''}')">Copy MT5 Credentials</button></div>`:'<div style="font-size:11px;color:var(--t-3);margin-top:4px">MT5 credentials will appear here after admin activation</div>'}
+    </div>`;
+  }).join('');
+}
+
+function renderPayoutHistory(){
+  const el = document.getElementById('payout-history');
+  if(!payouts.length){
+    el.innerHTML='<div class="empty-state"><div class="empty-state-icon">◈</div><div class="empty-state-text">No payout requests yet.</div></div>';
+    return;
+  }
+  el.innerHTML=`<table class="payout-table">
+    <thead><tr><th>Date</th><th>Amount</th><th>Method</th><th>Challenge</th><th>Status</th></tr></thead>
+    <tbody>${payouts.map(p=>{
+      const bdg={pending:'badge-pending',approved:'badge-active',paid:'badge-funded',rejected:'badge-failed'}[p.status]||'badge-waiting';
+      return `<tr>
+        <td>${VornixDB.Utils.formatDate(p.requested_at)}</td>
+        <td style="color:var(--t-1)">$${(p.amount_requested||0).toFixed(2)}</td>
+        <td>${p.method||'—'}</td>
+        <td>${p.challenge_id?.slice(0,8).toUpperCase()||'—'}</td>
+        <td><span class="badge ${bdg}" style="font-size:9px">${(p.status||'').toUpperCase()}</span></td>
+      </tr>`;
+    }).join('')}</tbody>
+  </table>`;
+}
+
+function populateFundedDropdown(){
+  const sel = document.getElementById('pay-challenge');
+  const funded = challenges.filter(c=>c.status==='funded');
+  sel.innerHTML = '<option value="">Select challenge...</option>' +
+    funded.map(c=>`<option value="${c.id}">${VornixDB.Utils.planName(c.plan)} $${Number(c.account_size).toLocaleString()} — ${c.id.slice(0,8).toUpperCase()}</option>`).join('');
+}
+
+// ── Tabs ──────────────────────────────────────────────────
+function showTab(t){
+  document.querySelectorAll('.db-tab').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.db-panel').forEach(el=>el.classList.remove('active'));
+  document.getElementById('tab-'+t)?.classList.add('active');
+  document.getElementById('panel-'+t)?.classList.add('active');
+}
+
+// ── Buy flow ──────────────────────────────────────────────
+function selectPlan(plan){
+  selectedPlan = plan;
+  document.querySelectorAll('[id^="pl-"]').forEach(el=>el.style.borderColor='');
+  document.getElementById('pl-'+plan).style.borderColor='var(--cr)';
+  const sel = document.getElementById('buy-size');
+  sel.innerHTML = '<option value="">Select size...</option>' +
+    SIZES[plan].map(s=>`<option value="${s}">$${s.toLocaleString()}</option>`).join('');
+  document.getElementById('buy-step2').style.display='block';
+  document.getElementById('price-display').style.display='none';
+}
+
+function updatePrice(){
+  const size = Number(document.getElementById('buy-size').value);
+  if(!size||!selectedPlan) return;
+  const price = PRICES[selectedPlan][size];
+  const pdisp = document.getElementById('price-display');
+  const pval  = document.getElementById('price-val');
+  const pnote = document.getElementById('partial-note');
+  pdisp.style.display='block';
+  if(price){ pval.textContent='$'+price+' USDT'; } else { pval.textContent='Contact us'; }
+  if(selectedPlan==='partial'&&price){
+    const upfront = Math.round(price*0.35);
+    pnote.textContent='Pay only $'+upfront+' now. Remaining $'+(price-upfront)+' deducted from first profit withdrawal.';
+    pnote.style.display='block';
+  } else { pnote.style.display='none'; }
+}
+
+function selectNet(net, btn){
+  selectedNet=net;
+  document.querySelectorAll('.net-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+async function initiatePurchase(){
+  const size = Number(document.getElementById('buy-size').value);
+  const err  = document.getElementById('buy-err');
+  const ok   = document.getElementById('buy-ok');
+  err.classList.remove('show'); ok.classList.remove('show');
+  if(!selectedPlan){ showMsg(err,'Please select a plan.'); return; }
+  if(!size){         showMsg(err,'Please select an account size.'); return; }
+
+  const btn = document.querySelector('#panel-buy .btn-sm.primary');
+  btn.disabled=true; btn.innerHTML='<span class="spin">Processing</span>';
+
+  const data = await VornixDB.Challenges.startCryptoPayment(selectedPlan, size, selectedNet);
+  btn.disabled=false; btn.innerHTML='Proceed to Payment →';
+
+  if(!data?.reference){ showMsg(err, data?.error||'Failed to create payment. Please try again.'); return; }
+
+  currentPaymentId = data.payment_id;
+  document.getElementById('pay-amount-display').textContent = data.amount + ' USDT';
+  document.getElementById('pay-ref-display').textContent    = 'Reference: ' + data.reference;
+  document.getElementById('pay-wallet-display').textContent = data.wallet;
+  const ol = document.getElementById('pay-instructions');
+  ol.innerHTML = (data.instructions||[]).map(i=>`<li>${i}</li>`).join('');
+  document.getElementById('buy-step2').style.display='none';
+  document.getElementById('buy-step3').style.display='block';
+  document.querySelectorAll('[id^="pl-"]').forEach(el=>el.style.cursor='default');
+}
+
+async function submitTx(){
+  const hash = document.getElementById('tx-hash').value.trim();
+  const err  = document.getElementById('tx-err');
+  const ok   = document.getElementById('tx-ok');
+  err.classList.remove('show'); ok.classList.remove('show');
+  if(!hash||hash.length<20){ showMsg(err,'Please enter a valid transaction hash.'); return; }
+  if(!currentPaymentId){     showMsg(err,'Payment session lost. Please start over.'); return; }
+
+  const btn = document.querySelectorAll('#panel-buy .btn-sm.primary')[0];
+  btn.disabled=true; btn.innerHTML='<span class="spin">Submitting</span>';
+
+  const data = await VornixDB.Challenges.submitPayment(currentPaymentId, hash, selectedNet);
+  btn.disabled=false; btn.innerHTML="I've Sent Payment →";
+
+  if(!data?.message){ showMsg(err, data?.error||'Submission failed. Please try again.'); return; }
+  showMsg(ok, '✓ '+data.message);
+  document.getElementById('tx-hash').value='';
+}
+
+function copyWallet(){
+  const addr = document.getElementById('pay-wallet-display').textContent;
+  navigator.clipboard.writeText(addr).then(()=>{
+    document.getElementById('copy-hint').textContent='✓ Copied!';
+    setTimeout(()=>{ document.getElementById('copy-hint').textContent='Click to copy address'; },2000);
+  });
+}
+
+function copyMT(login,pass,server){
+  const text = `MT5 Login: ${login}\nPassword: ${pass}\nServer: ${server}`;
+  navigator.clipboard.writeText(text).then(()=>alert('MT5 credentials copied!'));
+}
+
+function resetBuy(){
+  selectedPlan=null; currentPaymentId=null;
+  document.getElementById('buy-step2').style.display='none';
+  document.getElementById('buy-step3').style.display='none';
+  document.querySelectorAll('[id^="pl-"]').forEach(el=>el.style.borderColor='');
+  ['buy-err','buy-ok','tx-err','tx-ok'].forEach(id=>document.getElementById(id).classList.remove('show'));
+}
+
+// ── Payout request ────────────────────────────────────────
+function togglePayDetails(){
+  const method = document.getElementById('pay-method').value;
+  document.getElementById('pay-wallet-wrap').style.display = method==='bank'?'none':'block';
+  document.getElementById('pay-bank-wrap').style.display   = method==='bank'?'block':'none';
+}
+
+async function requestPayout(){
+  const cid    = document.getElementById('pay-challenge').value;
+  const amount = Number(document.getElementById('pay-amount').value);
+  const method = document.getElementById('pay-method').value;
+  const wallet = document.getElementById('pay-wallet').value.trim();
+  const bank   = document.getElementById('pay-bank').value.trim();
+  const err    = document.getElementById('pay-err');
+  const ok     = document.getElementById('pay-ok');
+  err.classList.remove('show'); ok.classList.remove('show');
+  if(!cid)          { showMsg(err,'Please select a challenge.'); return; }
+  if(!amount||amount<50){ showMsg(err,'Minimum payout is $50.'); return; }
+  if(method!=='bank'&&!wallet){ showMsg(err,'Please enter your wallet address.'); return; }
+
+  const details = method==='bank'?bank:wallet;
+  const data = await VornixDB.Payouts.request(cid, amount, method, details);
+  if(data?.error){ showMsg(err,data.error); return; }
+  showMsg(ok,'✓ Payout request submitted! You\'ll hear back within 1–3 business days.');
+  await loadPayouts();
+}
+
+// ── Profile save ──────────────────────────────────────────
+async function saveProfile(){
+  const name    = document.getElementById('prof-name-input').value.trim();
+  const country = document.getElementById('prof-country-input').value;
+  const err     = document.getElementById('prof-err');
+  const ok      = document.getElementById('prof-ok');
+  err.classList.remove('show'); ok.classList.remove('show');
+  if(!name){ showMsg(err,'Please enter your name.'); return; }
+  const {error} = await VornixDB.Profiles.update(user.id,{full_name:name,country});
+  if(error){ showMsg(err,error.message); return; }
+  showMsg(ok,'✓ Profile updated successfully!');
+  await loadProfile();
+}
+
+// ── Logout ────────────────────────────────────────────────
+async function doLogout(){
+  await VornixDB.Auth.signOut();
+  location.href='login.html';
+}
+
+function showMsg(el,msg){ el.textContent=msg; el.classList.add('show'); }
+</script>
+</body>
+</html>
