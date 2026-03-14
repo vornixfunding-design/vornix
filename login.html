@@ -3,53 +3,56 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Login — VORNIX</title>
+<title>Sign In — VORNIX</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;500;600;700;900&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;900&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 <style>
 .auth-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:80px var(--g) 48px}
-.auth-split{display:grid;grid-template-columns:1fr 420px;gap:0;max-width:860px;width:100%;background:var(--bg-card);border:1px solid var(--bd2)}
-.auth-side{padding:48px 40px;border-right:1px solid var(--bd);display:flex;flex-direction:column;justify-content:center}
-.auth-side-brand{font-family:var(--ff-d);font-size:42px;letter-spacing:4px;color:var(--white);line-height:1;margin-bottom:12px}
-.auth-side-brand span{color:var(--red)}
+.auth-split{display:grid;grid-template-columns:1fr 420px;max-width:840px;width:100%;background:var(--bg-card);border:1px solid var(--bd2)}
+.auth-side{padding:48px 40px;border-right:1px solid var(--bd);display:flex;flex-direction:column;justify-content:center;background:var(--bg-card2)}
+.auth-brand{font-family:var(--ff-d);font-size:38px;letter-spacing:4px;color:var(--white);line-height:1;margin-bottom:8px}
+.auth-brand span{color:var(--red)}
 .auth-side-tag{font-family:var(--ff-m);font-size:10px;color:var(--t3);letter-spacing:2px;margin-bottom:32px}
-.auth-side-perks{display:flex;flex-direction:column;gap:10px}
-.auth-perk{display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--bg-2);border:1px solid var(--bd)}
-.auth-perk-val{font-family:var(--ff-d);font-size:22px;color:var(--white);letter-spacing:1px;min-width:60px}
-.auth-perk-val.g{color:var(--grn)}
-.auth-perk-lbl{font-family:var(--ff-ui);font-size:11px;color:var(--t3);letter-spacing:1.5px;text-transform:uppercase}
+.side-perk{display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid var(--bd)}
+.side-perk:last-child{border-bottom:none}
+.side-perk-val{font-family:var(--ff-d);font-size:22px;color:var(--white);min-width:62px;letter-spacing:1px}
+.side-perk-val.g{color:var(--grn)}
+.side-perk-lbl{font-family:var(--ff-ui);font-size:10px;color:var(--t3);letter-spacing:1.5px;text-transform:uppercase}
+.side-tagline{margin-top:28px;font-family:var(--ff-m);font-size:10px;color:var(--t3);letter-spacing:2px}
 .auth-form{padding:40px}
-.auth-eyebrow{font-family:var(--ff-m);font-size:10px;color:var(--red);letter-spacing:2px;margin-bottom:8px}
-.auth-heading{font-family:var(--ff-d);font-size:34px;letter-spacing:2px;color:var(--white);margin-bottom:28px;line-height:1}
+.auth-step-lbl{font-family:var(--ff-m);font-size:10px;color:var(--red);letter-spacing:3px;margin-bottom:8px}
+.auth-title{font-family:var(--ff-d);font-size:30px;letter-spacing:2px;color:var(--white);margin-bottom:4px;line-height:1}
+.auth-sub{font-size:13px;color:var(--t2);margin-bottom:22px;line-height:1.6}
 .f-g{margin-bottom:18px}
 .f-l{display:block;font-family:var(--ff-ui);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--t3);margin-bottom:7px}
-.f-i{width:100%;background:var(--bg-2);border:1px solid var(--bd2);color:var(--t1);font-family:var(--ff-b);font-size:14px;padding:13px 16px;outline:none;transition:border-color .2s}
+.f-i{width:100%;background:var(--bg-2);border:1px solid var(--bd2);color:var(--t1);font-family:var(--ff-b);font-size:14px;padding:13px 16px;outline:none;transition:border-color .2s;-webkit-appearance:none}
 .f-i:focus{border-color:var(--red-bd)}
 .f-i::placeholder{color:var(--t3)}
-.f-hint{font-size:11px;color:var(--t3);margin-top:5px;text-align:right;cursor:pointer;transition:color .2s}
-.f-hint:hover{color:var(--red)}
-.auth-btn{width:100%;background:var(--red);color:#fff;border:none;font-family:var(--ff-ui);font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;padding:15px;cursor:pointer;transition:background .2s;margin-top:6px;clip-path:polygon(10px 0%,100% 0%,calc(100% - 10px) 100%,0% 100%)}
+.auth-btn{width:100%;background:var(--red);color:#fff;border:none;font-family:var(--ff-ui);font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;padding:15px;cursor:pointer;transition:background .2s;clip-path:polygon(10px 0%,100% 0%,calc(100% - 10px) 100%,0% 100%)}
 .auth-btn:hover:not(:disabled){background:var(--red-hi)}
 .auth-btn:disabled{opacity:.5;cursor:not-allowed}
-.auth-sep{display:flex;align-items:center;gap:10px;margin:18px 0;font-size:11px;color:var(--t3)}
+.auth-sep{display:flex;align-items:center;gap:10px;margin:16px 0;font-size:11px;color:var(--t3)}
 .auth-sep::before,.auth-sep::after{content:'';flex:1;height:1px;background:var(--bd)}
 .auth-foot{font-size:13px;color:var(--t2);text-align:center}
 .auth-foot a{color:var(--red)}
-.auth-foot a:hover{color:var(--red-hi)}
+.otp-wrap{display:flex;gap:8px;justify-content:center;margin-bottom:8px}
+.otp-d{width:52px;height:62px;background:var(--bg-2);border:1px solid var(--bd2);color:var(--white);font-family:var(--ff-d);font-size:34px;text-align:center;outline:none;transition:border-color .2s,background .2s;caret-color:var(--red);-webkit-appearance:none;appearance:none}
+.otp-d:focus{border-color:var(--red);background:var(--bg-3)}
+.otp-d.filled{border-color:var(--red-bd)}
+.otp-hint{font-size:12px;color:var(--t3);text-align:center;margin-bottom:20px;line-height:1.7}
+.otp-hint a{color:var(--red);cursor:pointer}
+.timer{font-family:var(--ff-m);font-size:11px;color:var(--t3);text-align:center;margin-bottom:16px}
+.timer span{color:var(--gold)}
 .msg{font-size:13px;padding:12px 16px;margin-bottom:14px;display:none;line-height:1.5}
 .msg.show{display:block}
 .msg-err{background:var(--red-lo);border:1px solid var(--red-bd);color:#ff9090}
 .msg-ok{background:var(--grn-lo);border:1px solid var(--grn-bd);color:#5aeaad}
-.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:200;align-items:center;justify-content:center;padding:20px}
-.overlay.show{display:flex}
-.overlay-card{background:var(--bg-card);border:1px solid var(--bd2);width:100%;max-width:420px;padding:36px}
-.overlay-title{font-family:var(--ff-d);font-size:22px;letter-spacing:2px;color:var(--white);margin-bottom:6px}
-.overlay-sub{font-size:13px;color:var(--t2);margin-bottom:24px;line-height:1.6}
 @keyframes ld{0%,100%{opacity:1}50%{opacity:.3}}
 .spin::after{content:'...';display:inline-block;animation:ld 1s infinite}
-@media(max-width:720px){.auth-split{grid-template-columns:1fr}.auth-side{display:none}.auth-form{padding:32px 24px}}
+@media(max-width:760px){.auth-split{grid-template-columns:1fr}.auth-side{display:none}.auth-form{padding:28px 22px 32px}}
+@media(max-width:460px){.otp-d{width:44px;height:54px;font-size:28px}}
 </style>
 </head>
 <body>
@@ -81,121 +84,121 @@
 
 <div class="auth-wrap">
   <div class="auth-split">
+    <!-- Left side panel -->
     <div class="auth-side">
-      <div class="auth-side-brand">VORN<span>IX</span></div>
+      <div class="auth-brand">VORN<span>IX</span></div>
       <div class="auth-side-tag">// Next Generation Prop Firm</div>
-      <div class="auth-side-perks">
-        <div class="auth-perk"><div class="auth-perk-val g">95%</div><div class="auth-perk-lbl">Maximum profit split</div></div>
-        <div class="auth-perk"><div class="auth-perk-val">$100K</div><div class="auth-perk-lbl">Maximum funded capital</div></div>
-        <div class="auth-perk"><div class="auth-perk-val">Day 1</div><div class="auth-perk-lbl">Withdrawal available from</div></div>
-        <div class="auth-perk"><div class="auth-perk-val">4</div><div class="auth-perk-lbl">Challenge paths available</div></div>
-      </div>
-      <div style="margin-top:32px;font-size:11px;color:var(--t3);font-family:var(--ff-m);letter-spacing:1px">LEARN → PROVE → TRADE → GROW</div>
+      <div class="side-perk"><div class="side-perk-val g">95%</div><div class="side-perk-lbl">Maximum profit split</div></div>
+      <div class="side-perk"><div class="side-perk-val">$100K</div><div class="side-perk-lbl">Maximum funded capital</div></div>
+      <div class="side-perk"><div class="side-perk-val">Day 1</div><div class="side-perk-lbl">Withdrawals from</div></div>
+      <div class="side-perk"><div class="side-perk-val">4</div><div class="side-perk-lbl">Challenge paths</div></div>
+      <div class="side-tagline">LEARN → PROVE → TRADE → GROW</div>
     </div>
+
+    <!-- Right form -->
     <div class="auth-form">
-      <div class="auth-eyebrow">// Trader Login</div>
-      <div class="auth-heading">WELCOME BACK</div>
-      <div class="msg msg-err" id="err"></div>
-      <div class="msg msg-ok"  id="ok"></div>
-      <div class="f-g">
-        <label class="f-l" for="em">Email Address</label>
-        <input class="f-i" type="email" id="em" placeholder="trader@email.com" autocomplete="email">
+
+      <!-- Step 1: Email -->
+      <div id="step1">
+        <div class="auth-step-lbl">// Sign In with Email</div>
+        <div class="auth-title">WELCOME BACK</div>
+        <div class="auth-sub">Enter your email and we'll send you a 6-digit login code. No password needed.</div>
+        <div class="msg msg-err" id="e1"></div>
+        <div class="f-g">
+          <label class="f-l" for="em">Email Address</label>
+          <input class="f-i" type="email" id="em" placeholder="trader@email.com" autocomplete="email">
+        </div>
+        <button class="auth-btn" id="b1" onclick="sendCode()">Send Login Code →</button>
+        <div class="auth-sep">or</div>
+        <div class="auth-foot">No account? <a href="signup.html">Register free →</a></div>
+        <div class="auth-foot" style="margin-top:10px"><a href="index.html" style="color:var(--t3);font-size:12px">← Back to website</a></div>
       </div>
-      <div class="f-g">
-        <label class="f-l" for="pw">Password</label>
-        <input class="f-i" type="password" id="pw" placeholder="••••••••" autocomplete="current-password">
-        <div class="f-hint" onclick="showReset()">Forgot password?</div>
+
+      <!-- Step 2: OTP -->
+      <div id="step2" style="display:none">
+        <div class="auth-step-lbl">// Enter Your Code</div>
+        <div class="auth-title">CHECK EMAIL</div>
+        <div class="auth-sub" id="sub2">We sent a 6-digit code to your email address.</div>
+        <div class="msg msg-err" id="e2"></div>
+        <div class="msg msg-ok"  id="ok2"></div>
+        <div class="otp-wrap">
+          <input class="otp-d" type="text" inputmode="numeric" maxlength="1" id="d0" autocomplete="off">
+          <input class="otp-d" type="text" inputmode="numeric" maxlength="1" id="d1" autocomplete="off">
+          <input class="otp-d" type="text" inputmode="numeric" maxlength="1" id="d2" autocomplete="off">
+          <input class="otp-d" type="text" inputmode="numeric" maxlength="1" id="d3" autocomplete="off">
+          <input class="otp-d" type="text" inputmode="numeric" maxlength="1" id="d4" autocomplete="off">
+          <input class="otp-d" type="text" inputmode="numeric" maxlength="1" id="d5" autocomplete="off">
+        </div>
+        <div class="timer" id="tmr"></div>
+        <div class="otp-hint">Didn't receive it? Check spam folder. <a onclick="resend()">Resend code →</a></div>
+        <button class="auth-btn" id="b2" onclick="verify()">Sign In →</button>
+        <div class="auth-foot" style="margin-top:16px"><a onclick="back()" style="cursor:pointer;color:var(--t3);font-size:12px">← Different email</a></div>
       </div>
-      <button class="auth-btn" id="btn" onclick="doLogin()">Sign In →</button>
-      <div class="auth-sep">or</div>
-      <div class="auth-foot">No account? <a href="signup.html">Register free →</a></div>
-      <div class="auth-foot" style="margin-top:10px"><a href="index.html" style="color:var(--t3);font-size:12px">← Back to VORNIX.com</a></div>
+
     </div>
   </div>
 </div>
 
-<!-- Reset overlay -->
-<div class="overlay" id="reset-overlay">
-  <div class="overlay-card">
-    <div class="overlay-title">RESET PASSWORD</div>
-    <div class="overlay-sub">Enter your email and we'll send a secure reset link immediately.</div>
-    <div class="msg msg-err" id="r-err"></div>
-    <div class="msg msg-ok"  id="r-ok"></div>
-    <div class="f-g">
-      <label class="f-l" for="r-em">Email Address</label>
-      <input class="f-i" type="email" id="r-em" placeholder="trader@email.com">
-    </div>
-    <button class="auth-btn" id="r-btn" onclick="doReset()">Send Reset Link →</button>
-    <div class="auth-foot" style="margin-top:14px"><a onclick="hideReset()" style="color:var(--t3);cursor:pointer;font-size:12px">Cancel</a></div>
-  </div>
-</div>
-
-<!-- ── THE FIX: load supabase CDN first, then our lib, then init ── -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="supabase.js"></script>
 <script>
-/* All VornixDB code inside window.load — guarantees scripts are ready */
-window.addEventListener('load', async function() {
+'use strict';
+if (VornixDB.Auth.isLoggedIn()) location.href = 'dashboard.html';
 
-  // Redirect if already logged in
-  try {
-    if (await VornixDB.Auth.isLoggedIn()) { location.href = 'dashboard.html'; return; }
-  } catch(e) {}
+let _em='', _ti=null;
 
-  // Enter key handlers
-  document.getElementById('pw')?.addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
-  document.getElementById('em')?.addEventListener('keydown', e => { if(e.key==='Enter') document.getElementById('pw').focus(); });
-  document.getElementById('r-em')?.addEventListener('keydown', e => { if(e.key==='Enter') doReset(); });
-});
+document.getElementById('em').addEventListener('keydown', e => { if(e.key==='Enter') sendCode(); });
 
-async function doLogin() {
-  const em  = document.getElementById('em').value.trim();
-  const pw  = document.getElementById('pw').value;
-  const btn = document.getElementById('btn');
-  const err = document.getElementById('err');
-  err.classList.remove('show');
-  if(!em || !pw) { showErr(err,'Please enter your email and password.'); return; }
-  btn.disabled=true; btn.innerHTML='<span class="spin">Signing in</span>';
-  try {
-    const {data, error} = await VornixDB.Auth.signIn(em, pw);
-    if(error) {
-      btn.disabled=false; btn.innerHTML='Sign In →';
-      showErr(err, error.message.toLowerCase().includes('invalid') ? 'Incorrect email or password.' : error.message);
-      return;
-    }
-    btn.innerHTML='✓ Success...';
-    location.href='dashboard.html';
-  } catch(e) {
-    btn.disabled=false; btn.innerHTML='Sign In →';
-    showErr(err,'Connection error. Please try again.');
-  }
+async function sendCode() {
+  const em=document.getElementById('em').value.trim();
+  const err=document.getElementById('e1'); err.classList.remove('show');
+  if(!em||!em.includes('@')){showMsg(err,'Please enter a valid email address.');return;}
+  const b=document.getElementById('b1'); b.disabled=true; b.innerHTML='<span class="spin">Sending code</span>';
+  const d=await VornixDB.Auth.sendOTP(em);
+  b.disabled=false; b.innerHTML='Send Login Code →';
+  if(d.error){showMsg(err,d.error);return;}
+  _em=em;
+  document.getElementById('step1').style.display='none';
+  document.getElementById('step2').style.display='block';
+  document.getElementById('sub2').textContent='We sent a 6-digit code to '+em+'. Enter it below.';
+  initOTP(); startTimer(600); document.getElementById('d0').focus();
 }
 
-function showReset() { document.getElementById('reset-overlay').classList.add('show'); }
-function hideReset() {
-  document.getElementById('reset-overlay').classList.remove('show');
-  ['r-err','r-ok'].forEach(id => document.getElementById(id).classList.remove('show'));
-}
-
-async function doReset() {
-  const em  = document.getElementById('r-em').value.trim();
-  const btn = document.getElementById('r-btn');
-  const err = document.getElementById('r-err'); const ok = document.getElementById('r-ok');
+async function verify() {
+  const otp=getOTP(), err=document.getElementById('e2'), ok=document.getElementById('ok2');
   err.classList.remove('show'); ok.classList.remove('show');
-  if(!em) { showErr(err,'Please enter your email address.'); return; }
-  btn.disabled=true; btn.innerHTML='<span class="spin">Sending</span>';
-  try {
-    const {error} = await VornixDB.Auth.resetPassword(em);
-    btn.disabled=false; btn.innerHTML='Send Reset Link →';
-    if(error) { showErr(err,error.message); return; }
-    ok.textContent='Reset link sent! Check your inbox (and spam folder).';
-    ok.classList.add('show');
-  } catch(e) {
-    btn.disabled=false; btn.innerHTML='Send Reset Link →';
-    showErr(err,'Connection error. Please try again.');
-  }
+  if(otp.length!==6){showMsg(err,'Please enter all 6 digits of your code.');return;}
+  const b=document.getElementById('b2'); b.disabled=true; b.innerHTML='<span class="spin">Signing in</span>';
+  const d=await VornixDB.Auth.verifyOTP(_em,otp);
+  b.disabled=false; b.innerHTML='Sign In →';
+  if(d.error){showMsg(err,d.error);clearOTP();document.getElementById('d0').focus();return;}
+  clearInterval(_ti);
+  b.innerHTML='✓ Signed In — Redirecting...';
+  setTimeout(()=>location.href='dashboard.html',800);
 }
-function showErr(el,msg) { el.textContent=msg; el.classList.add('show'); }
+
+async function resend() {
+  clearInterval(_ti); document.getElementById('e2').classList.remove('show');
+  const d=await VornixDB.Auth.sendOTP(_em);
+  if(d.error){showMsg(document.getElementById('e2'),d.error);return;}
+  clearOTP(); document.getElementById('d0').focus(); startTimer(600);
+  const ok=document.getElementById('ok2'); ok.textContent='New code sent to '+_em; ok.classList.add('show');
+  setTimeout(()=>ok.classList.remove('show'),4000);
+}
+
+function back(){clearInterval(_ti);document.getElementById('step2').style.display='none';document.getElementById('step1').style.display='block';}
+function initOTP(){
+  const ds=Array.from(document.querySelectorAll('.otp-d'));
+  ds.forEach((d,i)=>{
+    d.value=''; d.classList.remove('filled');
+    d.oninput=()=>{const v=d.value.replace(/\D/g,'');d.value=v?v[0]:'';d.classList.toggle('filled',!!d.value);if(d.value&&i<5)ds[i+1].focus();if(getOTP().length===6)verify();};
+    d.onkeydown=e=>{if(e.key==='Backspace'&&!d.value&&i>0){ds[i-1].value='';ds[i-1].classList.remove('filled');ds[i-1].focus();}if(e.key==='ArrowLeft'&&i>0)ds[i-1].focus();if(e.key==='ArrowRight'&&i<5)ds[i+1].focus();};
+    d.onpaste=e=>{e.preventDefault();const p=(e.clipboardData||window.clipboardData).getData('text').replace(/\D/g,'').slice(0,6);p.split('').forEach((c,j)=>{if(ds[i+j]){ds[i+j].value=c;ds[i+j].classList.add('filled');}});const nx=ds[Math.min(i+p.length,5)];if(nx)nx.focus();if(getOTP().length===6)verify();};
+  });
+}
+function getOTP(){return Array.from(document.querySelectorAll('.otp-d')).map(d=>d.value).join('');}
+function clearOTP(){document.querySelectorAll('.otp-d').forEach(d=>{d.value='';d.classList.remove('filled');});}
+function startTimer(s){clearInterval(_ti);const el=document.getElementById('tmr');let r=s;function t(){const m=Math.floor(r/60),sc=r%60;el.innerHTML=`Code expires in <span>${m}:${sc.toString().padStart(2,'0')}</span>`;if(r<=0){clearInterval(_ti);el.innerHTML='<span style="color:var(--red)">Code expired — request a new one.</span>';}r--;}t();_ti=setInterval(t,1000);}
+function showMsg(el,msg){el.textContent=msg;el.classList.add('show');}
 </script>
 </body>
 </html>
