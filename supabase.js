@@ -1,157 +1,199 @@
 /* ================================================================
-   VORNIX — supabase.js  v5  FIXED (no naming conflicts)
-   ── CHANGE ONLY THESE TWO LINES ─────────────────────────────────
-   Get values from: supabase.com → Project Settings → API
+   VORNIX — supabase.js  v6  OTP EDITION
+   ── Zero CDN dependency. Pure fetch() calls to /api/ endpoints ──
+   ── Sessions stored in cookies, not localStorage ────────────────
    ================================================================ */
-const SUPABASE_URL      = 'https://bociajqqwpexnuoemnlx.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJvY2lhanFxd3BleG51b2Vtbmx4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzNDc2MDQsImV4cCI6MjA4ODkyMzYwNH0.3j13j-FWDGIyFZoSIRk7HTB7aipv_gLxaLAoPKm6FS8';
-/* ============================================================== */
 
-/* Internal client — uses _VX prefix to avoid ALL conflicts */
-let _VXclient = null;
+const _API = '';  // Empty = same origin (your Vercel domain)
 
-function _getClient() {
-  if (_VXclient) return _VXclient;
-  /* CDN sets window.supabase = { createClient, ... } */
-  if (typeof window !== 'undefined' && window.supabase && window.supabase.createClient) {
-    _VXclient = window.supabase.createClient(VX_URL, VX_KEY);
-  }
-  return _VXclient;
+/* ── COOKIE HELPERS ────────────────────────────────────────────── */
+function _setCookie(name, value, days) {
+  const d = new Date(Date.now() + days * 864e5).toUTCString();
+  document.cookie = `${name}=${encodeURIComponent(value)}; expires=${d}; path=/; SameSite=Strict`;
 }
+function _getCookie(name) {
+  const match = document.cookie.split('; ').find(r => r.startsWith(name + '='));
+  return match ? decodeURIComponent(match.split('=')[1]) : null;
+}
+function _clearCookie(name) {
+  document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; SameSite=Strict`;
+}
+
+const TOKEN_KEY = 'vx_token';
+const USER_KEY  = 'vx_user';
 
 /* ── AUTH ──────────────────────────────────────────────────────── */
 const _Auth = {
-  async signUp(email, password, fullName) {
-    const c = _getClient();
-    if (!c) return { error: { message: 'Supabase not initialized. Check your VX_URL and VX_KEY in supabase.js' } };
-    return c.auth.signUp({ email, password, options: { data: { full_name: fullName } } });
+
+  /* Step 1 — Send OTP to email */
+  async sendOTP(email, name, country) {
+    try {
+      const r = await fetch(`${_API}/api/auth?action=send-otp`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, name, country }),
+      });
+      return r.json();
+    } catch(e) { return { error: 'Connection failed. Check your internet connection.' }; }
   },
-  async signIn(email, password) {
-    const c = _getClient();
-    if (!c) return { error: { message: 'Supabase not initialized.' } };
-    return c.auth.signInWithPassword({ email, password });
+
+  /* Step 2 — Verify OTP and get session token */
+  async verifyOTP(email, otp, name, country) {
+    try {
+      const r = await fetch(`${_API}/api/auth?action=verify-otp`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, otp, name, country }),
+      });
+      const data = await r.json();
+      if (data.token) {
+        _setCookie(TOKEN_KEY, data.token, 30);
+        if (data.user) _setCookie(USER_KEY, JSON.stringify(data.user), 30);
+      }
+      return data;
+    } catch(e) { return { error: 'Connection failed. Check your internet connection.' }; }
   },
-  async signOut() {
-    const c = _getClient();
-    if (!c) return;
-    return c.auth.signOut();
-  },
+
+  /* Get current session from API */
   async getSession() {
-    const c = _getClient();
-    if (!c) return { data: { session: null } };
-    return c.auth.getSession();
+    const token = _getCookie(TOKEN_KEY);
+    if (!token) return { data: { session: null } };
+    try {
+      const r = await fetch(`${_API}/api/auth?action=get-session`, {
+        headers: { Authorization: 'Bearer ' + token },
+      });
+      if (!r.ok) {
+        _clearCookie(TOKEN_KEY); _clearCookie(USER_KEY);
+        return { data: { session: null } };
+      }
+      const data = await r.json();
+      return { data: { session: { user: data.user } } };
+    } catch(e) { return { data: { session: null } }; }
   },
-  async getUser() {
-    const { data } = await _Auth.getSession();
-    return data?.session?.user || null;
+
+  /* Get user object from cookie (fast, no network) */
+  getUser() {
+    try {
+      const raw = _getCookie(USER_KEY);
+      return raw ? JSON.parse(raw) : null;
+    } catch { return null; }
   },
-  async getToken() {
-    const { data } = await _Auth.getSession();
-    return data?.session?.access_token || null;
+
+  /* Get token for API calls */
+  getToken() {
+    return _getCookie(TOKEN_KEY);
   },
-  async isLoggedIn() {
-    const { data } = await _Auth.getSession();
-    return !!data?.session;
+
+  /* Is user logged in? (cookie check only — instant) */
+  isLoggedIn() {
+    return !!_getCookie(TOKEN_KEY);
   },
-  async resetPassword(email) {
-    const c = _getClient();
-    if (!c) return { error: { message: 'Supabase not initialized.' } };
-    return c.auth.resetPasswordForEmail(email, {
-      redirectTo: (window.APP_URL || window.location.origin) + '/login.html',
-    });
-  },
-  onStateChange(callback) {
-    const c = _getClient();
-    if (!c) return;
-    c.auth.onAuthStateChange(callback);
+
+  /* Sign out */
+  async signOut() {
+    const token = _getCookie(TOKEN_KEY);
+    _clearCookie(TOKEN_KEY);
+    _clearCookie(USER_KEY);
+    if (token) {
+      try {
+        await fetch(`${_API}/api/auth?action=logout`, {
+          method: 'POST',
+          headers: { Authorization: 'Bearer ' + token },
+        });
+      } catch {}
+    }
+    return { error: null };
   },
 };
 
 /* ── PROFILES ──────────────────────────────────────────────────── */
 const _Profiles = {
   async get(userId) {
-    const c = _getClient();
-    if (!c) return { data: null };
-    return c.from('profiles').select('*').eq('id', userId).single();
+    const token = _Auth.getToken();
+    if (!token) return { data: null };
+    try {
+      const r = await fetch(`${_API}/api/auth?action=get-session`, {
+        headers: { Authorization: 'Bearer ' + token },
+      });
+      const data = await r.json();
+      return { data: data.user || null };
+    } catch { return { data: null }; }
   },
   async update(userId, fields) {
-    const c = _getClient();
-    if (!c) return { error: { message: 'Supabase not initialized.' } };
-    return c.from('profiles').upsert({ id: userId, ...fields, updated_at: new Date().toISOString() });
+    const token = _Auth.getToken();
+    if (!token) return { error: { message: 'Not authenticated' } };
+    try {
+      const r = await fetch(`${_API}/api/auth?action=update-profile`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
+        body: JSON.stringify(fields),
+      });
+      return r.json();
+    } catch(e) { return { error: { message: 'Connection failed' } }; }
   },
 };
 
 /* ── CHALLENGES ────────────────────────────────────────────────── */
 const _Challenges = {
   async getMyAll() {
-    const token = await _Auth.getToken();
+    const token = _Auth.getToken();
     if (!token) return { data: [] };
     try {
-      const r = await fetch('/api/challenges?action=get', {
+      const r = await fetch(`${_API}/api/challenges?action=get`, {
         headers: { Authorization: 'Bearer ' + token },
       });
       return r.json();
     } catch { return { data: [] }; }
   },
-  async getById(id) {
-    const token = await _Auth.getToken();
-    if (!token) return { data: null };
-    try {
-      const r = await fetch('/api/challenges?action=get&id=' + id, {
-        headers: { Authorization: 'Bearer ' + token },
-      });
-      return r.json();
-    } catch { return { data: null }; }
-  },
   async startCryptoPayment(plan, size, network) {
-    const token = await _Auth.getToken();
+    const token = _Auth.getToken();
     if (!token) return { error: 'Not authenticated' };
     try {
-      const r = await fetch('/api/crypto-payment?action=initiate', {
+      const r = await fetch(`${_API}/api/crypto-payment?action=initiate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
         body: JSON.stringify({ plan, account_size: size, network }),
       });
       return r.json();
-    } catch (e) { return { error: e.message }; }
+    } catch(e) { return { error: e.message }; }
   },
   async submitPayment(paymentId, txHash, network) {
-    const token = await _Auth.getToken();
+    const token = _Auth.getToken();
     if (!token) return { error: 'Not authenticated' };
     try {
-      const r = await fetch('/api/crypto-payment?action=submit', {
+      const r = await fetch(`${_API}/api/crypto-payment?action=submit`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
         body: JSON.stringify({ payment_id: paymentId, tx_hash: txHash, network }),
       });
       return r.json();
-    } catch (e) { return { error: e.message }; }
+    } catch(e) { return { error: e.message }; }
   },
 };
 
 /* ── PAYOUTS ───────────────────────────────────────────────────── */
 const _Payouts = {
   async getMy() {
-    const token = await _Auth.getToken();
+    const token = _Auth.getToken();
     if (!token) return { data: [] };
     try {
-      const r = await fetch('/api/payouts?action=get', {
+      const r = await fetch(`${_API}/api/payouts?action=get`, {
         headers: { Authorization: 'Bearer ' + token },
       });
       return r.json();
     } catch { return { data: [] }; }
   },
   async request(challengeId, amount, method, details) {
-    const token = await _Auth.getToken();
+    const token = _Auth.getToken();
     if (!token) return { error: 'Not authenticated' };
     try {
-      const r = await fetch('/api/payouts?action=request', {
+      const r = await fetch(`${_API}/api/payouts?action=request`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
         body: JSON.stringify({ challenge_id: challengeId, amount_requested: amount, method, payout_details: details }),
       });
       return r.json();
-    } catch (e) { return { error: e.message }; }
+    } catch(e) { return { error: e.message }; }
   },
 };
 
@@ -159,7 +201,7 @@ const _Payouts = {
 const _Leaderboard = {
   async get(period = 'monthly', limit = 50) {
     try {
-      const r = await fetch(`/api/leaderboard?period=${period}&limit=${limit}`);
+      const r = await fetch(`${_API}/api/leaderboard?period=${period}&limit=${limit}`);
       return r.json();
     } catch { return { data: [] }; }
   },
@@ -169,66 +211,34 @@ const _Leaderboard = {
 const _Affiliates = {
   captureRef() {
     const ref = new URLSearchParams(window.location.search).get('ref');
-    if (ref) { try { sessionStorage.setItem('vx_ref', ref); } catch{} }
-    return ref || (function(){ try { return sessionStorage.getItem('vx_ref'); } catch{ return null; } })();
-  },
-  async getDashboard() {
-    const token = await _Auth.getToken();
-    if (!token) return { data: null };
-    try {
-      const r = await fetch('/api/affiliate?action=dashboard', {
-        headers: { Authorization: 'Bearer ' + token },
-      });
-      return r.json();
-    } catch { return { data: null }; }
+    if (ref) { try { sessionStorage.setItem('vx_ref', ref); } catch {} }
+    return ref || (function(){ try { return sessionStorage.getItem('vx_ref'); } catch { return null; } })();
   },
 };
 
 /* ── ADMIN ─────────────────────────────────────────────────────── */
 const _Admin = {
-  async getStats() {
-    const token = await _Auth.getToken();
-    if (!token) return { data: null };
-    try {
-      const r = await fetch('/api/admin?action=stats', {
-        headers: { Authorization: 'Bearer ' + token },
-      });
-      return r.json();
-    } catch { return { data: null }; }
-  },
   async getPendingPayments() {
-    const token = await _Auth.getToken();
+    const token = _Auth.getToken();
     if (!token) return { data: [] };
     try {
-      const r = await fetch('/api/crypto-payment?action=pending', {
+      const r = await fetch(`${_API}/api/crypto-payment?action=pending`, {
         headers: { Authorization: 'Bearer ' + token },
       });
       return r.json();
     } catch { return { data: [] }; }
   },
   async approvePayment(paymentId, challengeData) {
-    const token = await _Auth.getToken();
+    const token = _Auth.getToken();
     if (!token) return { error: 'Not authenticated' };
     try {
-      const r = await fetch('/api/crypto-payment?action=approve', {
+      const r = await fetch(`${_API}/api/crypto-payment?action=approve`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
         body: JSON.stringify({ payment_id: paymentId, ...challengeData }),
       });
       return r.json();
-    } catch (e) { return { error: e.message }; }
-  },
-  async rejectPayment(paymentId, reason) {
-    const token = await _Auth.getToken();
-    if (!token) return { error: 'Not authenticated' };
-    try {
-      const r = await fetch('/api/crypto-payment?action=reject', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
-        body: JSON.stringify({ payment_id: paymentId, reason }),
-      });
-      return r.json();
-    } catch (e) { return { error: e.message }; }
+    } catch(e) { return { error: e.message }; }
   },
 };
 
