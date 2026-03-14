@@ -234,6 +234,17 @@ module.exports = async (req, res) => {
     }
 
 
+    // DEBUG endpoint — remove after fixing
+    if (action === "debug") {
+      return ok(res, {
+        RESEND_KEY:  process.env.RESEND_API_KEY ? "SET: " + process.env.RESEND_API_KEY.slice(0,8) + "..." : "MISSING",
+        EMAIL_FROM:  process.env.EMAIL_FROM || "MISSING - fallback: onboarding@resend.dev",
+        FROM_used:   FROM,
+        SUPABASE:    process.env.SUPABASE_URL ? "SET" : "MISSING",
+        APP_URL:     process.env.APP_URL || "MISSING",
+      });
+    }
+
     return err(res, `Unknown action: ${action}`, 400);
 
   } catch (e) {
