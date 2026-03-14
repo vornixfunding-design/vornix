@@ -8,7 +8,8 @@ const { supabase, cors, ok, err } = require('../lib/db');
 const { Resend }                   = require('resend');
 
 const resend = new Resend(process.env.RESEND_API_KEY);
-const FROM   = process.env.EMAIL_FROM || 'VORNIX <noreply@vornix.com>';
+/* onboarding@resend.dev works with zero domain setup — change after buying domain */
+const FROM   = process.env.EMAIL_FROM || 'onboarding@resend.dev';
 const APP    = process.env.APP_URL    || 'https://vornix.com';
 
 module.exports = async (req, res) => {
@@ -27,6 +28,11 @@ module.exports = async (req, res) => {
       if (req.method !== 'POST') return err(res, 'POST required', 405);
       const email = (body.email || '').toLowerCase().trim();
       if (!email || !email.includes('@')) return err(res, 'Valid email required');
+
+      // Check Resend key exists
+      if (!process.env.RESEND_API_KEY) {
+        return err(res, 'RESEND_API_KEY is not set in Vercel environment variables.');
+      }
 
       // 6-digit OTP, expires in 10 minutes
       const otp        = Math.floor(100000 + Math.random() * 900000).toString();
@@ -86,8 +92,9 @@ module.exports = async (req, res) => {
       });
 
       if (mailErr) {
-        console.error('Resend error:', mailErr);
-        return err(res, 'Failed to send email. Check RESEND_API_KEY and EMAIL_FROM in Vercel env vars.');
+        console.error('Resend error full:', JSON.stringify(mailErr));
+        const detail = mailErr?.message || mailErr?.name || JSON.stringify(mailErr);
+        return err(res, `Email send failed: ${detail}. FROM="${FROM}" — make sure EMAIL_FROM=onboarding@resend.dev in Vercel env vars.`);
       }
 
       return ok(res, { message: 'Code sent to ' + email });
