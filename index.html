@@ -4,50 +4,54 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>VORNIX — Next Generation Prop Firm</title>
-<meta name="description" content="VORNIX funds skilled traders with capital up to $100K. Four evaluation paths. Keep up to 95% of your profits.">
+<meta name="description" content="VORNIX funds skilled traders with capital up to $100K. Four evaluation paths. Keep up to 95% of your profits. Learn. Prove. Trade. Grow.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;500;600;700;900&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;500;600;700;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<style>
+  /* Extra clarity — GROW is always bright emerald */
+  .hero__h1 .grn { color:#34D399; -webkit-text-stroke:0; opacity:1; }
+  .hero__h1 .gold { color:#F5C842; -webkit-text-stroke:0; opacity:1; }
+</style>
 </head>
 <body>
 
-<!-- 3D Canvas Background -->
 <canvas id="bg-canvas"></canvas>
 <div id="bg-veil"></div>
 
-<!-- ═══════════════════════ NAV ═══════════════════════ -->
+<!-- ═══ NAV ═══ -->
 <nav class="nav" role="navigation" aria-label="Main navigation">
   <div class="nav__logo" onclick="nav('home')" role="button" tabindex="0" aria-label="VORNIX Home">
     <svg class="nav__logo-svg" viewBox="0 0 172 38" fill="none" xmlns="http://www.w3.org/2000/svg">
       <defs>
-        <linearGradient id="lg-w" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#F0F4FF" stop-opacity=".95"/><stop offset="100%" stop-color="#8890AA"/></linearGradient>
-        <linearGradient id="lg-g" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#C9A84C"/><stop offset="100%" stop-color="#7A5C1E"/></linearGradient>
-        <linearGradient id="lg-e" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#2ECC8F"/><stop offset="100%" stop-color="#0E6B4A"/></linearGradient>
+        <linearGradient id="lg-w" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#EEF2FF" stop-opacity=".95"/><stop offset="100%" stop-color="#6B7EB8"/></linearGradient>
+        <linearGradient id="lg-g" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#F5C842"/><stop offset="100%" stop-color="#8A6A10"/></linearGradient>
+        <linearGradient id="lg-e" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#34D399"/><stop offset="100%" stop-color="#065F46"/></linearGradient>
         <filter id="glow-g" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="1" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
       </defs>
       <g filter="url(#glow-g)">
         <rect x="1" y="14" width="5" height="13" fill="url(#lg-g)" rx=".3"/>
-        <line x1="3.5" y1="8" x2="3.5" y2="14" stroke="#C9A84C" stroke-width="1.2" opacity=".7"/>
-        <line x1="3.5" y1="27" x2="3.5" y2="32" stroke="#C9A84C" stroke-width="1.2" opacity=".5"/>
-        <rect x="9" y="18" width="5" height="7" fill="rgba(255,255,255,.08)" rx=".3"/>
-        <line x1="11.5" y1="13" x2="11.5" y2="18" stroke="rgba(255,255,255,.1)" stroke-width="1.2"/>
-        <line x1="11.5" y1="25" x2="11.5" y2="29" stroke="rgba(255,255,255,.08)" stroke-width="1.2"/>
+        <line x1="3.5" y1="8" x2="3.5" y2="14" stroke="#F5C842" stroke-width="1.2" opacity=".7"/>
+        <line x1="3.5" y1="27" x2="3.5" y2="32" stroke="#F5C842" stroke-width="1.2" opacity=".5"/>
+        <rect x="9" y="18" width="5" height="7" fill="rgba(255,255,255,.07)" rx=".3"/>
+        <line x1="11.5" y1="13" x2="11.5" y2="18" stroke="rgba(255,255,255,.09)" stroke-width="1.2"/>
+        <line x1="11.5" y1="25" x2="11.5" y2="29" stroke="rgba(255,255,255,.07)" stroke-width="1.2"/>
         <rect x="17" y="11" width="5" height="14" fill="url(#lg-e)" rx=".3"/>
-        <line x1="19.5" y1="6" x2="19.5" y2="11" stroke="#2ECC8F" stroke-width="1.2" opacity=".6"/>
-        <line x1="19.5" y1="25" x2="19.5" y2="30" stroke="#2ECC8F" stroke-width="1.2" opacity=".5"/>
+        <line x1="19.5" y1="6" x2="19.5" y2="11" stroke="#34D399" stroke-width="1.2" opacity=".6"/>
+        <line x1="19.5" y1="25" x2="19.5" y2="30" stroke="#34D399" stroke-width="1.2" opacity=".5"/>
       </g>
-      <polyline points="3.5,26 11.5,22 19.5,14" stroke="#C9A84C" stroke-width=".8" opacity=".4" stroke-dasharray="2,2"/>
+      <polyline points="3.5,26 11.5,22 19.5,14" stroke="#F5C842" stroke-width=".8" opacity=".4" stroke-dasharray="2,2"/>
       <path d="M30 7L38 31L46 7" stroke="url(#lg-w)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
       <ellipse cx="56.5" cy="19" rx="7" ry="12" stroke="url(#lg-w)" stroke-width="2.7" fill="none"/>
       <path d="M68 7v24M68 7h9c3 0 5 2.5 5 6s-2 6-5 6H68M76 19l7.5 12" stroke="url(#lg-w)" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
       <path d="M88 31V7L102 31V7" stroke="url(#lg-w)" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
       <line x1="108" y1="7" x2="108" y2="31" stroke="url(#lg-w)" stroke-width="2.7" stroke-linecap="round"/>
       <path d="M114 7l13 24M127 7l-13 24" stroke="url(#lg-g)" stroke-width="2.8" stroke-linecap="round" filter="url(#glow-g)"/>
-      <line x1="30" y1="36" x2="127" y2="36" stroke="rgba(201,168,76,.10)" stroke-width=".8"/>
-      <line x1="30" y1="36" x2="72"  y2="36" stroke="rgba(201,168,76,.65)" stroke-width="1.4"/>
-      <text x="133" y="16" font-family="'Barlow Condensed',sans-serif" font-size="6" fill="#3A3C58" letter-spacing="1.5">PROP</text>
-      <text x="133" y="26" font-family="'Barlow Condensed',sans-serif" font-size="6" fill="#3A3C58" letter-spacing="1.5">FIRM</text>
+      <line x1="30" y1="36" x2="127" y2="36" stroke="rgba(212,160,23,.10)" stroke-width=".8"/>
+      <line x1="30" y1="36" x2="72"  y2="36" stroke="rgba(212,160,23,.65)" stroke-width="1.4"/>
+      <text x="133" y="16" font-family="'Barlow Condensed',sans-serif" font-size="6" fill="#2D3A5A" letter-spacing="1.5">PROP</text>
+      <text x="133" y="26" font-family="'Barlow Condensed',sans-serif" font-size="6" fill="#2D3A5A" letter-spacing="1.5">FIRM</text>
     </svg>
   </div>
 
@@ -84,26 +88,25 @@
 </div>
 
 
-<!-- ═══════════════════════ PAGE: HOME ═══════════════════════ -->
+<!-- ═══ PAGE: HOME ═══ -->
 <main class="page is-active" id="page-home">
 
-  <!-- Hero -->
   <section class="hero" aria-labelledby="hero-h1">
     <div class="hero__left">
       <span class="hero__eye">// Next Generation Prop Firm</span>
       <h1 class="hero__h1" id="hero-h1">
         LEARN.
         <span class="gold">PROVE.</span>
-        <span class="grn">TRADE &amp;</span>
-        <span class="ghost">GROW</span>
+        <span class="grn">TRADE.</span>
+        <span style="color:#F5C842;display:block;">GROW.</span>
       </h1>
       <div class="hero__tagline" aria-label="Our journey">
         <span class="hero__step">Learn</span>
-        <span class="hero__arr" aria-hidden="true">→</span>
+        <span class="hero__arr">→</span>
         <span class="hero__step">Prove</span>
-        <span class="hero__arr" aria-hidden="true">→</span>
+        <span class="hero__arr">→</span>
         <span class="hero__step">Trade</span>
-        <span class="hero__arr" aria-hidden="true">→</span>
+        <span class="hero__arr">→</span>
         <span class="hero__step">Grow</span>
       </div>
       <p class="hero__desc">VORNIX funds traders who <strong>prove they can perform</strong>. Four evaluation paths, capital up to $100K, and up to <strong>95% of every dollar you generate</strong>.</p>
@@ -112,6 +115,7 @@
         <button class="btn-s" onclick="nav('how')">How It Works</button>
       </div>
     </div>
+
     <div class="hero__panel" aria-hidden="true">
       <div class="hero__stats">
         <div class="hs"><div class="hs__v g">95%</div><div class="hs__l">Max Profit Split</div></div>
@@ -120,14 +124,13 @@
         <div class="hs"><div class="hs__v">Day 1</div><div class="hs__l">Withdrawals</div></div>
       </div>
       <div class="hero__ticker">
-        <div class="ticker-i"><span style="color:var(--t2)">XAUUSD</span> <span style="color:var(--t1)">2847.50</span> <span>▲ 0.82%</span></div>
-        <div class="ticker-i"><span style="color:var(--t2)">EURUSD</span> <span style="color:var(--t1)">1.0842</span> <span class="dn">▼ 0.24%</span></div>
-        <div class="ticker-i"><span style="color:var(--t2)">BTC/USD</span> <span style="color:var(--t1)">96,440</span> <span>▲ 2.38%</span></div>
+        <div class="ticker-i"><span style="color:var(--t2)">XAUUSD</span><span style="color:var(--t1)">2847.50</span><span>▲ 0.82%</span></div>
+        <div class="ticker-i"><span style="color:var(--t2)">EURUSD</span><span style="color:var(--t1)">1.0842</span><span class="dn">▼ 0.24%</span></div>
+        <div class="ticker-i"><span style="color:var(--t2)">BTC/USD</span><span style="color:var(--t1)">96,440</span><span>▲ 2.38%</span></div>
       </div>
     </div>
   </section>
 
-  <!-- Stats strip -->
   <div class="strip" role="list">
     <div class="strip-i" role="listitem"><div class="strip-i__n"><span>95</span>%</div><div class="strip-i__l">Max Profit Split</div></div>
     <div class="strip-i" role="listitem"><div class="strip-i__n">$<span>100</span>K</div><div class="strip-i__l">Max Funded Capital</div></div>
@@ -135,7 +138,6 @@
     <div class="strip-i" role="listitem"><div class="strip-i__n"><span>24</span>/5</div><div class="strip-i__l">Support Available</div></div>
   </div>
 
-  <!-- Plans preview -->
   <section class="section" aria-labelledby="plans-h2">
     <span class="s-eye">// Choose Your Path</span>
     <h2 class="s-head" id="plans-h2">4 WAYS TO GET <span class="gold">FUNDED</span></h2>
@@ -180,7 +182,6 @@
     </div>
   </section>
 
-  <!-- Technology preview -->
   <div class="section--dark">
     <section class="section" aria-labelledby="tech-h2">
       <span class="s-eye">// Our Products</span>
@@ -198,7 +199,6 @@
     </section>
   </div>
 
-  <!-- Journey -->
   <section class="section" aria-labelledby="journey-h2">
     <span class="s-eye">// The Journey</span>
     <h2 class="s-head" id="journey-h2">LEARN → PROVE → TRADE → <span class="gold">GROW</span></h2>
@@ -228,7 +228,7 @@
 </main>
 
 
-<!-- ═══════════════════════ PAGE: CHALLENGES ═══════════════════════ -->
+<!-- ═══ PAGE: CHALLENGES ═══ -->
 <main class="page" id="page-challenges">
   <header class="ph">
     <span class="ph__eye">// Evaluation Plans</span>
@@ -243,7 +243,6 @@
     <button class="tab"           id="tab-partial" onclick="setTab('partial')" role="tab">💳 Partial <span class="tab-pill pill-green">35% Up</span></button>
   </div>
 
-  <!-- ── 1-STEP ── -->
   <div class="panel is-active" id="panel-one">
     <div class="plan-ov">
       <div class="rv">
@@ -252,10 +251,8 @@
         <p class="body-t">Hit <strong>10% profit</strong> in a single phase. No time limit. No minimum trading days. News trading and EA/Algo both allowed. Fastest path to a funded account.</p>
         <p class="body-t">Consistency rule: <strong>no single trade may exceed 40% of total profit</strong>.</p>
         <div class="flags">
-          <span class="flag flag-ok">✓ News Trading</span>
-          <span class="flag flag-ok">✓ EA / Algo</span>
-          <span class="flag flag-gold">★ No Min. Days</span>
-          <span class="flag flag-ok">✓ No Time Limit</span>
+          <span class="flag flag-ok">✓ News Trading</span><span class="flag flag-ok">✓ EA / Algo</span>
+          <span class="flag flag-gold">★ No Min. Days</span><span class="flag flag-ok">✓ No Time Limit</span>
         </div>
       </div>
       <div class="rv">
@@ -293,7 +290,6 @@
     </div>
   </div>
 
-  <!-- ── 2-STEP ── -->
   <div class="panel" id="panel-two">
     <div class="plan-ov">
       <div class="rv">
@@ -302,8 +298,7 @@
         <p class="body-t">Two evaluation phases that verify <strong>consistent, repeatable performance</strong>. News trading and EA/Algo allowed. Accounts from <strong>$1K to $100K</strong>.</p>
         <p class="body-t">Consistency rule: <strong>no single trade may exceed 40% of total profit</strong>. Minimum 3 trading days per phase.</p>
         <div class="flags">
-          <span class="flag flag-ok">✓ News Trading</span>
-          <span class="flag flag-ok">✓ EA / Algo</span>
+          <span class="flag flag-ok">✓ News Trading</span><span class="flag flag-ok">✓ EA / Algo</span>
           <span class="flag flag-nt">3 Min. Days / Phase</span>
         </div>
       </div>
@@ -345,7 +340,6 @@
     </div>
   </div>
 
-  <!-- ── 3-STEP ── -->
   <div class="panel" id="panel-three">
     <div class="plan-ov">
       <div class="rv">
@@ -354,10 +348,8 @@
         <p class="body-t">Three evaluation phases. Strict <strong>15% consistency rule</strong>. No news trading. Most disciplined evaluation available.</p>
         <p class="body-t">The 15% consistency rule and no-news restriction apply in <strong>all phases and the funded account</strong>.</p>
         <div class="flags">
-          <span class="flag flag-no">✕ No News Trading</span>
-          <span class="flag flag-ok">✓ EA / Algo</span>
-          <span class="flag flag-nt">3 Min. Days / Phase</span>
-          <span class="flag flag-no">15% Consistency Cap</span>
+          <span class="flag flag-no">✕ No News Trading</span><span class="flag flag-ok">✓ EA / Algo</span>
+          <span class="flag flag-nt">3 Min. Days / Phase</span><span class="flag flag-no">15% Consistency Cap</span>
         </div>
       </div>
       <div class="rv">
@@ -403,7 +395,6 @@
     </div>
   </div>
 
-  <!-- ── PARTIAL ── -->
   <div class="panel" id="panel-partial">
     <div class="plan-ov">
       <div class="rv">
@@ -412,10 +403,8 @@
         <p class="body-t">Pay <strong>only 35% of the challenge fee upfront</strong>. The remaining 65% is deducted from your first profit withdrawal. Lower barrier — stricter evaluation.</p>
         <p class="body-t">The 15% consistency rule and no-news restriction apply throughout all phases and the funded account.</p>
         <div class="flags">
-          <span class="flag flag-gold">★ 35% Upfront Only</span>
-          <span class="flag flag-no">✕ No News Trading</span>
-          <span class="flag flag-nt">5 Min. Days / Phase</span>
-          <span class="flag flag-no">15% Consistency Cap</span>
+          <span class="flag flag-gold">★ 35% Upfront Only</span><span class="flag flag-no">✕ No News Trading</span>
+          <span class="flag flag-nt">5 Min. Days / Phase</span><span class="flag flag-no">15% Consistency Cap</span>
         </div>
       </div>
       <div class="rv">
@@ -453,20 +442,16 @@
 </main>
 
 
-<!-- ═══════════════════════ PAGE: TECHNOLOGY ═══════════════════════ -->
+<!-- ═══ PAGE: TECHNOLOGY ═══ -->
 <main class="page" id="page-tech">
-  <header class="ph">
-    <span class="ph__eye">// Our Products</span>
-    <h1 class="ph__h">VORNIX <span class="gold">TECHNOLOGY</span></h1>
-    <p class="ph__sub">We are building a technology ecosystem to make traders smarter, more disciplined and more profitable.</p>
-  </header>
+  <header class="ph"><span class="ph__eye">// Our Products</span><h1 class="ph__h">VORNIX <span class="gold">TECHNOLOGY</span></h1><p class="ph__sub">We are building a technology ecosystem to make traders smarter, more disciplined and more profitable.</p></header>
   <section class="section">
     <div class="g2 grid">
       <div class="tcard rv rv-d1"><div class="tcard__n">// 01</div><div class="tcard__icon">🤖</div><div class="tcard__title">AI Trading Bots</div><p class="tcard__desc">Automated bots that identify opportunities and execute trades. <strong>The goal is not to replace traders — it's to enhance discipline and remove emotion.</strong></p><ul class="tcard__list"><li>Identify opportunities automatically</li><li>Execute trades based on your strategy rules</li><li>Manage positions and exits automatically</li><li>Adapt continuously to changing conditions</li></ul><span class="tcard__tag">// In Development</span></div>
-      <div class="tcard rv rv-d2"><div class="tcard__n">// 02</div><div class="tcard__icon">📊</div><div class="tcard__title">Market Analyzer</div><p class="tcard__desc">Professional analysis dashboard that gives traders <strong>data-driven insights instead of gut feelings</strong>. Built for serious market analysis at every timeframe.</p><ul class="tcard__list"><li>Real-time market trend analysis</li><li>Volatility and momentum insights</li><li>Risk metrics per instrument and session</li><li>Live trade performance tracking</li></ul><span class="tcard__tag">// In Development</span></div>
+      <div class="tcard rv rv-d2"><div class="tcard__n">// 02</div><div class="tcard__icon">📊</div><div class="tcard__title">Market Analyzer</div><p class="tcard__desc">Professional analysis dashboard that gives traders <strong>data-driven insights instead of gut feelings</strong>.</p><ul class="tcard__list"><li>Real-time market trend analysis</li><li>Volatility and momentum insights</li><li>Risk metrics per instrument and session</li><li>Live trade performance tracking</li></ul><span class="tcard__tag">// In Development</span></div>
       <div class="tcard rv rv-d3"><div class="tcard__n">// 03</div><div class="tcard__icon">📈</div><div class="tcard__title">Smart Indicators</div><p class="tcard__desc">Proprietary algorithmic indicators that <strong>simplify complex market analysis</strong>. Traditional indicators confuse. Ours clarify.</p><ul class="tcard__list"><li>Identify trend direction with clarity</li><li>Highlight potential entry and exit zones</li><li>Filter false and noisy signals</li><li>Compatible with MT4 and MT5</li></ul><span class="tcard__tag">// In Development</span></div>
       <div class="tcard rv rv-d4"><div class="tcard__n">// 04</div><div class="tcard__icon">⚙️</div><div class="tcard__title">Strategy Builder</div><p class="tcard__desc">No-code strategy creation. Build, backtest and deploy automated strategies <strong>without writing a single line of code</strong>.</p><ul class="tcard__list"><li>Use pre-built, backtested strategies</li><li>Customise parameters to your style</li><li>Test on historical market data</li><li>Deploy directly on funded accounts</li></ul><span class="tcard__tag">// In Development</span></div>
-      <div class="tcard rv rv-d5"><div class="tcard__n">// 05</div><div class="tcard__icon">🔬</div><div class="tcard__title">Performance Analytics</div><p class="tcard__desc">Deep reporting that helps traders <strong>identify exactly what is working and what is not</strong>. Institution-level analytics for individuals.</p><ul class="tcard__list"><li>Win rate and expectancy tracking</li><li>Average profit vs average loss</li><li>Risk per trade and per session</li><li>Drawdown timeline visualisation</li></ul><span class="tcard__tag">// In Development</span></div>
+      <div class="tcard rv rv-d5"><div class="tcard__n">// 05</div><div class="tcard__icon">🔬</div><div class="tcard__title">Performance Analytics</div><p class="tcard__desc">Deep reporting that helps traders <strong>identify exactly what is working and what is not</strong>.</p><ul class="tcard__list"><li>Win rate and expectancy tracking</li><li>Average profit vs average loss</li><li>Risk per trade and per session</li><li>Drawdown timeline visualisation</li></ul><span class="tcard__tag">// In Development</span></div>
       <div class="tcard rv rv-d6"><div class="tcard__n">// 06</div><div class="tcard__icon">🎓</div><div class="tcard__title">Education Platform</div><p class="tcard__desc">A professional curriculum that gives trading <strong>the same structured pathway as medicine or engineering</strong>.</p><ul class="tcard__list"><li>Market structure and price action</li><li>Risk management fundamentals</li><li>Trading psychology and discipline</li><li>Strategy development from first principles</li></ul><span class="tcard__tag">// In Development</span></div>
     </div>
     <div class="tech-purpose rv">
@@ -483,41 +468,13 @@
 </main>
 
 
-<!-- ═══════════════════════ PAGE: HOW IT WORKS ═══════════════════════ -->
+<!-- ═══ PAGE: HOW IT WORKS ═══ -->
 <main class="page" id="page-how">
-  <header class="ph">
-    <span class="ph__eye">// The Process</span>
-    <h1 class="ph__h">HOW <span class="gold">VORNIX WORKS</span></h1>
-    <p class="ph__sub">Every plan follows the same journey. Choose your challenge, prove your edge, get funded and scale.</p>
-  </header>
+  <header class="ph"><span class="ph__eye">// The Process</span><h1 class="ph__h">HOW <span class="gold">VORNIX WORKS</span></h1><p class="ph__sub">Every plan follows the same journey. Choose your challenge, prove your edge, get funded and scale.</p></header>
   <section class="section">
-    <div class="how-block rv">
-      <div class="how-block__hd">⚡ 1-STEP PROCESS</div>
-      <div class="how-steps">
-        <div class="hstep"><div class="hstep__n">01</div><div class="hstep__t">Purchase</div><p class="hstep__d">Choose $5K–$100K. Pay the one-time fee. Receive evaluation account credentials immediately.</p></div>
-        <div class="hstep"><div class="hstep__n">02</div><div class="hstep__t">Single Evaluation</div><p class="hstep__d">Hit 10% profit. Stay within 3% trailing daily loss and 8% static max drawdown. No time limit. No minimum days.</p></div>
-        <div class="hstep"><div class="hstep__n">03</div><div class="hstep__t">Get Funded</div><p class="hstep__d">Pass the evaluation and receive your funded account. Trade live capital from Day 1.</p></div>
-        <div class="hstep"><div class="hstep__n">04</div><div class="hstep__t">Withdraw &amp; Scale</div><p class="hstep__d">Request payouts from Day 1. 95% profit split. Automatic 25% scaling every 10% profit cycle.</p></div>
-      </div>
-    </div>
-    <div class="how-block rv">
-      <div class="how-block__hd">🎯 2-STEP PROCESS</div>
-      <div class="how-steps">
-        <div class="hstep"><div class="hstep__n">01</div><div class="hstep__t">Purchase</div><p class="hstep__d">Select $1K–$100K account. Pay the one-time fee and access your account instantly.</p></div>
-        <div class="hstep"><div class="hstep__n">02</div><div class="hstep__t">Phase 1 — 10%</div><p class="hstep__d">Hit 10% profit. Minimum 3 trading days. Stay within 5% trailing daily loss and 10% static max drawdown.</p></div>
-        <div class="hstep"><div class="hstep__n">03</div><div class="hstep__t">Phase 2 — 5%</div><p class="hstep__d">Confirm consistency with a 5% profit target. Same risk rules. 3 more minimum trading days.</p></div>
-        <div class="hstep"><div class="hstep__n">04</div><div class="hstep__t">Funded &amp; Scale</div><p class="hstep__d">Live funded account. 90% profit split. Automatic scaling every 10% profit cycle up to $100K.</p></div>
-      </div>
-    </div>
-    <div class="how-block rv">
-      <div class="how-block__hd">🏆 3-STEP &amp; 💳 PARTIAL PAYMENT</div>
-      <div class="how-steps">
-        <div class="hstep"><div class="hstep__n">01</div><div class="hstep__t">Purchase / Partial</div><p class="hstep__d">3-Step: full fee. Partial: 35% upfront. Both receive the same evaluation access immediately.</p></div>
-        <div class="hstep"><div class="hstep__n">02</div><div class="hstep__t">Phase 1</div><p class="hstep__d">3-Step: 8% target, 3 min days. Partial: 10% target, 5 min days. No news trading on either.</p></div>
-        <div class="hstep"><div class="hstep__n">03</div><div class="hstep__t">Phase 2 + Phase 3</div><p class="hstep__d">3-Step: 5%+4%. Partial: 6%+5%. 15% consistency rule active throughout all phases on both plans.</p></div>
-        <div class="hstep"><div class="hstep__n">04</div><div class="hstep__t">Funded &amp; Scale</div><p class="hstep__d">80–90% split. Partial plan: 65% deducted from first payout. 15% consistency rule stays active on funded.</p></div>
-      </div>
-    </div>
+    <div class="how-block rv"><div class="how-block__hd">⚡ 1-STEP PROCESS</div><div class="how-steps"><div class="hstep"><div class="hstep__n">01</div><div class="hstep__t">Purchase</div><p class="hstep__d">Choose $5K–$100K. Pay the one-time fee. Receive evaluation account credentials immediately.</p></div><div class="hstep"><div class="hstep__n">02</div><div class="hstep__t">Single Evaluation</div><p class="hstep__d">Hit 10% profit. Stay within 3% trailing daily loss and 8% static max drawdown. No time limit. No minimum days.</p></div><div class="hstep"><div class="hstep__n">03</div><div class="hstep__t">Get Funded</div><p class="hstep__d">Pass the evaluation and receive your funded account. Trade live capital from Day 1.</p></div><div class="hstep"><div class="hstep__n">04</div><div class="hstep__t">Withdraw &amp; Scale</div><p class="hstep__d">Request payouts from Day 1. 95% profit split. Automatic 25% scaling every 10% profit cycle.</p></div></div></div>
+    <div class="how-block rv"><div class="how-block__hd">🎯 2-STEP PROCESS</div><div class="how-steps"><div class="hstep"><div class="hstep__n">01</div><div class="hstep__t">Purchase</div><p class="hstep__d">Select $1K–$100K account. Pay the one-time fee and access your account instantly.</p></div><div class="hstep"><div class="hstep__n">02</div><div class="hstep__t">Phase 1 — 10%</div><p class="hstep__d">Hit 10% profit. Minimum 3 trading days. Stay within 5% trailing daily loss and 10% static max drawdown.</p></div><div class="hstep"><div class="hstep__n">03</div><div class="hstep__t">Phase 2 — 5%</div><p class="hstep__d">Confirm consistency with a 5% profit target. Same risk rules. 3 more minimum trading days.</p></div><div class="hstep"><div class="hstep__n">04</div><div class="hstep__t">Funded &amp; Scale</div><p class="hstep__d">Live funded account. 90% profit split. Automatic scaling every 10% profit cycle up to $100K.</p></div></div></div>
+    <div class="how-block rv"><div class="how-block__hd">🏆 3-STEP &amp; 💳 PARTIAL PAYMENT</div><div class="how-steps"><div class="hstep"><div class="hstep__n">01</div><div class="hstep__t">Purchase / Partial</div><p class="hstep__d">3-Step: full fee. Partial: 35% upfront. Both receive the same evaluation access immediately.</p></div><div class="hstep"><div class="hstep__n">02</div><div class="hstep__t">Phase 1</div><p class="hstep__d">3-Step: 8% target, 3 min days. Partial: 10% target, 5 min days. No news trading on either.</p></div><div class="hstep"><div class="hstep__n">03</div><div class="hstep__t">Phase 2 + Phase 3</div><p class="hstep__d">3-Step: 5%+4%. Partial: 6%+5%. 15% consistency rule active throughout all phases on both plans.</p></div><div class="hstep"><div class="hstep__n">04</div><div class="hstep__t">Funded &amp; Scale</div><p class="hstep__d">80–90% split. Partial plan: 65% deducted from first payout. 15% consistency rule stays active on funded.</p></div></div></div>
     <div class="gr-box rv">
       <span class="label-mono" style="margin-bottom:10px;display:block">// Universal Rules</span>
       <h2 class="h-md" style="margin-bottom:16px">GLOBAL <span class="gold">TRADING RULES</span></h2>
@@ -536,13 +493,9 @@
 </main>
 
 
-<!-- ═══════════════════════ PAGE: ABOUT ═══════════════════════ -->
+<!-- ═══ PAGE: ABOUT ═══ -->
 <main class="page" id="page-about">
-  <header class="ph">
-    <span class="ph__eye">// Our Story</span>
-    <h1 class="ph__h">ABOUT <span class="gold">VORNIX</span></h1>
-    <p class="ph__sub">We're not just funding traders. We're building the infrastructure that turns trading into a legitimate profession.</p>
-  </header>
+  <header class="ph"><span class="ph__eye">// Our Story</span><h1 class="ph__h">ABOUT <span class="gold">VORNIX</span></h1><p class="ph__sub">We're not just funding traders. We're building the infrastructure that turns trading into a legitimate profession.</p></header>
   <section class="section">
     <div class="about-2col">
       <div class="rv">
@@ -566,10 +519,7 @@
       <div class="vc"><div class="vc__icon">🚀</div><div class="vc__title">Scale to $100K</div><p class="vc__desc">Automatic scaling program. Every 10% profit cycle increases allocation by 25%, up to $100,000.</p></div>
     </div>
     <div class="founder rv">
-      <div>
-        <div class="founder__mark">VORN<span>IX</span></div>
-        <div class="founder__sub">// NEXT GEN PROP FIRM</div>
-      </div>
+      <div><div class="founder__mark">VORN<span>IX</span></div><div class="founder__sub">// NEXT GEN PROP FIRM</div></div>
       <div class="founder__text">
         <h3>BUILT BY JATIN SHARMA</h3>
         <p>Jatin Sharma founded VORNIX after identifying that the prop trading industry is fundamentally failing traders. <strong>Most firms exist to collect challenge fees</strong> — not to develop traders. VORNIX was designed from day one to be different.</p>
@@ -581,13 +531,9 @@
 </main>
 
 
-<!-- ═══════════════════════ PAGE: CONTACT ═══════════════════════ -->
+<!-- ═══ PAGE: CONTACT ═══ -->
 <main class="page" id="page-contact">
-  <header class="ph">
-    <span class="ph__eye">// Get In Touch</span>
-    <h1 class="ph__h">CONTACT <span class="gold">VORNIX</span></h1>
-    <p class="ph__sub">Questions about a challenge, payouts or technology waitlist. We respond within 2 hours during market hours.</p>
-  </header>
+  <header class="ph"><span class="ph__eye">// Get In Touch</span><h1 class="ph__h">CONTACT <span class="gold">VORNIX</span></h1><p class="ph__sub">Questions about a challenge, payouts or technology waitlist. We respond within 2 hours during market hours.</p></header>
   <section class="section">
     <div class="contact-2col">
       <div>
@@ -623,7 +569,6 @@
       </div>
     </div>
   </section>
-
   <div class="section--dark">
     <section class="section" style="padding-top:var(--s4)">
       <span class="s-eye">// FAQ</span>
@@ -640,7 +585,6 @@
       </div>
     </section>
   </div>
-
   <footer class="footer"><div class="footer__grid"><div><div class="footer__brand-name">VORN<span>IX</span></div><p class="footer__brand-desc">Next generation prop firm.</p></div><div class="footer__col"><h4>Challenges</h4><ul><li><a onclick="nav('challenges');setTab('one')">1-Step</a></li><li><a onclick="nav('challenges');setTab('two')">2-Step</a></li><li><a onclick="nav('challenges');setTab('three')">3-Step</a></li><li><a onclick="nav('challenges');setTab('partial')">Partial</a></li></ul></div><div class="footer__col"><h4>Company</h4><ul><li><a onclick="nav('tech')">Technology</a></li><li><a onclick="nav('how')">How It Works</a></li><li><a onclick="nav('about')">About</a></li></ul></div><div class="footer__col"><h4>Legal</h4><ul><li><a href="#">Terms</a></li><li><a href="#">Privacy</a></li><li><a href="#">Risk Warning</a></li></ul></div></div><div class="footer__bottom"><span class="footer__copy">© 2025 VORNIX. All rights reserved.</span><div class="footer__legal"><a href="#">Terms</a><a href="#">Privacy</a></div></div></footer>
 </main>
 
