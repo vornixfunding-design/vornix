@@ -6,51 +6,57 @@
 <title>Create Account — VORNIX</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;500;600;700;900&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;900&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 <style>
 .auth-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:80px var(--g) 48px}
-.auth-box{width:100%;max-width:520px;background:var(--bg-card);border:1px solid var(--bd2);position:relative}
+.auth-box{width:100%;max-width:500px;background:var(--bg-card);border:1px solid var(--bd2);position:relative}
 .auth-box::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--red),transparent)}
-.auth-head{padding:28px 36px 22px;border-bottom:1px solid var(--bd)}
-.auth-brand{font-family:var(--ff-d);font-size:26px;letter-spacing:4px;color:var(--white)}
+.auth-head{padding:26px 34px 20px;border-bottom:1px solid var(--bd)}
+.auth-brand{font-family:var(--ff-d);font-size:24px;letter-spacing:4px;color:var(--white)}
 .auth-brand span{color:var(--red)}
-.auth-tag{font-family:var(--ff-m);font-size:10px;color:var(--t3);letter-spacing:2px;margin-top:4px}
-.auth-body{padding:30px 36px 36px}
-.auth-eyebrow{font-family:var(--ff-m);font-size:10px;color:var(--red);letter-spacing:2px;margin-bottom:6px}
-.auth-heading{font-family:var(--ff-d);font-size:30px;letter-spacing:2px;color:var(--white);margin-bottom:4px;line-height:1}
+.auth-tag{font-family:var(--ff-m);font-size:10px;color:var(--t3);letter-spacing:2px;margin-top:3px}
+.auth-body{padding:28px 34px 34px}
+.auth-step-lbl{font-family:var(--ff-m);font-size:10px;color:var(--red);letter-spacing:3px;margin-bottom:8px}
+.auth-title{font-family:var(--ff-d);font-size:30px;letter-spacing:2px;color:var(--white);margin-bottom:4px;line-height:1}
 .auth-sub{font-size:13px;color:var(--t2);margin-bottom:22px;line-height:1.6}
-.perks{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:22px}
-.perk{background:var(--bg-2);border:1px solid var(--bd);padding:10px 14px}
-.perk strong{display:block;font-family:var(--ff-d);font-size:18px;letter-spacing:1.5px;color:var(--white);line-height:1;margin-bottom:2px}
-.perk span{font-family:var(--ff-ui);font-size:10px;color:var(--t3);letter-spacing:1.5px;text-transform:uppercase}
 .f-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .f-g{margin-bottom:16px}
 .f-l{display:block;font-family:var(--ff-ui);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--t3);margin-bottom:7px}
-.f-i,.f-s{width:100%;background:var(--bg-2);border:1px solid var(--bd2);color:var(--t1);font-family:var(--ff-b);font-size:14px;padding:12px 14px;outline:none;transition:border-color .2s}
+.f-i,.f-s{width:100%;background:var(--bg-2);border:1px solid var(--bd2);color:var(--t1);font-family:var(--ff-b);font-size:14px;padding:12px 14px;outline:none;transition:border-color .2s;-webkit-appearance:none;appearance:none}
 .f-i:focus,.f-s:focus{border-color:var(--red-bd)}
 .f-i::placeholder{color:var(--t3)}
-.f-s{cursor:pointer;-webkit-appearance:none;appearance:none}
-.pw-bar{height:3px;background:var(--bg-3);margin-top:6px}
-.pw-fill{height:100%;width:0;transition:width .3s,background .3s}
-.ref-badge{background:var(--grn-lo);border:1px solid var(--grn-bd);color:#5aeaad;font-family:var(--ff-m);font-size:11px;padding:8px 14px;margin-bottom:16px;display:none}
-.ref-badge.show{display:block}
-.auth-btn{width:100%;background:var(--red);color:#fff;border:none;font-family:var(--ff-ui);font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;padding:15px;cursor:pointer;transition:background .2s;margin-top:4px;clip-path:polygon(10px 0%,100% 0%,calc(100% - 10px) 100%,0% 100%)}
+.f-s{cursor:pointer}
+.otp-wrap{display:flex;gap:8px;justify-content:center;margin-bottom:8px}
+.otp-d{width:52px;height:62px;background:var(--bg-2);border:1px solid var(--bd2);color:var(--white);font-family:var(--ff-d);font-size:34px;text-align:center;outline:none;transition:border-color .2s,background .2s;caret-color:var(--red);-webkit-appearance:none;appearance:none}
+.otp-d:focus{border-color:var(--red);background:var(--bg-3)}
+.otp-d.filled{border-color:var(--red-bd)}
+.otp-hint{font-size:12px;color:var(--t3);text-align:center;margin-bottom:20px;line-height:1.7}
+.otp-hint a{color:var(--red);cursor:pointer}
+.otp-hint a:hover{text-decoration:underline}
+.timer{font-family:var(--ff-m);font-size:11px;color:var(--t3);text-align:center;margin-bottom:16px}
+.timer span{color:var(--gold)}
+.auth-btn{width:100%;background:var(--red);color:#fff;border:none;font-family:var(--ff-ui);font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;padding:15px;cursor:pointer;transition:background .2s;clip-path:polygon(10px 0%,100% 0%,calc(100% - 10px) 100%,0% 100%)}
 .auth-btn:hover:not(:disabled){background:var(--red-hi)}
 .auth-btn:disabled{opacity:.5;cursor:not-allowed}
-.auth-terms{font-size:11px;color:var(--t3);text-align:center;margin-top:14px;line-height:1.6}
-.auth-terms a{color:var(--t2)}
-.auth-sep{display:flex;align-items:center;gap:10px;margin:16px 0;font-size:11px;color:var(--t3)}
-.auth-sep::before,.auth-sep::after{content:'';flex:1;height:1px;background:var(--bd)}
-.auth-foot{font-size:13px;color:var(--t2);text-align:center}
-.auth-foot a{color:var(--red)}
+.steps{display:flex;align-items:center;gap:0;margin-bottom:24px}
+.s-dot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--ff-m);font-size:11px;font-weight:700;border:1px solid var(--bd2);color:var(--t3);flex-shrink:0;transition:all .3s}
+.s-dot.active{border-color:var(--red);color:var(--red);background:var(--red-lo)}
+.s-dot.done{border-color:var(--grn);color:var(--grn);background:var(--grn-lo)}
+.s-line{flex:1;height:1px;background:var(--bd)}
 .msg{font-size:13px;padding:12px 16px;margin-bottom:14px;display:none;line-height:1.5}
 .msg.show{display:block}
 .msg-err{background:var(--red-lo);border:1px solid var(--red-bd);color:#ff9090}
 .msg-ok{background:var(--grn-lo);border:1px solid var(--grn-bd);color:#5aeaad}
+.perks{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:22px}
+.perk{background:var(--bg-2);border:1px solid var(--bd);padding:10px 14px}
+.perk strong{display:block;font-family:var(--ff-d);font-size:18px;letter-spacing:1.5px;color:var(--white);line-height:1;margin-bottom:2px}
+.perk span{font-family:var(--ff-ui);font-size:10px;color:var(--t3);letter-spacing:1.5px;text-transform:uppercase}
+.auth-foot{font-size:13px;color:var(--t2);text-align:center;margin-top:16px}
+.auth-foot a{color:var(--red)}
 @keyframes ld{0%,100%{opacity:1}50%{opacity:.3}}
 .spin::after{content:'...';display:inline-block;animation:ld 1s infinite}
-@media(max-width:560px){.f-row{grid-template-columns:1fr}.perks{grid-template-columns:1fr 1fr}.auth-body{padding:24px 22px 28px}.auth-head{padding:22px 22px 18px}}
+@media(max-width:540px){.f-row{grid-template-columns:1fr}.otp-d{width:44px;height:54px;font-size:28px}.auth-body{padding:22px 20px 26px}.auth-head{padding:22px 20px 16px}}
 </style>
 </head>
 <body>
@@ -84,166 +90,150 @@
   <div class="auth-box">
     <div class="auth-head">
       <div class="auth-brand">VORN<span>IX</span></div>
-      <div class="auth-tag">// Create Trader Account</div>
+      <div class="auth-tag">// Create Trader Account — No Password Needed</div>
     </div>
     <div class="auth-body">
-      <div class="auth-eyebrow">// New Account</div>
-      <div class="auth-heading">JOIN VORNIX</div>
-      <div class="auth-sub">Get funded up to $100,000. Keep up to 95% of your profits.</div>
 
-      <div class="perks">
-        <div class="perk"><strong>95%</strong><span>Max profit split</span></div>
-        <div class="perk"><strong>$100K</strong><span>Max capital</span></div>
-        <div class="perk"><strong>Day 1</strong><span>Withdrawals</span></div>
-        <div class="perk"><strong>4</strong><span>Challenge types</span></div>
+      <div class="steps">
+        <div class="s-dot active" id="dot1">1</div>
+        <div class="s-line"></div>
+        <div class="s-dot" id="dot2">2</div>
       </div>
 
-      <div class="ref-badge" id="ref-badge"></div>
-      <div class="msg msg-err" id="err"></div>
-      <div class="msg msg-ok"  id="ok"></div>
-
-      <div class="f-row">
-        <div class="f-g">
-          <label class="f-l" for="fn">First Name</label>
-          <input class="f-i" type="text" id="fn" placeholder="Jatin" autocomplete="given-name">
+      <!-- STEP 1: Details -->
+      <div id="step1">
+        <div class="auth-step-lbl">// Step 1 — Your Details</div>
+        <div class="auth-title">JOIN VORNIX</div>
+        <div class="auth-sub">Enter your details and we'll send a 6-digit code to verify your email.</div>
+        <div class="perks">
+          <div class="perk"><strong>95%</strong><span>Max profit split</span></div>
+          <div class="perk"><strong>$100K</strong><span>Max capital</span></div>
+          <div class="perk"><strong>Day 1</strong><span>Withdrawals</span></div>
+          <div class="perk"><strong>4</strong><span>Challenge types</span></div>
         </div>
-        <div class="f-g">
-          <label class="f-l" for="ln">Last Name</label>
-          <input class="f-i" type="text" id="ln" placeholder="Sharma" autocomplete="family-name">
+        <div class="msg msg-err" id="e1"></div>
+        <div class="f-row">
+          <div class="f-g"><label class="f-l" for="fn">First Name</label><input class="f-i" type="text" id="fn" placeholder="Jatin" autocomplete="given-name"></div>
+          <div class="f-g"><label class="f-l" for="ln">Last Name</label><input class="f-i" type="text" id="ln" placeholder="Sharma" autocomplete="family-name"></div>
         </div>
-      </div>
-      <div class="f-g">
-        <label class="f-l" for="em">Email Address</label>
-        <input class="f-i" type="email" id="em" placeholder="trader@email.com" autocomplete="email">
-      </div>
-      <div class="f-g">
-        <label class="f-l" for="country">Country</label>
-        <select class="f-s" id="country">
-          <option value="">Select country...</option>
-          <option value="IN" selected>India</option>
-          <option value="PK">Pakistan</option>
-          <option value="BD">Bangladesh</option>
-          <option value="NG">Nigeria</option>
-          <option value="PH">Philippines</option>
-          <option value="ID">Indonesia</option>
-          <option value="BR">Brazil</option>
-          <option value="EG">Egypt</option>
-          <option value="KE">Kenya</option>
-          <option value="ZA">South Africa</option>
-          <option value="GH">Ghana</option>
-          <option value="MY">Malaysia</option>
-          <option value="AE">UAE</option>
-          <option value="SA">Saudi Arabia</option>
-          <option value="GB">United Kingdom</option>
-          <option value="US">United States</option>
-          <option value="CA">Canada</option>
-          <option value="AU">Australia</option>
-          <option value="DE">Germany</option>
-          <option value="OTHER">Other</option>
-        </select>
-      </div>
-      <div class="f-g">
-        <label class="f-l" for="pw">Password</label>
-        <input class="f-i" type="password" id="pw" placeholder="Minimum 8 characters" autocomplete="new-password" oninput="checkPw(this.value)">
-        <div class="pw-bar"><div class="pw-fill" id="pw-fill"></div></div>
-      </div>
-      <div class="f-g">
-        <label class="f-l" for="pw2">Confirm Password</label>
-        <input class="f-i" type="password" id="pw2" placeholder="Repeat password" autocomplete="new-password">
-      </div>
-      <div class="f-g">
-        <label class="f-l" for="ref">Referral Code (optional)</label>
-        <input class="f-i" type="text" id="ref" placeholder="e.g. AB12CD34" oninput="this.value=this.value.toUpperCase()">
+        <div class="f-g"><label class="f-l" for="em">Email Address</label><input class="f-i" type="email" id="em" placeholder="trader@email.com" autocomplete="email"></div>
+        <div class="f-g">
+          <label class="f-l" for="cty">Country</label>
+          <select class="f-s" id="cty">
+            <option value="">Select country...</option>
+            <option value="IN" selected>India</option><option value="PK">Pakistan</option>
+            <option value="BD">Bangladesh</option><option value="NG">Nigeria</option>
+            <option value="PH">Philippines</option><option value="ID">Indonesia</option>
+            <option value="BR">Brazil</option><option value="EG">Egypt</option>
+            <option value="KE">Kenya</option><option value="ZA">South Africa</option>
+            <option value="MY">Malaysia</option><option value="AE">UAE</option>
+            <option value="SA">Saudi Arabia</option><option value="GB">United Kingdom</option>
+            <option value="US">United States</option><option value="CA">Canada</option>
+            <option value="AU">Australia</option><option value="DE">Germany</option>
+            <option value="OTHER">Other</option>
+          </select>
+        </div>
+        <button class="auth-btn" id="b1" onclick="sendCode()">Send Verification Code →</button>
+        <div class="auth-foot" style="margin-top:16px">Already have an account? <a href="login.html">Sign in →</a></div>
+        <div class="auth-foot" style="margin-top:8px"><a href="index.html" style="color:var(--t3);font-size:12px">← Back to website</a></div>
       </div>
 
-      <button class="auth-btn" id="btn" onclick="doSignup()">Create Account →</button>
+      <!-- STEP 2: OTP -->
+      <div id="step2" style="display:none">
+        <div class="auth-step-lbl">// Step 2 — Verify Email</div>
+        <div class="auth-title">CHECK EMAIL</div>
+        <div class="auth-sub" id="sub2">We sent a 6-digit code to your email. Enter it below.</div>
+        <div class="msg msg-err" id="e2"></div>
+        <div class="msg msg-ok"  id="ok2"></div>
+        <div class="otp-wrap">
+          <input class="otp-d" type="text" inputmode="numeric" maxlength="1" id="d0" autocomplete="off">
+          <input class="otp-d" type="text" inputmode="numeric" maxlength="1" id="d1" autocomplete="off">
+          <input class="otp-d" type="text" inputmode="numeric" maxlength="1" id="d2" autocomplete="off">
+          <input class="otp-d" type="text" inputmode="numeric" maxlength="1" id="d3" autocomplete="off">
+          <input class="otp-d" type="text" inputmode="numeric" maxlength="1" id="d4" autocomplete="off">
+          <input class="otp-d" type="text" inputmode="numeric" maxlength="1" id="d5" autocomplete="off">
+        </div>
+        <div class="timer" id="tmr"></div>
+        <div class="otp-hint">Didn't get it? Check spam folder. <a onclick="resend()">Resend code →</a></div>
+        <button class="auth-btn" id="b2" onclick="verify()">Create Account →</button>
+        <div class="auth-foot" style="margin-top:16px"><a onclick="back()" style="cursor:pointer;color:var(--t3);font-size:12px">← Change email address</a></div>
+      </div>
 
-      <div class="auth-terms">By registering you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></div>
-      <div class="auth-sep">or</div>
-      <div class="auth-foot">Already have an account? <a href="login.html">Sign in →</a></div>
-      <div class="auth-foot" style="margin-top:10px"><a href="index.html" style="color:var(--t3);font-size:12px">← Back to VORNIX.com</a></div>
     </div>
   </div>
 </div>
 
-<!-- ── THE FIX: CDN first, then supabase.js, then init on load ── -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="supabase.js"></script>
 <script>
-window.addEventListener('load', async function() {
+'use strict';
+if (VornixDB.Auth.isLoggedIn()) location.href = 'dashboard.html';
 
-  // Redirect if already logged in
-  try {
-    if (await VornixDB.Auth.isLoggedIn()) { location.href = 'dashboard.html'; return; }
-  } catch(e) {}
+let _em='', _nm='', _cty='', _ti=null;
 
-  // Show referral badge
-  const refCode = VornixDB.Affiliates.captureRef() || new URLSearchParams(location.search).get('ref');
-  if(refCode) {
-    const badge = document.getElementById('ref-badge');
-    badge.textContent = '✓ Referral code applied: ' + refCode;
-    badge.classList.add('show');
-    document.getElementById('ref').value = refCode;
-  }
-});
-
-function checkPw(v) {
-  const fill = document.getElementById('pw-fill');
-  let s = 0;
-  if(v.length >= 8)  s++;
-  if(v.length >= 12) s++;
-  if(/[A-Z]/.test(v)) s++;
-  if(/[0-9]/.test(v)) s++;
-  if(/[^A-Za-z0-9]/.test(v)) s++;
-  fill.style.width = (s/5*100)+'%';
-  fill.style.background = s<=1?'var(--red)':s<=3?'var(--gold)':'var(--grn)';
+async function sendCode() {
+  const fn=document.getElementById('fn').value.trim(), ln=document.getElementById('ln').value.trim();
+  const em=document.getElementById('em').value.trim(), cty=document.getElementById('cty').value;
+  const err=document.getElementById('e1'); err.classList.remove('show');
+  if(!fn||!ln){showMsg(err,'Please enter your full name.');return;}
+  if(!em||!em.includes('@')){showMsg(err,'Please enter a valid email address.');return;}
+  if(!cty){showMsg(err,'Please select your country.');return;}
+  const b=document.getElementById('b1'); b.disabled=true; b.innerHTML='<span class="spin">Sending code</span>';
+  const d=await VornixDB.Auth.sendOTP(em,fn+' '+ln,cty);
+  b.disabled=false; b.innerHTML='Send Verification Code →';
+  if(d.error){showMsg(err,d.error);return;}
+  _em=em; _nm=fn+' '+ln; _cty=cty;
+  document.getElementById('step1').style.display='none';
+  document.getElementById('step2').style.display='block';
+  document.getElementById('sub2').textContent='We sent a 6-digit code to '+em+'. Enter it below.';
+  document.getElementById('dot1').className='s-dot done'; document.getElementById('dot2').className='s-dot active';
+  initOTP(); startTimer(600); document.getElementById('d0').focus();
 }
 
-async function doSignup() {
-  const fn  = document.getElementById('fn').value.trim();
-  const ln  = document.getElementById('ln').value.trim();
-  const em  = document.getElementById('em').value.trim();
-  const cty = document.getElementById('country').value;
-  const pw  = document.getElementById('pw').value;
-  const pw2 = document.getElementById('pw2').value;
-  const ref = document.getElementById('ref').value.trim();
-  const btn = document.getElementById('btn');
-  const err = document.getElementById('err');
-  const ok  = document.getElementById('ok');
+async function verify() {
+  const otp=getOTP(), err=document.getElementById('e2'), ok=document.getElementById('ok2');
   err.classList.remove('show'); ok.classList.remove('show');
-
-  if(!fn||!ln)    { showErr(err,'Please enter your full name.'); return; }
-  if(!em)         { showErr(err,'Please enter your email address.'); return; }
-  if(!cty)        { showErr(err,'Please select your country.'); return; }
-  if(pw.length<8) { showErr(err,'Password must be at least 8 characters.'); return; }
-  if(pw!==pw2)    { showErr(err,'Passwords do not match.'); return; }
-
-  btn.disabled=true; btn.innerHTML='<span class="spin">Creating account</span>';
-
-  try {
-    const {data, error} = await VornixDB.Auth.signUp(em, pw, fn+' '+ln);
-    if(error) {
-      btn.disabled=false; btn.innerHTML='Create Account →';
-      const m = error.message.includes('already') ? 'An account with this email already exists.' : error.message;
-      showErr(err, m); return;
-    }
-    if(data?.user) {
-      try {
-        await VornixDB.Profiles.update(data.user.id, { full_name: fn+' '+ln, country: cty, referred_by: ref||null });
-      } catch(e) {}
-    }
-    btn.disabled=false; btn.innerHTML='✓ Account Created!';
-    ok.innerHTML='Account created! Check your email to confirm, then <a href="login.html" style="color:#5aeaad">sign in →</a>';
-    ok.classList.add('show');
-    // Auto-redirect if no email confirmation needed
-    setTimeout(async()=>{ try { if(await VornixDB.Auth.isLoggedIn()) location.href='dashboard.html'; } catch(e){} }, 2000);
-  } catch(e) {
-    btn.disabled=false; btn.innerHTML='Create Account →';
-    showErr(err,'Connection error. Please check your internet and try again.');
-  }
+  if(otp.length!==6){showMsg(err,'Please enter all 6 digits.');return;}
+  const b=document.getElementById('b2'); b.disabled=true; b.innerHTML='<span class="spin">Verifying</span>';
+  const d=await VornixDB.Auth.verifyOTP(_em,otp,_nm,_cty);
+  b.disabled=false; b.innerHTML='Create Account →';
+  if(d.error){showMsg(err,d.error);clearOTP();document.getElementById('d0').focus();return;}
+  clearInterval(_ti);
+  showMsg(ok,'✓ Account created! Taking you to your dashboard...');
+  b.innerHTML='✓ Success — Redirecting...';
+  setTimeout(()=>location.href='dashboard.html',1200);
 }
 
-function showErr(el,msg) { el.textContent=msg; el.classList.add('show'); }
+async function resend() {
+  clearInterval(_ti);
+  document.getElementById('e2').classList.remove('show');
+  const d=await VornixDB.Auth.sendOTP(_em,_nm,_cty);
+  if(d.error){showMsg(document.getElementById('e2'),d.error);return;}
+  clearOTP(); document.getElementById('d0').focus(); startTimer(600);
+  const ok=document.getElementById('ok2'); ok.textContent='New code sent to '+_em; ok.classList.add('show');
+  setTimeout(()=>ok.classList.remove('show'),4000);
+}
+
+function back() {
+  clearInterval(_ti);
+  document.getElementById('step2').style.display='none';
+  document.getElementById('step1').style.display='block';
+  document.getElementById('dot1').className='s-dot active';
+  document.getElementById('dot2').className='s-dot';
+}
+
+function initOTP() {
+  const ds=Array.from(document.querySelectorAll('.otp-d'));
+  ds.forEach((d,i)=>{
+    d.value=''; d.classList.remove('filled');
+    d.oninput=()=>{ const v=d.value.replace(/\D/g,''); d.value=v?v[0]:''; d.classList.toggle('filled',!!d.value); if(d.value&&i<5)ds[i+1].focus(); if(getOTP().length===6)verify(); };
+    d.onkeydown=e=>{ if(e.key==='Backspace'&&!d.value&&i>0){ds[i-1].value='';ds[i-1].classList.remove('filled');ds[i-1].focus();} if(e.key==='ArrowLeft'&&i>0)ds[i-1].focus(); if(e.key==='ArrowRight'&&i<5)ds[i+1].focus(); };
+    d.onpaste=e=>{ e.preventDefault(); const p=(e.clipboardData||window.clipboardData).getData('text').replace(/\D/g,'').slice(0,6); p.split('').forEach((c,j)=>{if(ds[i+j]){ds[i+j].value=c;ds[i+j].classList.add('filled');}}); const nx=ds[Math.min(i+p.length,5)]; if(nx)nx.focus(); if(getOTP().length===6)verify(); };
+  });
+}
+function getOTP(){return Array.from(document.querySelectorAll('.otp-d')).map(d=>d.value).join('');}
+function clearOTP(){document.querySelectorAll('.otp-d').forEach(d=>{d.value='';d.classList.remove('filled');});}
+function startTimer(s){clearInterval(_ti);const el=document.getElementById('tmr');let r=s;function t(){const m=Math.floor(r/60),sc=r%60;el.innerHTML=`Code expires in <span>${m}:${sc.toString().padStart(2,'0')}</span>`;if(r<=0){clearInterval(_ti);el.innerHTML='<span style="color:var(--red)">Code expired — request a new one.</span>';}r--;}t();_ti=setInterval(t,1000);}
+function showMsg(el,msg){el.textContent=msg;el.classList.add('show');}
 </script>
 </body>
 </html>
