@@ -9,11 +9,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;500;600;700;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
-<style>
-  /* Extra clarity — GROW is always bright emerald */
-  .hero__h1 .grn { color:#34D399; -webkit-text-stroke:0; opacity:1; }
-  .hero__h1 .gold { color:#F5C842; -webkit-text-stroke:0; opacity:1; }
-</style>
 </head>
 <body>
 
@@ -25,7 +20,7 @@
   <div class="nav__logo" onclick="nav('home')" role="button" tabindex="0" aria-label="VORNIX Home">
     <svg class="nav__logo-svg" viewBox="0 0 172 38" fill="none" xmlns="http://www.w3.org/2000/svg">
       <defs>
-        <linearGradient id="lg-w" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#EEF2FF" stop-opacity=".95"/><stop offset="100%" stop-color="#6B7EB8"/></linearGradient>
+        <linearGradient id="lg-w" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#F0F4FF" stop-opacity=".95"/><stop offset="100%" stop-color="#6B7EB8"/></linearGradient>
         <linearGradient id="lg-g" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#F5C842"/><stop offset="100%" stop-color="#8A6A10"/></linearGradient>
         <linearGradient id="lg-e" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#34D399"/><stop offset="100%" stop-color="#065F46"/></linearGradient>
         <filter id="glow-g" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="1" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
@@ -54,7 +49,6 @@
       <text x="133" y="26" font-family="'Barlow Condensed',sans-serif" font-size="6" fill="#2D3A5A" letter-spacing="1.5">FIRM</text>
     </svg>
   </div>
-
   <ul class="nav__links" role="list">
     <li><a class="nav__link is-active" id="nl-home"       onclick="nav('home')">Home</a></li>
     <li><a class="nav__link"           id="nl-challenges" onclick="nav('challenges')">Challenges</a></li>
@@ -63,18 +57,15 @@
     <li><a class="nav__link"           id="nl-about"      onclick="nav('about')">About</a></li>
     <li><a class="nav__link"           id="nl-contact"    onclick="nav('contact')">Contact</a></li>
   </ul>
-
   <div class="nav__right">
     <a href="login.html" class="nav__login">Login</a>
     <button class="nav__cta" onclick="window.location.href='signup.html'">Get Funded</button>
   </div>
-
   <button class="nav__ham" id="nav-ham" onclick="hamMenu()" aria-label="Toggle menu" aria-expanded="false">
     <span></span><span></span><span></span>
   </button>
 </nav>
 
-<!-- Mobile Drawer -->
 <div class="nav__drawer" id="nav-drawer" role="dialog" aria-label="Mobile menu">
   <a class="nav__drawer-link is-active" id="ml-home"       onclick="nav('home');closeDrawer()">Home</a>
   <a class="nav__drawer-link"           id="ml-challenges" onclick="nav('challenges');closeDrawer()">Challenges</a>
@@ -88,9 +79,10 @@
 </div>
 
 
-<!-- ═══ PAGE: HOME ═══ -->
+<!-- ═══════════ PAGE: HOME ═══════════ -->
 <main class="page is-active" id="page-home">
 
+  <!-- HERO -->
   <section class="hero" aria-labelledby="hero-h1">
     <div class="hero__left">
       <span class="hero__eye">// Next Generation Prop Firm</span>
@@ -98,9 +90,9 @@
         LEARN.
         <span class="gold">PROVE.</span>
         <span class="grn">TRADE.</span>
-        <span style="color:#F5C842;display:block;">GROW.</span>
+        <span class="grow">GROW.</span>
       </h1>
-      <div class="hero__tagline" aria-label="Our journey">
+      <div class="hero__tagline">
         <span class="hero__step">Learn</span>
         <span class="hero__arr">→</span>
         <span class="hero__step">Prove</span>
@@ -109,13 +101,12 @@
         <span class="hero__arr">→</span>
         <span class="hero__step">Grow</span>
       </div>
-      <p class="hero__desc">VORNIX funds traders who <strong>prove they can perform</strong>. Four evaluation paths, capital up to $100K, and up to <strong>95% of every dollar you generate</strong>.</p>
+      <p class="hero__desc">VORNIX funds traders who <strong>prove they can perform</strong>. Four evaluation paths, capital up to $100K, and up to <strong>95% of every dollar you generate</strong>. A global prop firm built to make trading a legitimate profession.</p>
       <div class="hero__ctas">
         <button class="btn-p" onclick="window.location.href='signup.html'">Start Your Challenge</button>
         <button class="btn-s" onclick="nav('how')">How It Works</button>
       </div>
     </div>
-
     <div class="hero__panel" aria-hidden="true">
       <div class="hero__stats">
         <div class="hs"><div class="hs__v g">95%</div><div class="hs__l">Max Profit Split</div></div>
@@ -123,21 +114,77 @@
         <div class="hs"><div class="hs__v">4</div><div class="hs__l">Challenge Types</div></div>
         <div class="hs"><div class="hs__v">Day 1</div><div class="hs__l">Withdrawals</div></div>
       </div>
-      <div class="hero__ticker">
-        <div class="ticker-i"><span style="color:var(--t2)">XAUUSD</span><span style="color:var(--t1)">2847.50</span><span>▲ 0.82%</span></div>
-        <div class="ticker-i"><span style="color:var(--t2)">EURUSD</span><span style="color:var(--t1)">1.0842</span><span class="dn">▼ 0.24%</span></div>
-        <div class="ticker-i"><span style="color:var(--t2)">BTC/USD</span><span style="color:var(--t1)">96,440</span><span>▲ 2.38%</span></div>
+    </div>
+  </section>
+
+  <!-- STATS STRIP -->
+  <div class="strip" role="list">
+    <div class="strip-i"><div class="strip-i__n"><span>95</span>%</div><div class="strip-i__l">Max Profit Split</div></div>
+    <div class="strip-i"><div class="strip-i__n">$<span>100</span>K</div><div class="strip-i__l">Max Funded Capital</div></div>
+    <div class="strip-i"><div class="strip-i__n"><span>4</span></div><div class="strip-i__l">Challenge Types</div></div>
+    <div class="strip-i"><div class="strip-i__n"><span>24</span>/5</div><div class="strip-i__l">Support Available</div></div>
+  </div>
+
+  <!-- THE PROBLEM — from pitch deck -->
+  <section class="section" aria-labelledby="problem-h2">
+    <span class="s-eye">// Why VORNIX Exists</span>
+    <h2 class="s-head" id="problem-h2">THE PROBLEM WITH <span class="gold">TRADING TODAY</span></h2>
+    <p class="s-sub">Millions of talented traders enter markets every year and fail — not because they lack skill, but because the system around them is broken.</p>
+    <div class="problem-grid">
+      <div class="prob-card rv rv-d1">
+        <div class="prob-card__icon">🎲</div>
+        <div class="prob-card__title">Seen as Gambling</div>
+        <p class="prob-card__desc">Society — especially in India — still treats trading as speculation, not a profession. There is no structured pathway that gives trading the same legitimacy as medicine or engineering.</p>
+        <div class="prob-card__stat">90%</div>
+        <div class="prob-card__stat-l">of Indian retail traders lose money</div>
+      </div>
+      <div class="prob-card rv rv-d2">
+        <div class="prob-card__icon">📚</div>
+        <div class="prob-card__title">No Structured Education</div>
+        <p class="prob-card__desc">Trading is learned randomly — no standardized curriculum, unregulated mentors, and strategies taught without risk management. Most traders are self-taught and self-confused.</p>
+        <div class="prob-card__stat">0</div>
+        <div class="prob-card__stat-l">standardized trading curricula globally</div>
+      </div>
+      <div class="prob-card rv rv-d3">
+        <div class="prob-card__icon">💸</div>
+        <div class="prob-card__title">Capital Constraints</div>
+        <p class="prob-card__desc">85%+ of active traders have little tradable capital, limiting meaningful trading. Without structured funding, skilled traders cannot scale. One wrong decision risks their entire financial stability.</p>
+        <div class="prob-card__stat">85%+</div>
+        <div class="prob-card__stat-l">of traders lack sufficient capital to scale</div>
       </div>
     </div>
   </section>
 
-  <div class="strip" role="list">
-    <div class="strip-i" role="listitem"><div class="strip-i__n"><span>95</span>%</div><div class="strip-i__l">Max Profit Split</div></div>
-    <div class="strip-i" role="listitem"><div class="strip-i__n">$<span>100</span>K</div><div class="strip-i__l">Max Funded Capital</div></div>
-    <div class="strip-i" role="listitem"><div class="strip-i__n"><span>4</span></div><div class="strip-i__l">Challenge Types</div></div>
-    <div class="strip-i" role="listitem"><div class="strip-i__n"><span>24</span>/5</div><div class="strip-i__l">Support Available</div></div>
+  <!-- MARKET SIZE — from pitch deck data -->
+  <div class="market-strip">
+    <div class="market-strip__inner">
+      <div class="market-strip__label">// Global Opportunity</div>
+      <div class="market-grid">
+        <div class="mg-item rv rv-d1">
+          <div class="mg-item__val">15.1 Cr</div>
+          <div class="mg-item__label">India Demat Accounts</div>
+          <div class="mg-item__note">Up from 4.1 Cr in 2020 — growing fast</div>
+        </div>
+        <div class="mg-item rv rv-d2">
+          <div class="mg-item__val">$7B+</div>
+          <div class="mg-item__label">Prop Industry Revenue</div>
+          <div class="mg-item__note">Global retail prop trading in 2024</div>
+        </div>
+        <div class="mg-item rv rv-d3">
+          <div class="mg-item__val">5 Cr+</div>
+          <div class="mg-item__label">Traders Participated</div>
+          <div class="mg-item__note">In prop challenges globally till date</div>
+        </div>
+        <div class="mg-item rv rv-d4">
+          <div class="mg-item__val">Zero</div>
+          <div class="mg-item__label">India-Based Global Leader</div>
+          <div class="mg-item__note">No Indian firm dominates this space — yet</div>
+        </div>
+      </div>
+    </div>
   </div>
 
+  <!-- PLANS PREVIEW -->
   <section class="section" aria-labelledby="plans-h2">
     <span class="s-eye">// Choose Your Path</span>
     <h2 class="s-head" id="plans-h2">4 WAYS TO GET <span class="gold">FUNDED</span></h2>
@@ -182,39 +229,116 @@
     </div>
   </section>
 
+  <!-- VORNIX 3-PHASE VISION — from pitch deck -->
   <div class="section--dark">
-    <section class="section" aria-labelledby="tech-h2">
-      <span class="s-eye">// Our Products</span>
-      <h2 class="s-head" id="tech-h2">TRADER <span class="gold">TECHNOLOGY</span></h2>
-      <p class="s-sub">Institution-level tools built for individual traders. Six products launching after the evaluation platform stabilises.</p>
-      <div class="tech-grid">
-        <div class="tc-card rv rv-d1"><div class="tc-n">// 01</div><div class="tc-icon">🤖</div><div class="tc-title">AI Trading Bots</div><p class="tc-desc">Automated bots that identify opportunities and execute trades with algorithmic precision.</p><span class="tc-soon">Coming Soon</span></div>
-        <div class="tc-card rv rv-d2"><div class="tc-n">// 02</div><div class="tc-icon">📊</div><div class="tc-title">Market Analyzer</div><p class="tc-desc">Professional analysis dashboard with trend data, volatility insights and live risk metrics.</p><span class="tc-soon">Coming Soon</span></div>
-        <div class="tc-card rv rv-d3"><div class="tc-n">// 03</div><div class="tc-icon">📈</div><div class="tc-title">Smart Indicators</div><p class="tc-desc">Proprietary indicators that identify trends clearly and filter false signals effectively.</p><span class="tc-soon">Coming Soon</span></div>
-        <div class="tc-card rv rv-d4"><div class="tc-n">// 04</div><div class="tc-icon">⚙️</div><div class="tc-title">Strategy Builder</div><p class="tc-desc">No-code automated strategy creation. Test on historical data, deploy on funded accounts.</p><span class="tc-soon">Coming Soon</span></div>
-        <div class="tc-card rv rv-d5"><div class="tc-n">// 05</div><div class="tc-icon">🎓</div><div class="tc-title">Education Platform</div><p class="tc-desc">Structured professional curriculum — market structure, risk management, trading psychology.</p><span class="tc-soon">Coming Soon</span></div>
-        <div class="tc-card rv rv-d6"><div class="tc-n">// 06</div><div class="tc-icon">🔬</div><div class="tc-title">Performance Analytics</div><p class="tc-desc">Deep reporting: win rate, average P&amp;L, risk per trade, full drawdown analysis.</p><span class="tc-soon">Coming Soon</span></div>
+    <section class="section" aria-labelledby="vision-h2">
+      <span class="s-eye">// Our Three-Phase Vision</span>
+      <h2 class="s-head" id="vision-h2">BUILDING THE COMPLETE <span class="gold">TRADER ECOSYSTEM</span></h2>
+      <p class="s-sub">VORNIX is not just a prop firm. We are building the infrastructure to make trading a legitimate, structured, scalable profession — globally.</p>
+      <div class="phase-grid">
+        <div class="phase-card rv rv-d1">
+          <div class="phase-card__num">// Phase 01 — Live Now</div>
+          <div class="phase-card__icon">💰</div>
+          <div class="phase-card__title">Funding Platform</div>
+          <p class="phase-card__desc">The foundation of VORNIX. Evaluation-based funding that gives skilled traders access to real capital — without risking their own money beyond the challenge fee.</p>
+          <div class="phase-card__list">
+            <div class="phase-card__item">Four challenge types — 1-Step, 2-Step, 3-Step, Partial</div>
+            <div class="phase-card__item">Capital from $1K to $100K with up to 95% profit split</div>
+            <div class="phase-card__item">Withdrawal from Day 1 — crypto, Wise, bank transfer</div>
+            <div class="phase-card__item">Automatic 25% scaling every 10% profit cycle</div>
+          </div>
+          <span class="phase-card__badge">Live Now</span>
+        </div>
+        <div class="phase-card rv rv-d2">
+          <div class="phase-card__num">// Phase 02 — In Development</div>
+          <div class="phase-card__icon">🎓</div>
+          <div class="phase-card__title">Structured Education</div>
+          <p class="phase-card__desc">A professional curriculum built with top-performing funded traders as mentors. The same structured pathway that medicine and engineering have — applied to trading.</p>
+          <div class="phase-card__list">
+            <div class="phase-card__item">Top funded traders become vetted mentors</div>
+            <div class="phase-card__item">Beginner to advanced — market structure, risk, psychology</div>
+            <div class="phase-card__item">Real strategies from real traders with a live track record</div>
+            <div class="phase-card__item">Quality-controlled — no random "gurus" or get-rich content</div>
+          </div>
+          <span class="phase-card__badge">Coming Soon</span>
+        </div>
+        <div class="phase-card rv rv-d3">
+          <div class="phase-card__num">// Phase 03 — In Development</div>
+          <div class="phase-card__icon">🤖</div>
+          <div class="phase-card__title">AI &amp; Technology</div>
+          <p class="phase-card__desc">Institution-level tools built for individual traders. Modernising the way traders analyse markets, build strategies, and manage performance — with AI and automation.</p>
+          <div class="phase-card__list">
+            <div class="phase-card__item">AI trading bots — adaptive, smart, automated execution</div>
+            <div class="phase-card__item">Market analyzer — real-time trend and risk insights</div>
+            <div class="phase-card__item">Smart indicators — filters noise, clarifies signals</div>
+            <div class="phase-card__item">Performance analytics — win rate, drawdown, full reporting</div>
+          </div>
+          <span class="phase-card__badge">Coming Soon</span>
+        </div>
       </div>
-      <div style="margin-top:40px"><button class="btn-p" onclick="nav('tech')">Explore All Products</button></div>
     </section>
   </div>
 
+  <!-- JOURNEY -->
   <section class="section" aria-labelledby="journey-h2">
     <span class="s-eye">// The Journey</span>
     <h2 class="s-head" id="journey-h2">LEARN → PROVE → TRADE → <span class="gold">GROW</span></h2>
     <div class="eco-grid">
-      <div class="eco-card rv rv-d1"><div class="eco-n">01 — LEARN</div><div class="eco-icon">📚</div><div class="eco-title">Education</div><p class="eco-desc">Master market structure, risk management, psychology and strategy through our structured curriculum.</p></div>
-      <div class="eco-card rv rv-d2"><div class="eco-n">02 — PROVE</div><div class="eco-icon">🎯</div><div class="eco-title">Evaluation</div><p class="eco-desc">Pass one of four evaluation paths. Demonstrate real discipline, consistency and sound risk management.</p></div>
-      <div class="eco-card rv rv-d3"><div class="eco-n">03 — TRADE</div><div class="eco-icon">💰</div><div class="eco-title">Get Funded</div><p class="eco-desc">Access $1K to $100K in funded capital. Keep up to 95% of every dollar you generate. Withdraw from Day 1.</p></div>
-      <div class="eco-card rv rv-d4"><div class="eco-n">04 — GROW</div><div class="eco-icon">🚀</div><div class="eco-title">Scale Up</div><p class="eco-desc">Automatic scaling every 10% profit cycle. 25% account increase each time. Up to $100K maximum.</p></div>
+      <div class="eco-card rv rv-d1"><div class="eco-n">01 — LEARN</div><div class="eco-icon">📚</div><div class="eco-title">Education</div><p class="eco-desc">Master market structure, risk management, psychology and strategy through our structured curriculum built by real funded traders.</p></div>
+      <div class="eco-card rv rv-d2"><div class="eco-n">02 — PROVE</div><div class="eco-icon">🎯</div><div class="eco-title">Evaluation</div><p class="eco-desc">Pass one of four evaluation paths. Demonstrate real discipline, consistency and sound risk management with our transparent rules.</p></div>
+      <div class="eco-card rv rv-d3"><div class="eco-n">03 — TRADE</div><div class="eco-icon">💰</div><div class="eco-title">Get Funded</div><p class="eco-desc">Access $1K to $100K in funded capital. Keep up to 95% of every dollar you generate. Withdraw from Day 1 — no waiting.</p></div>
+      <div class="eco-card rv rv-d4"><div class="eco-n">04 — GROW</div><div class="eco-icon">🚀</div><div class="eco-title">Scale Up</div><p class="eco-desc">Automatic scaling every 10% profit cycle. 25% account increase each time. Up to $100K maximum. Your career, not a one-time payout.</p></div>
     </div>
+  </section>
+
+  <!-- WHY VORNIX IS DIFFERENT -->
+  <div class="section--dark">
+    <section class="section" aria-labelledby="diff-h2">
+      <span class="s-eye">// The Vornix Difference</span>
+      <h2 class="s-head" id="diff-h2">WHY WE ARE <span class="gold">DIFFERENT</span></h2>
+      <p class="s-sub">Most prop firms exist to collect challenge fees, not to develop traders. VORNIX was built from day one to be the opposite.</p>
+      <div class="diff-grid">
+        <div class="diff-col diff-col--other rv rv-d1">
+          <div class="diff-col__title">❌ Other Prop Firms</div>
+          <div class="diff-item"><span class="diff-item__icon">—</span>Evaluation-based funding only — no trader development</div>
+          <div class="diff-item"><span class="diff-item__icon">—</span>Revenue focused on challenge fees and failed attempts</div>
+          <div class="diff-item"><span class="diff-item__icon">—</span>No education or structured learning pathway</div>
+          <div class="diff-item"><span class="diff-item__icon">—</span>Standalone tools with no integration or guidance</div>
+          <div class="diff-item"><span class="diff-item__icon">—</span>No India-based global leader exists</div>
+        </div>
+        <div class="diff-col diff-col--vornix rv rv-d2">
+          <div class="diff-col__title">✓ VORNIX</div>
+          <div class="diff-item"><span class="diff-item__icon">✓</span>Capital access + education + technology — one ecosystem</div>
+          <div class="diff-item"><span class="diff-item__icon">✓</span>Real skill validation — assessed before and after funding</div>
+          <div class="diff-item"><span class="diff-item__icon">✓</span>Structured learning from vetted, funded traders</div>
+          <div class="diff-item"><span class="diff-item__icon">✓</span>Integrated tools — technology and mentorship together</div>
+          <div class="diff-item"><span class="diff-item__icon">✓</span>Built in India, for the world — filling a $7B gap</div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- TECH PREVIEW -->
+  <section class="section" aria-labelledby="tech-h2">
+    <span class="s-eye">// Our Products</span>
+    <h2 class="s-head" id="tech-h2">TRADER <span class="gold">TECHNOLOGY</span></h2>
+    <p class="s-sub">Institution-level tools built for individual traders. Six products launching after the evaluation platform stabilises.</p>
+    <div class="tech-grid">
+      <div class="tc-card rv rv-d1"><div class="tc-n">// 01</div><div class="tc-icon">🤖</div><div class="tc-title">AI Trading Bots</div><p class="tc-desc">Automated bots that identify opportunities and execute trades with algorithmic precision. Enhance discipline, remove emotion.</p><span class="tc-soon">Coming Soon</span></div>
+      <div class="tc-card rv rv-d2"><div class="tc-n">// 02</div><div class="tc-icon">📊</div><div class="tc-title">Market Analyzer</div><p class="tc-desc">Professional analysis dashboard with trend data, volatility insights and live risk metrics for every instrument.</p><span class="tc-soon">Coming Soon</span></div>
+      <div class="tc-card rv rv-d3"><div class="tc-n">// 03</div><div class="tc-icon">📈</div><div class="tc-title">Smart Indicators</div><p class="tc-desc">Proprietary indicators that identify trends clearly and filter false signals — compatible with MT4 and MT5.</p><span class="tc-soon">Coming Soon</span></div>
+      <div class="tc-card rv rv-d4"><div class="tc-n">// 04</div><div class="tc-icon">⚙️</div><div class="tc-title">Strategy Builder</div><p class="tc-desc">No-code strategy creation. Build, backtest and deploy automated strategies without writing a single line of code.</p><span class="tc-soon">Coming Soon</span></div>
+      <div class="tc-card rv rv-d5"><div class="tc-n">// 05</div><div class="tc-icon">🎓</div><div class="tc-title">Education Platform</div><p class="tc-desc">Structured professional curriculum from beginner to advanced — built with vetted, successful traders as educators.</p><span class="tc-soon">Coming Soon</span></div>
+      <div class="tc-card rv rv-d6"><div class="tc-n">// 06</div><div class="tc-icon">🔬</div><div class="tc-title">Performance Analytics</div><p class="tc-desc">Deep reporting: win rate, average P&amp;L, risk per trade, drawdown timeline — identify exactly what works.</p><span class="tc-soon">Coming Soon</span></div>
+    </div>
+    <div style="margin-top:40px"><button class="btn-p" onclick="nav('tech')">Explore All Products</button></div>
   </section>
 
   <footer class="footer">
     <div class="footer__grid">
       <div>
         <div class="footer__brand-name">VORN<span>IX</span></div>
-        <p class="footer__brand-desc">Next generation prop firm. Education, evaluation and technology — built for serious traders worldwide. Founded by Jatin Sharma.</p>
+        <p class="footer__brand-desc">A purpose-driven proprietary trading firm. Education, evaluation and technology — built to make trading a legitimate profession worldwide. Founded by Jatin Sharma.</p>
       </div>
       <div class="footer__col"><h4>Challenges</h4><ul><li><a onclick="nav('challenges');setTab('one')">1-Step</a></li><li><a onclick="nav('challenges');setTab('two')">2-Step</a></li><li><a onclick="nav('challenges');setTab('three')">3-Step</a></li><li><a onclick="nav('challenges');setTab('partial')">Partial Payment</a></li></ul></div>
       <div class="footer__col"><h4>Company</h4><ul><li><a onclick="nav('tech')">Technology</a></li><li><a onclick="nav('how')">How It Works</a></li><li><a onclick="nav('about')">About</a></li><li><a onclick="nav('contact')">Contact</a></li></ul></div>
@@ -228,7 +352,7 @@
 </main>
 
 
-<!-- ═══ PAGE: CHALLENGES ═══ -->
+<!-- ═══════════ PAGE: CHALLENGES ═══════════ -->
 <main class="page" id="page-challenges">
   <header class="ph">
     <span class="ph__eye">// Evaluation Plans</span>
@@ -354,7 +478,7 @@
       </div>
       <div class="rv">
         <div class="rules">
-          <div class="rc"><div class="rc__icon">🎯</div><div class="rc__val rc__val--g">8+5+4%</div><div class="rc__lbl">Phases 1, 2 and 3</div></div>
+          <div class="rc"><div class="rc__icon">🎯</div><div class="rc__val rc__val--g">8+5+4%</div><div class="rc__lbl">Phases 1, 2 &amp; 3</div></div>
           <div class="rc"><div class="rc__icon">📉</div><div class="rc__val rc__val--r">6%</div><div class="rc__lbl">Daily Loss</div><div class="rc__note">Trailing from day high</div></div>
           <div class="rc"><div class="rc__icon">🛑</div><div class="rc__val rc__val--r">12%</div><div class="rc__lbl">Max Drawdown</div><div class="rc__note">Static from initial</div></div>
           <div class="rc"><div class="rc__icon">💰</div><div class="rc__val rc__val--g">80–90%</div><div class="rc__lbl">Profit Split</div></div>
@@ -409,12 +533,12 @@
       </div>
       <div class="rv">
         <div class="rules">
-          <div class="rc"><div class="rc__icon">🎯</div><div class="rc__val rc__val--g">10+6+5%</div><div class="rc__lbl">Phases 1, 2 and 3</div></div>
+          <div class="rc"><div class="rc__icon">🎯</div><div class="rc__val rc__val--g">10+6+5%</div><div class="rc__lbl">Phases 1, 2 &amp; 3</div></div>
           <div class="rc"><div class="rc__icon">📉</div><div class="rc__val rc__val--r">5%</div><div class="rc__lbl">Daily Loss</div><div class="rc__note">Trailing — stricter</div></div>
           <div class="rc"><div class="rc__icon">🛑</div><div class="rc__val rc__val--r">10%</div><div class="rc__lbl">Max Drawdown</div><div class="rc__note">Static — stricter</div></div>
           <div class="rc"><div class="rc__icon">💰</div><div class="rc__val rc__val--g">80–90%</div><div class="rc__lbl">Profit Split</div></div>
           <div class="rc"><div class="rc__icon">📊</div><div class="rc__val rc__val--r">15%</div><div class="rc__lbl">Consistency Cap</div><div class="rc__note">Max per single trade</div></div>
-          <div class="rc"><div class="rc__icon">📅</div><div class="rc__val">5 Days</div><div class="rc__lbl">Min Trading Days</div><div class="rc__note">Per phase — stricter</div></div>
+          <div class="rc"><div class="rc__icon">📅</div><div class="rc__val">5 Days</div><div class="rc__lbl">Min Trading Days</div><div class="rc__note">Per phase</div></div>
         </div>
       </div>
     </div>
@@ -442,9 +566,9 @@
 </main>
 
 
-<!-- ═══ PAGE: TECHNOLOGY ═══ -->
+<!-- ═══════════ PAGE: TECHNOLOGY ═══════════ -->
 <main class="page" id="page-tech">
-  <header class="ph"><span class="ph__eye">// Our Products</span><h1 class="ph__h">VORNIX <span class="gold">TECHNOLOGY</span></h1><p class="ph__sub">We are building a technology ecosystem to make traders smarter, more disciplined and more profitable.</p></header>
+  <header class="ph"><span class="ph__eye">// Our Products</span><h1 class="ph__h">VORNIX <span class="gold">TECHNOLOGY</span></h1><p class="ph__sub">Institution-level tools built for individual traders. We are building a technology ecosystem that makes traders smarter, more disciplined and more profitable.</p></header>
   <section class="section">
     <div class="g2 grid">
       <div class="tcard rv rv-d1"><div class="tcard__n">// 01</div><div class="tcard__icon">🤖</div><div class="tcard__title">AI Trading Bots</div><p class="tcard__desc">Automated bots that identify opportunities and execute trades. <strong>The goal is not to replace traders — it's to enhance discipline and remove emotion.</strong></p><ul class="tcard__list"><li>Identify opportunities automatically</li><li>Execute trades based on your strategy rules</li><li>Manage positions and exits automatically</li><li>Adapt continuously to changing conditions</li></ul><span class="tcard__tag">// In Development</span></div>
@@ -468,7 +592,7 @@
 </main>
 
 
-<!-- ═══ PAGE: HOW IT WORKS ═══ -->
+<!-- ═══════════ PAGE: HOW IT WORKS ═══════════ -->
 <main class="page" id="page-how">
   <header class="ph"><span class="ph__eye">// The Process</span><h1 class="ph__h">HOW <span class="gold">VORNIX WORKS</span></h1><p class="ph__sub">Every plan follows the same journey. Choose your challenge, prove your edge, get funded and scale.</p></header>
   <section class="section">
@@ -478,7 +602,7 @@
     <div class="gr-box rv">
       <span class="label-mono" style="margin-bottom:10px;display:block">// Universal Rules</span>
       <h2 class="h-md" style="margin-bottom:16px">GLOBAL <span class="gold">TRADING RULES</span></h2>
-      <p style="font-size:14px;color:var(--t2);margin-bottom:22px;line-height:1.7">These rules apply to every VORNIX account regardless of plan.</p>
+      <p style="font-size:14px;color:var(--t1);margin-bottom:22px;line-height:1.75">These rules apply to every VORNIX account regardless of plan.</p>
       <div class="gr-grid">
         <div class="gri"><div class="gri__t">All Instruments</div><p class="gri__d">Forex, Indices, Commodities (Gold, Oil, Silver), Crypto and Stocks — tradeable on every plan.</p></div>
         <div class="gri"><div class="gri__t">Trailing Daily Loss</div><p class="gri__d">Calculated from the highest equity point of the trading day. Trails upward only. Resets each new day.</p></div>
@@ -493,37 +617,74 @@
 </main>
 
 
-<!-- ═══ PAGE: ABOUT ═══ -->
+<!-- ═══════════ PAGE: ABOUT ═══════════ -->
 <main class="page" id="page-about">
-  <header class="ph"><span class="ph__eye">// Our Story</span><h1 class="ph__h">ABOUT <span class="gold">VORNIX</span></h1><p class="ph__sub">We're not just funding traders. We're building the infrastructure that turns trading into a legitimate profession.</p></header>
+  <header class="ph"><span class="ph__eye">// Our Story</span><h1 class="ph__h">ABOUT <span class="gold">VORNIX</span></h1><p class="ph__sub">We are not just funding traders. We are building the infrastructure that turns trading into a legitimate profession — globally.</p></header>
   <section class="section">
+
+    <!-- MISSION STATEMENT -->
     <div class="about-2col">
       <div class="rv">
         <p class="body-t">VORNIX was founded by <strong>Jatin Sharma</strong> after observing a fundamental gap in the global trading industry: millions of talented traders enter markets every year, yet most fail — not because they lack skill, but because the system around them is broken.</p>
-        <p class="body-t" style="margin-top:14px">Trading is still seen as gambling in much of the world. Yet risk exists in every profession. An engineer studies four years with no job guarantee. A doctor spends a decade. The difference is that those professions have structured pathways — and trading does not.</p>
-        <p class="body-t" style="margin-top:14px">VORNIX was created to change that. By combining rigorous evaluation, real capital access and a technology ecosystem, we are building the infrastructure that makes trading <strong>a legitimate, structured, scalable profession for anyone, anywhere.</strong></p>
+        <p class="body-t" style="margin-top:14px">Indian parents rarely say "I want my child to become a professional trader" — because trading is still seen as gambling, not a profession. Yet risk exists in every career. An engineer studies four years with no job guarantee. A doctor spends a decade. The difference is those professions have structured pathways. <strong>Trading does not — and VORNIX is here to change that.</strong></p>
+        <p class="body-t" style="margin-top:14px">By combining rigorous evaluation, real capital access and a technology ecosystem, we are building the infrastructure that makes trading a legitimate, structured, scalable profession for anyone, anywhere — whether you're starting with ₹5,000 in India or trading professionally in Europe.</p>
       </div>
       <div class="qb rv">
-        <p class="qb__text">"Trading is one of the fastest-growing financial activities on earth. Yet most participants fail — not because they lack talent, but because <strong>no structured system exists to develop them.</strong>"</p>
+        <p class="qb__text">"Trading is one of the fastest-growing financial activities on earth. Yet most participants fail — not because they lack talent, but because <strong>no structured system exists to develop them.</strong> VORNIX is that system."</p>
         <div class="qb__attr">— JATIN SHARMA, FOUNDER · VORNIX</div>
       </div>
     </div>
+
+    <!-- MARKET OPPORTUNITY -->
+    <span class="s-eye" style="margin-top:var(--s4);display:inline-flex">// The Opportunity</span>
+    <h2 class="h-md rv" style="margin-bottom:16px">A <span class="gold">$7 BILLION</span> INDUSTRY WITH NO INDIAN LEADER</h2>
+    <p style="font-size:15px;color:var(--t1);max-width:720px;line-height:1.78;margin-bottom:32px" class="rv">Despite 100–200+ active prop firms globally and 5 crore+ traders having participated in challenges, there is no India-based global leader in this space. India's demat accounts have grown from 4.1 crore in 2020 to 15.1 crore in 2024 — participation is rising fast, but failure remains near 90%. The reason is not lack of interest. It is lack of structure.</p>
+
+    <div class="market-grid rv" style="margin-bottom:var(--s4)">
+      <div class="mg-item">
+        <div class="mg-item__val">15.1 Cr</div>
+        <div class="mg-item__label">India Demat Accounts (2024)</div>
+        <div class="mg-item__note">Up from 4.1 Cr in 2020</div>
+      </div>
+      <div class="mg-item">
+        <div class="mg-item__val">$7B+</div>
+        <div class="mg-item__label">Global Prop Industry (2024)</div>
+        <div class="mg-item__note">Estimated total revenue</div>
+      </div>
+      <div class="mg-item">
+        <div class="mg-item__val">200+</div>
+        <div class="mg-item__label">Active Prop Firms Worldwide</div>
+        <div class="mg-item__note">None India-based and globally dominant</div>
+      </div>
+      <div class="mg-item">
+        <div class="mg-item__val">~90%</div>
+        <div class="mg-item__label">Traders Fail Consistently</div>
+        <div class="mg-item__note">Due to lack of structure, not lack of skill</div>
+      </div>
+    </div>
+
+    <!-- ROADMAP -->
     <span class="label-mono" style="display:block;margin-bottom:12px">// Long-Term Vision</span>
     <h2 class="h-md rv" style="margin-bottom:32px">VORNIX <span class="gold">ROADMAP</span></h2>
     <div class="g3 grid vision rv">
       <div class="vc"><div class="vc__icon">🎯</div><div class="vc__title">Evaluation Platform</div><p class="vc__desc">Four challenge types with rigorous, transparent rules. Live now. The foundation of everything we build.</p></div>
-      <div class="vc"><div class="vc__icon">📚</div><div class="vc__title">Education System</div><p class="vc__desc">A professional curriculum structured like a medical degree for traders. Launches after core platform stabilises.</p></div>
+      <div class="vc"><div class="vc__icon">📚</div><div class="vc__title">Education System</div><p class="vc__desc">A professional curriculum built by real funded traders — structured like a medical degree, not a YouTube course.</p></div>
       <div class="vc"><div class="vc__icon">🤖</div><div class="vc__title">AI Tools Suite</div><p class="vc__desc">Bots, smart indicators, strategy builders and performance analytics. Institution-level tools for every trader.</p></div>
       <div class="vc"><div class="vc__icon">🌐</div><div class="vc__title">Global Community</div><p class="vc__desc">Funded traders become mentors and strategy contributors. A self-reinforcing ecosystem that grows with each member.</p></div>
       <div class="vc"><div class="vc__icon">📊</div><div class="vc__title">Performance Data</div><p class="vc__desc">Deep analytics for every funded trader. Identify exactly what is working and fix precisely what is not.</p></div>
       <div class="vc"><div class="vc__icon">🚀</div><div class="vc__title">Scale to $100K</div><p class="vc__desc">Automatic scaling program. Every 10% profit cycle increases allocation by 25%, up to $100,000.</p></div>
     </div>
+
+    <!-- FOUNDER -->
     <div class="founder rv">
-      <div><div class="founder__mark">VORN<span>IX</span></div><div class="founder__sub">// NEXT GEN PROP FIRM</div></div>
+      <div>
+        <div class="founder__mark">VORN<span>IX</span></div>
+        <div class="founder__sub">// NEXT GEN PROP FIRM</div>
+      </div>
       <div class="founder__text">
         <h3>BUILT BY JATIN SHARMA</h3>
-        <p>Jatin Sharma founded VORNIX after identifying that the prop trading industry is fundamentally failing traders. <strong>Most firms exist to collect challenge fees</strong> — not to develop traders. VORNIX was designed from day one to be different.</p>
-        <p>The vision is clear: give every trader — whether starting with ₹5,000 in India or trading professionally in Europe — the <strong>education, capital and technology</strong> to build a real career. This is VORNIX.</p>
+        <p>Jatin Sharma founded VORNIX after identifying that the prop trading industry is fundamentally failing traders. <strong>Most firms exist to collect challenge fees</strong> — not to develop traders. VORNIX was designed from day one to be different: a complete ecosystem where traders learn, prove themselves, access real capital, and scale their careers with institutional-level tools.</p>
+        <p>The vision is clear: give every trader — whether starting with ₹5,000 in India or trading professionally in Europe — the <strong>education, capital and technology</strong> to build a real career. Participation is rising globally. Failure is a structural problem. <strong>VORNIX is the structure.</strong></p>
       </div>
     </div>
   </section>
@@ -531,13 +692,13 @@
 </main>
 
 
-<!-- ═══ PAGE: CONTACT ═══ -->
+<!-- ═══════════ PAGE: CONTACT ═══════════ -->
 <main class="page" id="page-contact">
   <header class="ph"><span class="ph__eye">// Get In Touch</span><h1 class="ph__h">CONTACT <span class="gold">VORNIX</span></h1><p class="ph__sub">Questions about a challenge, payouts or technology waitlist. We respond within 2 hours during market hours.</p></header>
   <section class="section">
     <div class="contact-2col">
       <div>
-        <p class="body-t rv" style="margin-bottom:24px">Whether it's a challenge question, a payout inquiry, or you want to join the waitlist for our AI tools — reach us on any of the channels below.</p>
+        <p class="body-t rv" style="margin-bottom:24px">Whether it's a challenge question, a payout inquiry, or you want to join the waitlist for our AI tools and education platform — reach us on any channel below.</p>
         <div class="channels rv">
           <div class="ch"><div class="ch__ico">✉️</div><div><div class="ch__key">Email</div><div class="ch__val">support@vornix.com</div></div></div>
           <div class="ch"><div class="ch__ico">💬</div><div><div class="ch__key">Live Chat</div><div class="ch__val">Available 24/5 on the platform</div></div></div>
