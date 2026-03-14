@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>VORNIX — Next Generation Prop Firm</title>
-<meta name="description" content="VORNIX funds skilled traders with capital up to $100K. Choose from 4 evaluation paths. Keep up to 95% of your profits.">
+<meta name="description" content="VORNIX funds skilled traders with capital up to $100K. Four evaluation paths. Keep up to 95% of your profits.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;500;600;700;900&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -12,90 +12,55 @@
 </head>
 <body>
 
-<!-- Cursor -->
-<div class="cursor"     aria-hidden="true"></div>
-<div class="cursor-ring"aria-hidden="true"></div>
-
-<!-- Background -->
-<canvas id="bg-canvas"  aria-hidden="true"></canvas>
-<div    id="bg-veil"    aria-hidden="true"></div>
-
-<!-- ═══════════════════════════════════════════
-     NAVIGATION
-═══════════════════════════════════════════ -->
+<!-- ═══════════════════════ NAV ═══════════════════════ -->
 <nav class="nav" role="navigation" aria-label="Main navigation">
-
-  <!-- Logo -->
   <div class="nav__logo" onclick="nav('home')" role="button" tabindex="0" aria-label="VORNIX Home">
     <svg class="nav__logo-svg" viewBox="0 0 172 38" fill="none" xmlns="http://www.w3.org/2000/svg">
       <defs>
-        <linearGradient id="lg-w" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%"   stop-color="#FFFFFF" stop-opacity=".95"/>
-          <stop offset="100%" stop-color="#8890AA"/>
-        </linearGradient>
-        <linearGradient id="lg-r" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%"   stop-color="#E8001A"/>
-          <stop offset="100%" stop-color="#7A0008"/>
-        </linearGradient>
-        <linearGradient id="lg-g" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%"   stop-color="#22B972"/>
-          <stop offset="100%" stop-color="#0E5E3A"/>
-        </linearGradient>
-        <filter id="glow-r" x="-30%" y="-30%" width="160%" height="160%">
-          <feGaussianBlur stdDeviation="1" result="b"/>
-          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-        </filter>
+        <linearGradient id="lg-w" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FFF" stop-opacity=".95"/><stop offset="100%" stop-color="#8890AA"/></linearGradient>
+        <linearGradient id="lg-r" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#E8001A"/><stop offset="100%" stop-color="#7A0008"/></linearGradient>
+        <linearGradient id="lg-g" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#22B972"/><stop offset="100%" stop-color="#0E5E3A"/></linearGradient>
+        <filter id="glow-r" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="1" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
       </defs>
-      <!-- Candlestick mark -->
       <g filter="url(#glow-r)">
-        <rect x="1"  y="14" width="5" height="13" fill="url(#lg-r)" rx=".3"/>
-        <line x1="3.5" y1="8"  x2="3.5" y2="14" stroke="#B8000F" stroke-width="1.2" opacity=".7"/>
+        <rect x="1" y="14" width="5" height="13" fill="url(#lg-r)" rx=".3"/>
+        <line x1="3.5" y1="8" x2="3.5" y2="14" stroke="#B8000F" stroke-width="1.2" opacity=".7"/>
         <line x1="3.5" y1="27" x2="3.5" y2="32" stroke="#B8000F" stroke-width="1.2" opacity=".5"/>
-        <rect x="9"  y="18" width="5" height="7"  fill="rgba(255,255,255,.08)" rx=".3"/>
+        <rect x="9" y="18" width="5" height="7" fill="rgba(255,255,255,.08)" rx=".3"/>
         <line x1="11.5" y1="13" x2="11.5" y2="18" stroke="rgba(255,255,255,.1)" stroke-width="1.2"/>
         <line x1="11.5" y1="25" x2="11.5" y2="29" stroke="rgba(255,255,255,.08)" stroke-width="1.2"/>
         <rect x="17" y="11" width="5" height="14" fill="url(#lg-g)" rx=".3"/>
-        <line x1="19.5" y1="6"  x2="19.5" y2="11" stroke="#22B972" stroke-width="1.2" opacity=".6"/>
+        <line x1="19.5" y1="6" x2="19.5" y2="11" stroke="#22B972" stroke-width="1.2" opacity=".6"/>
         <line x1="19.5" y1="25" x2="19.5" y2="30" stroke="#22B972" stroke-width="1.2" opacity=".5"/>
       </g>
-      <!-- Trend arrow line -->
       <polyline points="3.5,26 11.5,22 19.5,14" stroke="#B8000F" stroke-width=".8" opacity=".4" stroke-dasharray="2,2"/>
-      <!-- VORNIX lettering -->
-      <path d="M30 7L38 31L46 7"                stroke="url(#lg-w)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <path d="M30 7L38 31L46 7" stroke="url(#lg-w)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
       <ellipse cx="56.5" cy="19" rx="7" ry="12" stroke="url(#lg-w)" stroke-width="2.7" fill="none"/>
       <path d="M68 7v24M68 7h9c3 0 5 2.5 5 6s-2 6-5 6H68M76 19l7.5 12" stroke="url(#lg-w)" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-      <path d="M88 31V7L102 31V7"  stroke="url(#lg-w)" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <path d="M88 31V7L102 31V7" stroke="url(#lg-w)" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
       <line x1="108" y1="7" x2="108" y2="31" stroke="url(#lg-w)" stroke-width="2.7" stroke-linecap="round"/>
       <path d="M114 7l13 24M127 7l-13 24" stroke="url(#lg-r)" stroke-width="2.8" stroke-linecap="round" filter="url(#glow-r)"/>
-      <!-- Baseline -->
-      <line x1="30" y1="36" x2="127" y2="36" stroke="rgba(184,0,15,.14)" stroke-width=".8"/>
-      <line x1="30" y1="36" x2="72"  y2="36" stroke="rgba(184,0,15,.7)"  stroke-width="1.4"/>
-      <!-- Right tag -->
+      <line x1="30" y1="36" x2="127" y2="36" stroke="rgba(184,0,15,.10)" stroke-width=".8"/>
+      <line x1="30" y1="36" x2="72"  y2="36" stroke="rgba(184,0,15,.65)" stroke-width="1.4"/>
       <text x="133" y="16" font-family="'Barlow Condensed',sans-serif" font-size="6" fill="#3A3C58" letter-spacing="1.5">PROP</text>
       <text x="133" y="26" font-family="'Barlow Condensed',sans-serif" font-size="6" fill="#3A3C58" letter-spacing="1.5">FIRM</text>
     </svg>
   </div>
 
-  <!-- Desktop nav links -->
-  <ul class="nav__links" id="nav-links" role="list">
-    <li><a class="nav__link is-active" id="nl-home"       role="button" tabindex="0" onclick="nav('home')">Home</a></li>
-    <li><a class="nav__link"           id="nl-challenges" role="button" tabindex="0" onclick="nav('challenges')">Challenges</a></li>
-    <li><a class="nav__link"           id="nl-tech"       role="button" tabindex="0" onclick="nav('tech')">Technology</a></li>
-    <li><a class="nav__link"           id="nl-how"        role="button" tabindex="0" onclick="nav('how')">How It Works</a></li>
-    <li><a class="nav__link"           id="nl-about"      role="button" tabindex="0" onclick="nav('about')">About</a></li>
-    <li><a class="nav__link"           id="nl-contact"    role="button" tabindex="0" onclick="nav('contact')">Contact</a></li>
+  <ul class="nav__links" role="list">
+    <li><a class="nav__link is-active" id="nl-home"       onclick="nav('home')">Home</a></li>
+    <li><a class="nav__link"           id="nl-challenges" onclick="nav('challenges')">Challenges</a></li>
+    <li><a class="nav__link"           id="nl-tech"       onclick="nav('tech')">Technology</a></li>
+    <li><a class="nav__link"           id="nl-how"        onclick="nav('how')">How It Works</a></li>
+    <li><a class="nav__link"           id="nl-about"      onclick="nav('about')">About</a></li>
+    <li><a class="nav__link"           id="nl-contact"    onclick="nav('contact')">Contact</a></li>
   </ul>
 
-  <!-- Right cluster -->
-  <div class="nav__right" id="nav-right">
-    <div class="nav__ticker-line" id="nav-ticker">
-      XAUUSD 2847.5 <span>▲ 0.82%</span>
-    </div>
-    <a href="login.html" style="font-family:var(--ff-ui);font-size:12px;letter-spacing:2px;color:var(--t-2);text-decoration:none;text-transform:uppercase;margin-right:18px">Login</a>
-    <button class="nav__cta" id="nav-cta" onclick="window.location.href='signup.html'">Get Funded</button>
+  <div class="nav__right">
+    <a href="login.html" class="nav__login">Login</a>
+    <button class="nav__cta" onclick="window.location.href='signup.html'">Get Funded</button>
   </div>
 
-  <!-- Hamburger -->
   <button class="nav__ham" id="nav-ham" onclick="hamMenu()" aria-label="Toggle menu" aria-expanded="false">
     <span></span><span></span><span></span>
   </button>
@@ -104,146 +69,151 @@
 <!-- Mobile Drawer -->
 <div class="nav__drawer" id="nav-drawer" role="dialog" aria-label="Mobile menu">
   <a class="nav__drawer-link is-active" id="ml-home"       onclick="nav('home');closeDrawer()">Home</a>
-  <a class="nav__drawer-link"           id="ml-challenges"  onclick="nav('challenges');closeDrawer()">Challenges</a>
-  <a class="nav__drawer-link"           id="ml-tech"        onclick="nav('tech');closeDrawer()">Technology</a>
-  <a class="nav__drawer-link"           id="ml-how"         onclick="nav('how');closeDrawer()">How It Works</a>
-  <a class="nav__drawer-link"           id="ml-about"       onclick="nav('about');closeDrawer()">About</a>
-  <a class="nav__drawer-link"           id="ml-contact"     onclick="nav('contact');closeDrawer()">Contact</a>
+  <a class="nav__drawer-link"           id="ml-challenges" onclick="nav('challenges');closeDrawer()">Challenges</a>
+  <a class="nav__drawer-link"           id="ml-tech"       onclick="nav('tech');closeDrawer()">Technology</a>
+  <a class="nav__drawer-link"           id="ml-how"        onclick="nav('how');closeDrawer()">How It Works</a>
+  <a class="nav__drawer-link"           id="ml-about"      onclick="nav('about');closeDrawer()">About</a>
+  <a class="nav__drawer-link"           id="ml-contact"    onclick="nav('contact');closeDrawer()">Contact</a>
+  <a class="nav__drawer-link"           href="login.html">Login →</a>
   <button class="nav__drawer-cta" onclick="window.location.href='signup.html'">Get Funded →</button>
   <p class="nav__drawer-foot">VORNIX — NEXT GENERATION PROP FIRM</p>
 </div>
 
 
-<!-- ═══════════════════════════════════════════
-     PAGE: HOME
-═══════════════════════════════════════════ -->
+<!-- ═══════════════════════ PAGE: HOME ═══════════════════════ -->
 <main class="page is-active" id="page-home">
 
   <!-- Hero -->
-  <section class="hero" aria-label="Hero">
+  <section class="hero" aria-labelledby="hero-h1">
     <div class="hero__left">
-      <span class="hero__eyebrow">Next Generation Prop Firm</span>
-      <h1 class="hero__heading h-xl">
+      <span class="hero__eye">// Next Generation Prop Firm</span>
+      <h1 class="hero__h1" id="hero-h1">
         FUNDED.
-        <span class="red" data-text="FEARLESS.">FEARLESS.</span>
+        <span class="red">FEARLESS.</span>
         <span class="ghost">VORNIX</span>
       </h1>
-      <div class="hero__steps" role="list">
+      <div class="hero__tagline" aria-label="Our journey">
         <span class="hero__step">Learn</span>
-        <span class="hero__sep">→</span>
+        <span class="hero__arr" aria-hidden="true">→</span>
         <span class="hero__step">Prove</span>
-        <span class="hero__sep">→</span>
+        <span class="hero__arr" aria-hidden="true">→</span>
         <span class="hero__step">Trade</span>
-        <span class="hero__sep">→</span>
+        <span class="hero__arr" aria-hidden="true">→</span>
         <span class="hero__step">Grow</span>
       </div>
       <p class="hero__desc">VORNIX funds traders who <strong>prove they can perform</strong>. Four evaluation paths, capital up to $100K, and up to <strong>95% of every dollar you generate</strong>.</p>
-      <div class="hero__actions">
-        <button class="btn btn-pri" onclick="nav('challenges')">Start Your Challenge</button>
-        <button class="btn btn-sec" onclick="nav('how')">How It Works</button>
+      <div class="hero__ctas">
+        <button class="btn-p" onclick="window.location.href='signup.html'">Start Your Challenge</button>
+        <button class="btn-s" onclick="nav('how')">How It Works</button>
       </div>
     </div>
-    <div class="hero__right">
-      <div class="stat"><div class="stat__val">95%</div><div class="stat__key">Max Profit Split</div></div>
-      <div class="stat"><div class="stat__val">4</div><div class="stat__key">Challenge Types</div></div>
-      <div class="stat"><div class="stat__val">$100K</div><div class="stat__key">Max Funded Account</div></div>
-      <div class="stat"><div class="stat__val">$1K</div><div class="stat__key">Entry From</div></div>
-      <div class="stat"><div class="stat__val">24/5</div><div class="stat__key">Support</div></div>
+    <div class="hero__panel" aria-hidden="true">
+      <div class="hero__stats">
+        <div class="hs"><div class="hs__v g">95%</div><div class="hs__l">Max Profit Split</div></div>
+        <div class="hs"><div class="hs__v">$100K</div><div class="hs__l">Max Capital</div></div>
+        <div class="hs"><div class="hs__v">4</div><div class="hs__l">Challenge Types</div></div>
+        <div class="hs"><div class="hs__v">Day 1</div><div class="hs__l">Withdrawals</div></div>
+      </div>
+      <div class="hero__ticker">
+        <div class="ticker-i"><span style="color:var(--t2)">XAUUSD</span> <span style="color:var(--t1)">2847.50</span> <span>▲ 0.82%</span></div>
+        <div class="ticker-i"><span style="color:var(--t2)">EURUSD</span> <span style="color:var(--t1)">1.0842</span> <span class="dn">▼ 0.24%</span></div>
+        <div class="ticker-i"><span style="color:var(--t2)">BTC/USD</span> <span style="color:var(--t1)">96,440</span> <span>▲ 2.38%</span></div>
+      </div>
     </div>
   </section>
 
-  <!-- Plan preview -->
-  <section class="sec-md band" aria-labelledby="home-plans-heading">
-    <span class="label-mono">// Choose Your Path</span>
-    <h2 class="h-lg rv" id="home-plans-heading">4 WAYS TO GET <span class="red">FUNDED</span></h2>
-    <p class="body rv" style="max-width:540px;margin-bottom:var(--s4)">All plans include every instrument. Forex, Indices, Commodities, Crypto and Stocks. Accounts from $1,000 to $100,000.</p>
-    <div class="grid g4">
-      <div class="plan-card gcell rv rv-d1" onclick="nav('challenges');setTab('one')">
-        <div class="plan-card__icon">⚡</div>
-        <div class="plan-card__name">1-STEP</div>
-        <span class="badge badge-gold" style="margin-bottom:14px">Fastest Path</span>
-        <div class="plan-card__pct">95%</div>
-        <div class="plan-card__pct-lbl">Profit Split</div>
-        <p class="plan-card__desc">Single phase. 10% target. No time limit. No minimum days. Most direct route to a funded account.</p>
-        <div class="plan-card__cta">View Plan →</div>
+  <!-- Stats strip -->
+  <div class="strip" role="list">
+    <div class="strip-i" role="listitem"><div class="strip-i__n"><span>95</span>%</div><div class="strip-i__l">Max Profit Split</div></div>
+    <div class="strip-i" role="listitem"><div class="strip-i__n">$<span>100</span>K</div><div class="strip-i__l">Max Funded Capital</div></div>
+    <div class="strip-i" role="listitem"><div class="strip-i__n"><span>4</span></div><div class="strip-i__l">Challenge Types</div></div>
+    <div class="strip-i" role="listitem"><div class="strip-i__n"><span>24</span>/5</div><div class="strip-i__l">Support Available</div></div>
+  </div>
+
+  <!-- Plans preview -->
+  <section class="section" aria-labelledby="plans-h2">
+    <span class="s-eye">// Choose Your Path</span>
+    <h2 class="s-head" id="plans-h2">4 WAYS TO GET <span class="red">FUNDED</span></h2>
+    <p class="s-sub">All plans include Forex, Indices, Commodities, Crypto and Stocks. Accounts from $1,000 to $100,000.</p>
+    <div class="plan-grid">
+      <div class="plan-card-home rv rv-d1" onclick="nav('challenges');setTab('one')" role="button" tabindex="0">
+        <span class="pch__badge">// Fastest Path</span>
+        <div class="pch__name">1-STEP</div>
+        <span class="pch__tag">Single Phase</span>
+        <div class="pch__split">95%</div>
+        <div class="pch__split-l">Profit Split</div>
+        <p class="pch__desc">10% target. No time limit. No minimum days. News trading and EA/Algo allowed. Fastest route to a funded account.</p>
+        <span class="pch__cta">View Plan →</span>
       </div>
-      <div class="plan-card gcell rv rv-d2" onclick="nav('challenges');setTab('two')">
-        <div class="plan-card__icon">🎯</div>
-        <div class="plan-card__name">2-STEP</div>
-        <span class="badge badge-blue" style="margin-bottom:14px">Balanced</span>
-        <div class="plan-card__pct">90%</div>
-        <div class="plan-card__pct-lbl">Profit Split</div>
-        <p class="plan-card__desc">Two phases. 10%+5% targets. News trading and EA allowed. Accounts from $1K to $100K.</p>
-        <div class="plan-card__cta">View Plan →</div>
+      <div class="plan-card-home rv rv-d2" onclick="nav('challenges');setTab('two')" role="button" tabindex="0">
+        <span class="pch__badge">// Balanced</span>
+        <div class="pch__name">2-STEP</div>
+        <span class="pch__tag">Two Phases — From $1K</span>
+        <div class="pch__split">90%</div>
+        <div class="pch__split-l">Profit Split</div>
+        <p class="pch__desc">10%+5% targets. News trading and EA allowed. Accounts from $1K to $100K. 3 minimum days per phase.</p>
+        <span class="pch__cta">View Plan →</span>
       </div>
-      <div class="plan-card gcell rv rv-d3" onclick="nav('challenges');setTab('three')">
-        <div class="plan-card__icon">🏆</div>
-        <div class="plan-card__name">3-STEP</div>
-        <span class="badge badge-slate" style="margin-bottom:14px">Structured</span>
-        <div class="plan-card__pct">80–90%</div>
-        <div class="plan-card__pct-lbl">Profit Split</div>
-        <p class="plan-card__desc">Three phases. Strict 15% consistency rule. Most disciplined evaluation available.</p>
-        <div class="plan-card__cta">View Plan →</div>
+      <div class="plan-card-home rv rv-d3" onclick="nav('challenges');setTab('three')" role="button" tabindex="0">
+        <span class="pch__badge">// Structured</span>
+        <div class="pch__name">3-STEP</div>
+        <span class="pch__tag">Three Phases</span>
+        <div class="pch__split">80–90%</div>
+        <div class="pch__split-l">Profit Split</div>
+        <p class="pch__desc">8%+5%+4% targets. Strict 15% consistency rule. Most disciplined evaluation available.</p>
+        <span class="pch__cta">View Plan →</span>
       </div>
-      <div class="plan-card gcell rv rv-d4" onclick="nav('challenges');setTab('partial')">
-        <div class="plan-card__icon">💳</div>
-        <div class="plan-card__name">PARTIAL</div>
-        <span class="badge badge-green" style="margin-bottom:14px">Low Entry Cost</span>
-        <div class="plan-card__pct">80–90%</div>
-        <div class="plan-card__pct-lbl">Profit Split</div>
-        <p class="plan-card__desc">Pay only 35% upfront. Remaining 65% is deducted from your first profit withdrawal.</p>
-        <div class="plan-card__cta">View Plan →</div>
+      <div class="plan-card-home rv rv-d4" onclick="nav('challenges');setTab('partial')" role="button" tabindex="0">
+        <span class="pch__badge">// Low Entry Cost</span>
+        <div class="pch__name">PARTIAL</div>
+        <span class="pch__tag">35% Upfront Only</span>
+        <div class="pch__split">80–90%</div>
+        <div class="pch__split-l">Profit Split</div>
+        <p class="pch__desc">Pay only 35% upfront. Remaining 65% deducted from first profit withdrawal. Lowest barrier to entry.</p>
+        <span class="pch__cta">View Plan →</span>
       </div>
     </div>
   </section>
 
   <!-- Technology preview -->
-  <section class="sec-md" aria-labelledby="home-tech-heading">
-    <span class="label-mono">// Our Products</span>
-    <h2 class="h-lg rv" id="home-tech-heading">TRADER <span class="red">TECHNOLOGY</span></h2>
-    <p class="body rv" style="max-width:560px;margin-bottom:var(--s4)">Institution-level tools built for individual traders. Six products launching after the evaluation platform stabilises.</p>
-    <div class="grid g3">
-      <div class="tc gcell rv rv-d1"><div class="tc__icon">🤖</div><div class="tc__name">AI Trading Bots</div><p class="tc__desc">Automated bots that identify opportunities, execute trades and manage positions with algorithmic precision.</p><span class="tc__tag">// Coming Soon</span></div>
-      <div class="tc gcell rv rv-d2"><div class="tc__icon">📊</div><div class="tc__name">Market Analyzer</div><p class="tc__desc">Professional analysis dashboard with trend data, volatility insights, risk metrics and performance tracking.</p><span class="tc__tag">// Coming Soon</span></div>
-      <div class="tc gcell rv rv-d3"><div class="tc__icon">📈</div><div class="tc__name">Smart Indicators</div><p class="tc__desc">Proprietary indicators that identify trends clearly, highlight entry/exit zones and filter false signals.</p><span class="tc__tag">// Coming Soon</span></div>
-      <div class="tc gcell rv rv-d4"><div class="tc__icon">⚙️</div><div class="tc__name">Strategy Builder</div><p class="tc__desc">No-code automated strategy creation. Test with historical data and deploy on funded accounts directly.</p><span class="tc__tag">// Coming Soon</span></div>
-      <div class="tc gcell rv rv-d5"><div class="tc__icon">🎓</div><div class="tc__name">Education Platform</div><p class="tc__desc">Structured professional curriculum: market structure, risk management, psychology and strategy development.</p><span class="tc__tag">// Coming Soon</span></div>
-      <div class="tc gcell rv rv-d6"><div class="tc__icon">🔬</div><div class="tc__name">Performance Analytics</div><p class="tc__desc">Deep reporting: win rate, average P&amp;L, risk per trade, drawdown analysis. Know your precise edge.</p><span class="tc__tag">// Coming Soon</span></div>
+  <div class="section--dark">
+    <section class="section" aria-labelledby="tech-h2">
+      <span class="s-eye">// Our Products</span>
+      <h2 class="s-head" id="tech-h2">TRADER <span class="red">TECHNOLOGY</span></h2>
+      <p class="s-sub">Institution-level tools built for individual traders. Six products launching after the evaluation platform stabilises.</p>
+      <div class="tech-grid">
+        <div class="tc-card rv rv-d1"><div class="tc-n">// 01</div><div class="tc-icon">🤖</div><div class="tc-title">AI Trading Bots</div><p class="tc-desc">Automated bots that identify opportunities and execute trades with algorithmic precision.</p><span class="tc-soon">Coming Soon</span></div>
+        <div class="tc-card rv rv-d2"><div class="tc-n">// 02</div><div class="tc-icon">📊</div><div class="tc-title">Market Analyzer</div><p class="tc-desc">Professional analysis dashboard with trend data, volatility insights and live risk metrics.</p><span class="tc-soon">Coming Soon</span></div>
+        <div class="tc-card rv rv-d3"><div class="tc-n">// 03</div><div class="tc-icon">📈</div><div class="tc-title">Smart Indicators</div><p class="tc-desc">Proprietary indicators that identify trends clearly and filter false signals effectively.</p><span class="tc-soon">Coming Soon</span></div>
+        <div class="tc-card rv rv-d4"><div class="tc-n">// 04</div><div class="tc-icon">⚙️</div><div class="tc-title">Strategy Builder</div><p class="tc-desc">No-code automated strategy creation. Test on historical data, deploy on funded accounts.</p><span class="tc-soon">Coming Soon</span></div>
+        <div class="tc-card rv rv-d5"><div class="tc-n">// 05</div><div class="tc-icon">🎓</div><div class="tc-title">Education Platform</div><p class="tc-desc">Structured professional curriculum — market structure, risk management, trading psychology.</p><span class="tc-soon">Coming Soon</span></div>
+        <div class="tc-card rv rv-d6"><div class="tc-n">// 06</div><div class="tc-icon">🔬</div><div class="tc-title">Performance Analytics</div><p class="tc-desc">Deep reporting: win rate, average P&amp;L, risk per trade, full drawdown analysis.</p><span class="tc-soon">Coming Soon</span></div>
+      </div>
+      <div style="margin-top:36px"><button class="btn-p" onclick="nav('tech')">Explore All Products</button></div>
+    </section>
+  </div>
+
+  <!-- Journey — Learn → Prove → Trade → Grow -->
+  <section class="section" aria-labelledby="journey-h2">
+    <span class="s-eye">// The Journey</span>
+    <h2 class="s-head" id="journey-h2">LEARN → PROVE → TRADE → <span class="red">GROW</span></h2>
+    <div class="eco-grid">
+      <div class="eco-card rv rv-d1"><div class="eco-n">01 — LEARN</div><div class="eco-icon">📚</div><div class="eco-title">Education</div><p class="eco-desc">Master market structure, risk management, psychology and strategy through our structured curriculum.</p></div>
+      <div class="eco-card rv rv-d2"><div class="eco-n">02 — PROVE</div><div class="eco-icon">🎯</div><div class="eco-title">Evaluation</div><p class="eco-desc">Pass one of four evaluation paths. Demonstrate real discipline, consistency and sound risk management.</p></div>
+      <div class="eco-card rv rv-d3"><div class="eco-n">03 — TRADE</div><div class="eco-icon">💰</div><div class="eco-title">Get Funded</div><p class="eco-desc">Access $1K to $100K in funded capital. Keep up to 95% of every dollar you generate. Withdraw from Day 1.</p></div>
+      <div class="eco-card rv rv-d4"><div class="eco-n">04 — GROW</div><div class="eco-icon">🚀</div><div class="eco-title">Scale Up</div><p class="eco-desc">Automatic scaling every 10% profit cycle. 25% account increase each time. Up to $100K maximum.</p></div>
     </div>
-    <div style="margin-top:var(--s4)"><button class="btn btn-pri" onclick="nav('tech')">Explore All Products</button></div>
   </section>
 
-  <!-- Journey -->
-  <section class="sec-md band" aria-labelledby="home-eco-heading">
-    <span class="label-mono">// The Journey</span>
-    <h2 class="h-lg rv" id="home-eco-heading">BEGINNER TO <span class="red">FUNDED PRO</span></h2>
-    <div class="grid g4" style="margin-top:var(--s4)">
-      <div class="eco gcell rv rv-d1"><div class="eco__num">01 — LEARN</div><div class="eco__icon">📚</div><div class="eco__title">Education</div><p class="eco__desc">Master market structure, risk management, psychology and strategy through our structured curriculum.</p></div>
-      <div class="eco gcell rv rv-d2"><div class="eco__num">02 — PROVE</div><div class="eco__icon">🎯</div><div class="eco__title">Evaluation</div><p class="eco__desc">Pass one of four evaluation paths. Demonstrate real discipline, consistency and sound risk management.</p></div>
-      <div class="eco gcell rv rv-d3"><div class="eco__num">03 — TRADE</div><div class="eco__icon">💰</div><div class="eco__title">Get Funded</div><p class="eco__desc">Access $1K to $100K in funded capital. Keep up to 95% of every dollar you generate. Withdraw from Day 1.</p></div>
-      <div class="eco gcell rv rv-d4"><div class="eco__num">04 — GROW</div><div class="eco__icon">🚀</div><div class="eco__title">Scale Up</div><p class="eco__desc">Automatic scaling every 10% profit cycle. 25% account increase each time. Up to $100K maximum.</p></div>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer class="footer" role="contentinfo">
+  <footer class="footer">
     <div class="footer__grid">
       <div>
         <div class="footer__brand-name">VORN<span>IX</span></div>
         <p class="footer__brand-desc">Next generation prop firm. Education, evaluation and technology — built for serious traders worldwide. Founded by Jatin Sharma.</p>
       </div>
-      <div class="footer__col">
-        <h4>Challenges</h4>
-        <ul><li><a onclick="nav('challenges');setTab('one')">1-Step</a></li><li><a onclick="nav('challenges');setTab('two')">2-Step</a></li><li><a onclick="nav('challenges');setTab('three')">3-Step</a></li><li><a onclick="nav('challenges');setTab('partial')">Partial Payment</a></li></ul>
-      </div>
-      <div class="footer__col">
-        <h4>Company</h4>
-        <ul><li><a onclick="nav('tech')">Technology</a></li><li><a onclick="nav('how')">How It Works</a></li><li><a onclick="nav('about')">About</a></li><li><a onclick="nav('contact')">Contact</a></li></ul>
-      </div>
-      <div class="footer__col">
-        <h4>Legal</h4>
-        <ul><li><a href="#">Terms &amp; Conditions</a></li><li><a href="#">Privacy Policy</a></li><li><a href="#">Risk Disclaimer</a></li><li><a href="#">Refund Policy</a></li></ul>
-      </div>
+      <div class="footer__col"><h4>Challenges</h4><ul><li><a onclick="nav('challenges');setTab('one')">1-Step</a></li><li><a onclick="nav('challenges');setTab('two')">2-Step</a></li><li><a onclick="nav('challenges');setTab('three')">3-Step</a></li><li><a onclick="nav('challenges');setTab('partial')">Partial Payment</a></li></ul></div>
+      <div class="footer__col"><h4>Company</h4><ul><li><a onclick="nav('tech')">Technology</a></li><li><a onclick="nav('how')">How It Works</a></li><li><a onclick="nav('about')">About</a></li><li><a onclick="nav('contact')">Contact</a></li></ul></div>
+      <div class="footer__col"><h4>Legal</h4><ul><li><a href="#">Terms &amp; Conditions</a></li><li><a href="#">Privacy Policy</a></li><li><a href="#">Risk Disclaimer</a></li><li><a href="#">Refund Policy</a></li></ul></div>
     </div>
     <div class="footer__bottom">
       <span class="footer__copy">© 2025 VORNIX. All rights reserved. Trading involves significant risk of loss.</span>
@@ -253,34 +223,29 @@
 </main>
 
 
-<!-- ═══════════════════════════════════════════
-     PAGE: CHALLENGES
-═══════════════════════════════════════════ -->
+<!-- ═══════════════════════ PAGE: CHALLENGES ═══════════════════════ -->
 <main class="page" id="page-challenges">
   <header class="ph">
-    <span class="label-mono">// Evaluation Plans</span>
-    <h1 class="h-lg" style="margin-bottom:0">CHOOSE YOUR <span class="red">CHALLENGE</span></h1>
+    <span class="ph__eye">// Evaluation Plans</span>
+    <h1 class="ph__h">CHOOSE YOUR <span class="red">CHALLENGE</span></h1>
     <p class="ph__sub">Four paths to a funded account. All plans include Forex, Indices, Commodities, Crypto and Stocks.</p>
   </header>
 
-  <!-- Tabs -->
-  <div class="tabs">
-    <div class="tabs__bar" role="tablist">
-      <div class="tab is-active" id="tab-one"     role="tab" aria-selected="true"  onclick="setTab('one')">⚡ 1-Step <span class="tab-pill pill-gold">95%</span></div>
-      <div class="tab"           id="tab-two"     role="tab" aria-selected="false" onclick="setTab('two')">🎯 2-Step <span class="tab-pill pill-blue">90%</span></div>
-      <div class="tab"           id="tab-three"   role="tab" aria-selected="false" onclick="setTab('three')">🏆 3-Step <span class="tab-pill pill-red">80–90%</span></div>
-      <div class="tab"           id="tab-partial" role="tab" aria-selected="false" onclick="setTab('partial')">💳 Partial <span class="tab-pill pill-green">35% Up</span></div>
-    </div>
+  <div class="tabs" role="tablist">
+    <button class="tab is-active" id="tab-one"     onclick="setTab('one')"     role="tab">⚡ 1-Step <span class="tab-pill pill-gold">95%</span></button>
+    <button class="tab"           id="tab-two"     onclick="setTab('two')"     role="tab">🎯 2-Step <span class="tab-pill pill-blue">90%</span></button>
+    <button class="tab"           id="tab-three"   onclick="setTab('three')"   role="tab">🏆 3-Step <span class="tab-pill pill-red">80–90%</span></button>
+    <button class="tab"           id="tab-partial" onclick="setTab('partial')" role="tab">💳 Partial <span class="tab-pill pill-green">35% Up</span></button>
   </div>
 
-  <!-- ── 1-STEP PANEL ── -->
-  <div class="panel is-active" id="panel-one" role="tabpanel">
+  <!-- ── 1-STEP ── -->
+  <div class="panel is-active" id="panel-one">
     <div class="plan-ov">
       <div class="rv">
         <div class="plan-name">⚡ 1-STEP CHALLENGE</div>
         <div class="plan-sub">Single Phase — 95% Profit Split</div>
-        <p class="body">Hit <strong>10% profit</strong> in a single evaluation phase. No time limit. No minimum trading days. News trading and EA/Algo both allowed. Fastest possible path to a funded account.</p>
-        <p class="body" style="margin-top:10px">Consistency rule: <strong>no single trade may exceed 40% of total profit</strong>.</p>
+        <p class="body-t">Hit <strong>10% profit</strong> in a single phase. No time limit. No minimum trading days. News trading and EA/Algo both allowed. Fastest path to a funded account.</p>
+        <p class="body-t">Consistency rule: <strong>no single trade may exceed 40% of total profit</strong>.</p>
         <div class="flags">
           <span class="flag flag-ok">✓ News Trading</span>
           <span class="flag flag-ok">✓ EA / Algo</span>
@@ -309,28 +274,28 @@
       </table>
     </div>
     <div class="tbl-wrap rv">
-      <span class="label-mono" style="margin-top:var(--s4);display:block">// 1-Step — Account Sizes & Pricing</span>
+      <span class="label-mono" style="margin:32px 0 14px;display:block">// 1-Step — Account Sizes &amp; Pricing</span>
       <table class="tbl">
         <thead><tr><th>Account Size</th><th>Challenge Fee</th><th>Profit Split</th><th>Daily Loss</th><th>Max Drawdown</th><th></th></tr></thead>
         <tbody>
-          <tr><td class="tc-acc">$5,000</td><td class="tc-fee">$49</td><td class="tc-spl">95%</td><td>3% Trailing</td><td>8% Static</td><td><button class="tbl-btn" onclick="nav('contact')">Start</button></td></tr>
-          <tr><td class="tc-acc">$10,000</td><td class="tc-fee">$89</td><td class="tc-spl">95%</td><td>3% Trailing</td><td>8% Static</td><td><button class="tbl-btn" onclick="nav('contact')">Start</button></td></tr>
-          <tr><td class="tc-acc">$25,000</td><td class="tc-fee">$189</td><td class="tc-spl">95%</td><td>3% Trailing</td><td>8% Static</td><td><button class="tbl-btn" onclick="nav('contact')">Start</button></td></tr>
-          <tr><td class="tc-acc">$50,000</td><td class="tc-fee">$289</td><td class="tc-spl">95%</td><td>3% Trailing</td><td>8% Static</td><td><button class="tbl-btn" onclick="nav('contact')">Start</button></td></tr>
-          <tr><td class="tc-acc">$100,000</td><td class="tc-fee">$489</td><td class="tc-spl">95%</td><td>3% Trailing</td><td>8% Static</td><td><button class="tbl-btn" onclick="nav('contact')">Start</button></td></tr>
+          <tr><td class="tc-acc">$5,000</td><td class="tc-fee">$49</td><td class="tc-spl">95%</td><td>3% Trailing</td><td>8% Static</td><td><button class="tbl-btn" onclick="window.location.href='signup.html'">Start →</button></td></tr>
+          <tr><td class="tc-acc">$10,000</td><td class="tc-fee">$89</td><td class="tc-spl">95%</td><td>3% Trailing</td><td>8% Static</td><td><button class="tbl-btn" onclick="window.location.href='signup.html'">Start →</button></td></tr>
+          <tr><td class="tc-acc">$25,000</td><td class="tc-fee">$189</td><td class="tc-spl">95%</td><td>3% Trailing</td><td>8% Static</td><td><button class="tbl-btn" onclick="window.location.href='signup.html'">Start →</button></td></tr>
+          <tr><td class="tc-acc">$50,000</td><td class="tc-fee">$289</td><td class="tc-spl">95%</td><td>3% Trailing</td><td>8% Static</td><td><button class="tbl-btn" onclick="window.location.href='signup.html'">Start →</button></td></tr>
+          <tr><td class="tc-acc">$100,000</td><td class="tc-fee">$489</td><td class="tc-spl">95%</td><td>3% Trailing</td><td>8% Static</td><td><button class="tbl-btn" onclick="window.location.href='signup.html'">Start →</button></td></tr>
         </tbody>
       </table>
     </div>
   </div>
 
-  <!-- ── 2-STEP PANEL ── -->
-  <div class="panel" id="panel-two" role="tabpanel">
+  <!-- ── 2-STEP ── -->
+  <div class="panel" id="panel-two">
     <div class="plan-ov">
       <div class="rv">
         <div class="plan-name">🎯 2-STEP CHALLENGE</div>
         <div class="plan-sub">Two Phases — 90% Profit Split</div>
-        <p class="body">Two evaluation phases that verify <strong>consistent, repeatable performance</strong>. Phase 1 tests ability. Phase 2 confirms it. News trading and EA/Algo both allowed. Accounts from <strong>$1K to $100K</strong>.</p>
-        <p class="body" style="margin-top:10px">Consistency rule: <strong>no single trade may exceed 40% of total profit</strong>. Minimum 3 trading days per phase.</p>
+        <p class="body-t">Two evaluation phases that verify <strong>consistent, repeatable performance</strong>. News trading and EA/Algo allowed. Accounts from <strong>$1K to $100K</strong>.</p>
+        <p class="body-t">Consistency rule: <strong>no single trade may exceed 40% of total profit</strong>. Minimum 3 trading days per phase.</p>
         <div class="flags">
           <span class="flag flag-ok">✓ News Trading</span>
           <span class="flag flag-ok">✓ EA / Algo</span>
@@ -359,30 +324,30 @@
       </table>
     </div>
     <div class="tbl-wrap rv">
-      <span class="label-mono" style="margin-top:var(--s4);display:block">// 2-Step — Account Sizes & Pricing</span>
+      <span class="label-mono" style="margin:32px 0 14px;display:block">// 2-Step — Account Sizes &amp; Pricing</span>
       <table class="tbl">
         <thead><tr><th>Account Size</th><th>Challenge Fee</th><th>Profit Split</th><th>Daily Loss</th><th>Max Drawdown</th><th></th></tr></thead>
         <tbody>
-          <tr><td class="tc-acc">$1,000</td><td class="tc-fee">$15</td><td class="tc-spl">90%</td><td>5% Trailing</td><td>10% Static</td><td><button class="tbl-btn" onclick="nav('contact')">Start</button></td></tr>
-          <tr><td class="tc-acc">$2,500</td><td class="tc-fee">$29</td><td class="tc-spl">90%</td><td>5% Trailing</td><td>10% Static</td><td><button class="tbl-btn" onclick="nav('contact')">Start</button></td></tr>
-          <tr><td class="tc-acc">$5,000</td><td class="tc-fee">$49</td><td class="tc-spl">90%</td><td>5% Trailing</td><td>10% Static</td><td><button class="tbl-btn" onclick="nav('contact')">Start</button></td></tr>
-          <tr><td class="tc-acc">$10,000</td><td class="tc-fee">$79</td><td class="tc-spl">90%</td><td>5% Trailing</td><td>10% Static</td><td><button class="tbl-btn" onclick="nav('contact')">Start</button></td></tr>
-          <tr><td class="tc-acc">$25,000</td><td class="tc-fee">$169</td><td class="tc-spl">90%</td><td>5% Trailing</td><td>10% Static</td><td><button class="tbl-btn" onclick="nav('contact')">Start</button></td></tr>
-          <tr><td class="tc-acc">$50,000</td><td class="tc-fee">$259</td><td class="tc-spl">90%</td><td>5% Trailing</td><td>10% Static</td><td><button class="tbl-btn" onclick="nav('contact')">Start</button></td></tr>
-          <tr><td class="tc-acc">$100,000</td><td class="tc-fee">$429</td><td class="tc-spl">90%</td><td>5% Trailing</td><td>10% Static</td><td><button class="tbl-btn" onclick="nav('contact')">Start</button></td></tr>
+          <tr><td class="tc-acc">$1,000</td><td class="tc-fee">$15</td><td class="tc-spl">90%</td><td>5% Trailing</td><td>10% Static</td><td><button class="tbl-btn" onclick="window.location.href='signup.html'">Start →</button></td></tr>
+          <tr><td class="tc-acc">$2,500</td><td class="tc-fee">$29</td><td class="tc-spl">90%</td><td>5% Trailing</td><td>10% Static</td><td><button class="tbl-btn" onclick="window.location.href='signup.html'">Start →</button></td></tr>
+          <tr><td class="tc-acc">$5,000</td><td class="tc-fee">$49</td><td class="tc-spl">90%</td><td>5% Trailing</td><td>10% Static</td><td><button class="tbl-btn" onclick="window.location.href='signup.html'">Start →</button></td></tr>
+          <tr><td class="tc-acc">$10,000</td><td class="tc-fee">$79</td><td class="tc-spl">90%</td><td>5% Trailing</td><td>10% Static</td><td><button class="tbl-btn" onclick="window.location.href='signup.html'">Start →</button></td></tr>
+          <tr><td class="tc-acc">$25,000</td><td class="tc-fee">$169</td><td class="tc-spl">90%</td><td>5% Trailing</td><td>10% Static</td><td><button class="tbl-btn" onclick="window.location.href='signup.html'">Start →</button></td></tr>
+          <tr><td class="tc-acc">$50,000</td><td class="tc-fee">$259</td><td class="tc-spl">90%</td><td>5% Trailing</td><td>10% Static</td><td><button class="tbl-btn" onclick="window.location.href='signup.html'">Start →</button></td></tr>
+          <tr><td class="tc-acc">$100,000</td><td class="tc-fee">$429</td><td class="tc-spl">90%</td><td>5% Trailing</td><td>10% Static</td><td><button class="tbl-btn" onclick="window.location.href='signup.html'">Start →</button></td></tr>
         </tbody>
       </table>
     </div>
   </div>
 
-  <!-- ── 3-STEP PANEL ── -->
-  <div class="panel" id="panel-three" role="tabpanel">
+  <!-- ── 3-STEP ── -->
+  <div class="panel" id="panel-three">
     <div class="plan-ov">
       <div class="rv">
         <div class="plan-name">🏆 3-STEP CHALLENGE</div>
         <div class="plan-sub">Three Phases — 80% to 90% Split</div>
-        <p class="body">Three evaluation phases for the most disciplined traders. Strict <strong>15% consistency rule</strong> — no single profitable trade may exceed 15% of total accumulated profit. No news trading.</p>
-        <p class="body" style="margin-top:10px">The 15% consistency rule and no-news restriction apply in <strong>all evaluation phases and the funded account</strong>.</p>
+        <p class="body-t">Three evaluation phases. Strict <strong>15% consistency rule</strong>. No news trading. Most disciplined evaluation available.</p>
+        <p class="body-t">The 15% consistency rule and no-news restriction apply in <strong>all phases and the funded account</strong>.</p>
         <div class="flags">
           <span class="flag flag-no">✕ No News Trading</span>
           <span class="flag flag-ok">✓ EA / Algo</span>
@@ -401,9 +366,11 @@
         </div>
       </div>
     </div>
-    <div class="callout rv"><div class="callout__ttl">⚠ News Trading Rule</div><p>Any trade opened within <strong>5 minutes before or after a high-impact news event</strong>: if in profit — the profit is <strong>disqualified</strong>. If in loss — the loss is <strong>fully counted</strong>. Active in all phases and the funded account.</p></div>
-    <div class="callout callout-gold rv"><div class="callout__ttl">📊 15% Consistency Rule</div><p>No single profitable trade may exceed <strong>15% of total accumulated profit</strong>. Example: total profit $1,000 → no single trade may have contributed more than $150. Active in evaluation and funded accounts.</p></div>
-    <div class="tbl-wrap rv">
+    <div style="padding:0 var(--g)">
+      <div class="callout rv"><div class="callout__ttl">⚠ News Trading Rule</div><p>Any trade within <strong>5 minutes before or after a high-impact news event</strong>: if in profit — profit is <strong>disqualified</strong>. If in loss — loss is <strong>fully counted</strong>.</p></div>
+      <div class="callout callout-gold rv" style="margin-top:10px"><div class="callout__ttl">📊 15% Consistency Rule</div><p>No single profitable trade may exceed <strong>15% of total accumulated profit</strong>. E.g. total profit $1,000 → no single trade may have contributed more than $150.</p></div>
+    </div>
+    <div class="tbl-wrap rv" style="margin-top:24px">
       <table class="tbl">
         <thead><tr><th>Phase</th><th>Target</th><th>Daily Loss</th><th>Max DD</th><th>Min Days</th><th>News</th></tr></thead>
         <tbody>
@@ -415,30 +382,30 @@
       </table>
     </div>
     <div class="tbl-wrap rv">
-      <span class="label-mono" style="margin-top:var(--s4);display:block">// 3-Step — Account Sizes & Pricing</span>
+      <span class="label-mono" style="margin:32px 0 14px;display:block">// 3-Step — Account Sizes &amp; Pricing</span>
       <table class="tbl">
         <thead><tr><th>Account Size</th><th>Challenge Fee</th><th>Profit Split</th><th>Daily Loss</th><th>Max Drawdown</th><th></th></tr></thead>
         <tbody>
-          <tr><td class="tc-acc">$1,000</td><td class="tc-fee">$12</td><td class="tc-spl">80→90%</td><td>6% Trailing</td><td>12% Static</td><td><button class="tbl-btn" onclick="nav('contact')">Start</button></td></tr>
-          <tr><td class="tc-acc">$2,500</td><td class="tc-fee">$24</td><td class="tc-spl">80→90%</td><td>6% Trailing</td><td>12% Static</td><td><button class="tbl-btn" onclick="nav('contact')">Start</button></td></tr>
-          <tr><td class="tc-acc">$5,000</td><td class="tc-fee">$39</td><td class="tc-spl">80→90%</td><td>6% Trailing</td><td>12% Static</td><td><button class="tbl-btn" onclick="nav('contact')">Start</button></td></tr>
-          <tr><td class="tc-acc">$10,000</td><td class="tc-fee">$69</td><td class="tc-spl">80→90%</td><td>6% Trailing</td><td>12% Static</td><td><button class="tbl-btn" onclick="nav('contact')">Start</button></td></tr>
-          <tr><td class="tc-acc">$25,000</td><td class="tc-fee">$139</td><td class="tc-spl">80→90%</td><td>6% Trailing</td><td>12% Static</td><td><button class="tbl-btn" onclick="nav('contact')">Start</button></td></tr>
-          <tr><td class="tc-acc">$50,000</td><td class="tc-fee">$229</td><td class="tc-spl">80→90%</td><td>6% Trailing</td><td>12% Static</td><td><button class="tbl-btn" onclick="nav('contact')">Start</button></td></tr>
-          <tr><td class="tc-acc">$100,000</td><td class="tc-fee">$389</td><td class="tc-spl">80→90%</td><td>6% Trailing</td><td>12% Static</td><td><button class="tbl-btn" onclick="nav('contact')">Start</button></td></tr>
+          <tr><td class="tc-acc">$1,000</td><td class="tc-fee">$12</td><td class="tc-spl">80→90%</td><td>6% Trailing</td><td>12% Static</td><td><button class="tbl-btn" onclick="window.location.href='signup.html'">Start →</button></td></tr>
+          <tr><td class="tc-acc">$2,500</td><td class="tc-fee">$24</td><td class="tc-spl">80→90%</td><td>6% Trailing</td><td>12% Static</td><td><button class="tbl-btn" onclick="window.location.href='signup.html'">Start →</button></td></tr>
+          <tr><td class="tc-acc">$5,000</td><td class="tc-fee">$39</td><td class="tc-spl">80→90%</td><td>6% Trailing</td><td>12% Static</td><td><button class="tbl-btn" onclick="window.location.href='signup.html'">Start →</button></td></tr>
+          <tr><td class="tc-acc">$10,000</td><td class="tc-fee">$69</td><td class="tc-spl">80→90%</td><td>6% Trailing</td><td>12% Static</td><td><button class="tbl-btn" onclick="window.location.href='signup.html'">Start →</button></td></tr>
+          <tr><td class="tc-acc">$25,000</td><td class="tc-fee">$139</td><td class="tc-spl">80→90%</td><td>6% Trailing</td><td>12% Static</td><td><button class="tbl-btn" onclick="window.location.href='signup.html'">Start →</button></td></tr>
+          <tr><td class="tc-acc">$50,000</td><td class="tc-fee">$229</td><td class="tc-spl">80→90%</td><td>6% Trailing</td><td>12% Static</td><td><button class="tbl-btn" onclick="window.location.href='signup.html'">Start →</button></td></tr>
+          <tr><td class="tc-acc">$100,000</td><td class="tc-fee">$389</td><td class="tc-spl">80→90%</td><td>6% Trailing</td><td>12% Static</td><td><button class="tbl-btn" onclick="window.location.href='signup.html'">Start →</button></td></tr>
         </tbody>
       </table>
     </div>
   </div>
 
-  <!-- ── PARTIAL PANEL ── -->
-  <div class="panel" id="panel-partial" role="tabpanel">
+  <!-- ── PARTIAL ── -->
+  <div class="panel" id="panel-partial">
     <div class="plan-ov">
       <div class="rv">
         <div class="plan-name">💳 PARTIAL PAYMENT</div>
         <div class="plan-sub">Three Phases — Pay Only 35% Upfront</div>
-        <p class="body">Pay <strong>only 35% of the challenge fee upfront</strong>. The remaining 65% is deducted from your first profit withdrawal on the funded account. Lower barrier — stricter evaluation.</p>
-        <p class="body" style="margin-top:10px">Higher profit targets, tighter risk limits and more minimum days than the 3-Step. The 15% consistency rule and no-news restriction both apply.</p>
+        <p class="body-t">Pay <strong>only 35% of the challenge fee upfront</strong>. The remaining 65% is deducted from your first profit withdrawal. Lower barrier — stricter evaluation.</p>
+        <p class="body-t">The 15% consistency rule and no-news restriction apply throughout all phases and the funded account.</p>
         <div class="flags">
           <span class="flag flag-gold">★ 35% Upfront Only</span>
           <span class="flag flag-no">✕ No News Trading</span>
@@ -457,120 +424,99 @@
         </div>
       </div>
     </div>
-    <div class="callout callout-gold rv"><div class="callout__ttl">💳 How Partial Payment Works</div><p>Pay <strong>35% upfront</strong>. Complete all three evaluation phases. Once funded and your first profit withdrawal is processed, the remaining <strong>65% is automatically deducted</strong> from that withdrawal. No additional payment — it comes from your own profits.</p></div>
-    <div class="tbl-wrap rv">
-      <table class="tbl">
-        <thead><tr><th>Phase</th><th>Target</th><th>Daily Loss</th><th>Max DD</th><th>Min Days</th><th>News</th></tr></thead>
-        <tbody>
-          <tr><td class="tc-ph">PHASE 1</td><td class="tc-grn">10%</td><td class="tc-red">5% Trailing</td><td class="tc-red">10% Static</td><td>5 Days</td><td class="tc-red">Not Allowed</td></tr>
-          <tr><td class="tc-ph">PHASE 2</td><td class="tc-grn">6%</td><td class="tc-red">5% Trailing</td><td class="tc-red">10% Static</td><td>5 Days</td><td class="tc-red">Not Allowed</td></tr>
-          <tr><td class="tc-ph">PHASE 3</td><td class="tc-grn">5%</td><td class="tc-red">5% Trailing</td><td class="tc-red">10% Static</td><td>5 Days</td><td class="tc-red">Not Allowed</td></tr>
-          <tr><td class="tc-ph">FUNDED</td><td>—</td><td class="tc-red">5% Trailing</td><td class="tc-red">10% Static</td><td>—</td><td class="tc-red">Not Allowed</td></tr>
-        </tbody>
-      </table>
+    <div style="padding:0 var(--g)">
+      <div class="callout callout-gold rv"><div class="callout__ttl">💳 How Partial Payment Works</div><p>Pay <strong>35% upfront</strong>. Complete all three evaluation phases. Once funded and your first profit withdrawal is processed, the remaining <strong>65% is automatically deducted</strong> from that withdrawal. No additional out-of-pocket payment ever.</p></div>
     </div>
-    <div class="tbl-wrap rv">
-      <span class="label-mono" style="margin-top:var(--s4);display:block">// Partial Payment — 35% Upfront Pricing</span>
+    <div class="tbl-wrap rv" style="margin-top:24px">
+      <span class="label-mono" style="margin:0 0 14px;display:block">// Partial Payment — 35% Upfront Pricing</span>
       <table class="tbl">
         <thead><tr><th>Account Size</th><th>Upfront (35%)</th><th>From Profits (65%)</th><th>Total Fee</th><th>Split</th><th></th></tr></thead>
         <tbody>
-          <tr><td class="tc-acc">$1,000</td><td class="tc-up">$7</td><td class="tc-dim">$13</td><td class="tc-dim">$20</td><td class="tc-spl">80→90%</td><td><button class="tbl-btn" onclick="nav('contact')">Start</button></td></tr>
-          <tr><td class="tc-acc">$2,500</td><td class="tc-up">$12</td><td class="tc-dim">$23</td><td class="tc-dim">$35</td><td class="tc-spl">80→90%</td><td><button class="tbl-btn" onclick="nav('contact')">Start</button></td></tr>
-          <tr><td class="tc-acc">$5,000</td><td class="tc-up">$19</td><td class="tc-dim">$36</td><td class="tc-dim">$55</td><td class="tc-spl">80→90%</td><td><button class="tbl-btn" onclick="nav('contact')">Start</button></td></tr>
-          <tr><td class="tc-acc">$10,000</td><td class="tc-up">$33</td><td class="tc-dim">$62</td><td class="tc-dim">$95</td><td class="tc-spl">80→90%</td><td><button class="tbl-btn" onclick="nav('contact')">Start</button></td></tr>
-          <tr><td class="tc-acc">$25,000</td><td class="tc-up">$68</td><td class="tc-dim">$127</td><td class="tc-dim">$195</td><td class="tc-spl">80→90%</td><td><button class="tbl-btn" onclick="nav('contact')">Start</button></td></tr>
-          <tr><td class="tc-acc">$50,000</td><td class="tc-up">$105</td><td class="tc-dim">$194</td><td class="tc-dim">$299</td><td class="tc-spl">80→90%</td><td><button class="tbl-btn" onclick="nav('contact')">Start</button></td></tr>
-          <tr><td class="tc-acc">$100,000</td><td class="tc-up">$171</td><td class="tc-dim">$318</td><td class="tc-dim">$489</td><td class="tc-spl">80→90%</td><td><button class="tbl-btn" onclick="nav('contact')">Start</button></td></tr>
+          <tr><td class="tc-acc">$1,000</td><td class="tc-up">$7</td><td class="tc-dim">$13</td><td class="tc-dim">$20</td><td class="tc-spl">80→90%</td><td><button class="tbl-btn" onclick="window.location.href='signup.html'">Start →</button></td></tr>
+          <tr><td class="tc-acc">$2,500</td><td class="tc-up">$12</td><td class="tc-dim">$23</td><td class="tc-dim">$35</td><td class="tc-spl">80→90%</td><td><button class="tbl-btn" onclick="window.location.href='signup.html'">Start →</button></td></tr>
+          <tr><td class="tc-acc">$5,000</td><td class="tc-up">$19</td><td class="tc-dim">$36</td><td class="tc-dim">$55</td><td class="tc-spl">80→90%</td><td><button class="tbl-btn" onclick="window.location.href='signup.html'">Start →</button></td></tr>
+          <tr><td class="tc-acc">$10,000</td><td class="tc-up">$33</td><td class="tc-dim">$62</td><td class="tc-dim">$95</td><td class="tc-spl">80→90%</td><td><button class="tbl-btn" onclick="window.location.href='signup.html'">Start →</button></td></tr>
+          <tr><td class="tc-acc">$25,000</td><td class="tc-up">$68</td><td class="tc-dim">$127</td><td class="tc-dim">$195</td><td class="tc-spl">80→90%</td><td><button class="tbl-btn" onclick="window.location.href='signup.html'">Start →</button></td></tr>
+          <tr><td class="tc-acc">$50,000</td><td class="tc-up">$105</td><td class="tc-dim">$194</td><td class="tc-dim">$299</td><td class="tc-spl">80→90%</td><td><button class="tbl-btn" onclick="window.location.href='signup.html'">Start →</button></td></tr>
+          <tr><td class="tc-acc">$100,000</td><td class="tc-up">$171</td><td class="tc-dim">$318</td><td class="tc-dim">$489</td><td class="tc-spl">80→90%</td><td><button class="tbl-btn" onclick="window.location.href='signup.html'">Start →</button></td></tr>
         </tbody>
       </table>
     </div>
   </div>
 
-  <footer class="footer">
-    <div class="footer__grid">
-      <div><div class="footer__brand-name">VORN<span>IX</span></div><p class="footer__brand-desc">4 evaluation paths. Every instrument. Capital up to $100K. Built for disciplined traders.</p></div>
-      <div class="footer__col"><h4>Plans</h4><ul><li><a onclick="setTab('one')">1-Step</a></li><li><a onclick="setTab('two')">2-Step</a></li><li><a onclick="setTab('three')">3-Step</a></li><li><a onclick="setTab('partial')">Partial</a></li></ul></div>
-      <div class="footer__col"><h4>Platform</h4><ul><li><a onclick="nav('how')">How It Works</a></li><li><a onclick="nav('tech')">Technology</a></li><li><a onclick="nav('contact')">Contact</a></li></ul></div>
-      <div class="footer__col"><h4>Legal</h4><ul><li><a href="#">Terms</a></li><li><a href="#">Privacy</a></li><li><a href="#">Risk Warning</a></li><li><a href="#">Refund Policy</a></li></ul></div>
-    </div>
-    <div class="footer__bottom"><span class="footer__copy">© 2025 VORNIX. All rights reserved.</span><div class="footer__legal"><a href="#">Terms</a><a href="#">Privacy</a><a href="#">Risk</a></div></div>
-  </footer>
+  <footer class="footer"><div class="footer__grid"><div><div class="footer__brand-name">VORN<span>IX</span></div><p class="footer__brand-desc">4 evaluation paths. Capital up to $100K.</p></div><div class="footer__col"><h4>Plans</h4><ul><li><a onclick="setTab('one')">1-Step</a></li><li><a onclick="setTab('two')">2-Step</a></li><li><a onclick="setTab('three')">3-Step</a></li><li><a onclick="setTab('partial')">Partial</a></li></ul></div><div class="footer__col"><h4>Platform</h4><ul><li><a onclick="nav('how')">How It Works</a></li><li><a onclick="nav('tech')">Technology</a></li><li><a onclick="nav('contact')">Contact</a></li></ul></div><div class="footer__col"><h4>Legal</h4><ul><li><a href="#">Terms</a></li><li><a href="#">Privacy</a></li><li><a href="#">Risk Warning</a></li><li><a href="#">Refund Policy</a></li></ul></div></div><div class="footer__bottom"><span class="footer__copy">© 2025 VORNIX. All rights reserved.</span><div class="footer__legal"><a href="#">Terms</a><a href="#">Privacy</a><a href="#">Risk</a></div></div></footer>
 </main>
 
 
-<!-- ═══════════════════════════════════════════
-     PAGE: TECHNOLOGY
-═══════════════════════════════════════════ -->
+<!-- ═══════════════════════ PAGE: TECHNOLOGY ═══════════════════════ -->
 <main class="page" id="page-tech">
   <header class="ph">
-    <span class="label-mono">// Our Products</span>
-    <h1 class="h-lg" style="margin-bottom:0">VORNIX <span class="red">TECHNOLOGY</span></h1>
-    <p class="ph__sub">We are building a technology-driven ecosystem to make traders smarter, more disciplined and more profitable.</p>
+    <span class="ph__eye">// Our Products</span>
+    <h1 class="ph__h">VORNIX <span class="red">TECHNOLOGY</span></h1>
+    <p class="ph__sub">We are building a technology ecosystem to make traders smarter, more disciplined and more profitable.</p>
   </header>
-  <section class="sec-md">
-    <div class="grid g2">
-      <div class="tcard gcell rv rv-d1"><div class="tcard__n">01</div><div class="tcard__icon">🤖</div><div class="tcard__title">AI Trading Bots</div><p class="tcard__desc">Automated bots that identify opportunities and execute trades. <strong>The goal is not to replace traders — it's to enhance discipline and remove emotion.</strong></p><ul class="tcard__list"><li>Identify opportunities automatically</li><li>Execute trades based on your strategy rules</li><li>Manage positions and exits automatically</li><li>Adapt continuously to changing conditions</li><li>Combine human strategy with AI execution</li></ul><span class="tcard__tag">// In Development</span></div>
-      <div class="tcard gcell rv rv-d2"><div class="tcard__n">02</div><div class="tcard__icon">📊</div><div class="tcard__title">Market Analyzer</div><p class="tcard__desc">Professional analysis dashboard that gives traders <strong>data-driven insights instead of gut feelings</strong>. Built for serious market analysis at every timeframe.</p><ul class="tcard__list"><li>Real-time market trend analysis</li><li>Volatility and momentum insights</li><li>Risk metrics per instrument and session</li><li>Live trade performance tracking</li><li>Correlation and liquidity mapping</li></ul><span class="tcard__tag">// In Development</span></div>
-      <div class="tcard gcell rv rv-d3"><div class="tcard__n">03</div><div class="tcard__icon">📈</div><div class="tcard__title">Smart Indicators</div><p class="tcard__desc">Proprietary algorithmic indicators that <strong>simplify complex market analysis</strong>. Traditional indicators confuse. Ours clarify.</p><ul class="tcard__list"><li>Identify trend direction with clarity</li><li>Highlight potential entry and exit zones</li><li>Filter false and noisy signals</li><li>Works across Forex, Indices and Crypto</li><li>Compatible with MT4 and MT5</li></ul><span class="tcard__tag">// In Development</span></div>
-      <div class="tcard gcell rv rv-d4"><div class="tcard__n">04</div><div class="tcard__icon">⚙️</div><div class="tcard__title">Strategy Builder</div><p class="tcard__desc">No-code strategy creation. Build, backtest and deploy automated strategies <strong>without writing a single line of code</strong>. Remove emotion from execution permanently.</p><ul class="tcard__list"><li>Use pre-built, backtested strategies</li><li>Customise parameters to your style</li><li>Test on historical market data</li><li>Deploy directly on funded accounts</li><li>Consistent, emotionless execution</li></ul><span class="tcard__tag">// In Development</span></div>
-      <div class="tcard gcell rv rv-d5"><div class="tcard__n">05</div><div class="tcard__icon">🔬</div><div class="tcard__title">Performance Analytics</div><p class="tcard__desc">Deep reporting that helps traders <strong>identify exactly what is working and what is not</strong>. Institution-level analytics for individual traders.</p><ul class="tcard__list"><li>Win rate and expectancy tracking</li><li>Average profit vs average loss</li><li>Risk per trade and per session</li><li>Drawdown timeline visualisation</li><li>Strategy performance comparison</li></ul><span class="tcard__tag">// In Development</span></div>
-      <div class="tcard gcell rv rv-d6"><div class="tcard__n">06</div><div class="tcard__icon">🎓</div><div class="tcard__title">Education Platform</div><p class="tcard__desc">A professional curriculum that gives trading <strong>the same structured career pathway as medicine or engineering</strong>. Learn properly — not from random videos.</p><ul class="tcard__list"><li>Market structure and price action</li><li>Risk management fundamentals</li><li>Trading psychology and discipline</li><li>Strategy development from first principles</li><li>Macroeconomics and fundamentals</li></ul><span class="tcard__tag">// In Development</span></div>
+  <section class="section">
+    <div class="g2 grid">
+      <div class="tcard rv rv-d1"><div class="tcard__n">// 01</div><div class="tcard__icon">🤖</div><div class="tcard__title">AI Trading Bots</div><p class="tcard__desc">Automated bots that identify opportunities and execute trades. <strong>The goal is not to replace traders — it's to enhance discipline and remove emotion.</strong></p><ul class="tcard__list"><li>Identify opportunities automatically</li><li>Execute trades based on your strategy rules</li><li>Manage positions and exits automatically</li><li>Adapt continuously to changing conditions</li></ul><span class="tcard__tag">// In Development</span></div>
+      <div class="tcard rv rv-d2"><div class="tcard__n">// 02</div><div class="tcard__icon">📊</div><div class="tcard__title">Market Analyzer</div><p class="tcard__desc">Professional analysis dashboard that gives traders <strong>data-driven insights instead of gut feelings</strong>. Built for serious market analysis at every timeframe.</p><ul class="tcard__list"><li>Real-time market trend analysis</li><li>Volatility and momentum insights</li><li>Risk metrics per instrument and session</li><li>Live trade performance tracking</li></ul><span class="tcard__tag">// In Development</span></div>
+      <div class="tcard rv rv-d3"><div class="tcard__n">// 03</div><div class="tcard__icon">📈</div><div class="tcard__title">Smart Indicators</div><p class="tcard__desc">Proprietary algorithmic indicators that <strong>simplify complex market analysis</strong>. Traditional indicators confuse. Ours clarify.</p><ul class="tcard__list"><li>Identify trend direction with clarity</li><li>Highlight potential entry and exit zones</li><li>Filter false and noisy signals</li><li>Compatible with MT4 and MT5</li></ul><span class="tcard__tag">// In Development</span></div>
+      <div class="tcard rv rv-d4"><div class="tcard__n">// 04</div><div class="tcard__icon">⚙️</div><div class="tcard__title">Strategy Builder</div><p class="tcard__desc">No-code strategy creation. Build, backtest and deploy automated strategies <strong>without writing a single line of code</strong>.</p><ul class="tcard__list"><li>Use pre-built, backtested strategies</li><li>Customise parameters to your style</li><li>Test on historical market data</li><li>Deploy directly on funded accounts</li></ul><span class="tcard__tag">// In Development</span></div>
+      <div class="tcard rv rv-d5"><div class="tcard__n">// 05</div><div class="tcard__icon">🔬</div><div class="tcard__title">Performance Analytics</div><p class="tcard__desc">Deep reporting that helps traders <strong>identify exactly what is working and what is not</strong>. Institution-level analytics for individuals.</p><ul class="tcard__list"><li>Win rate and expectancy tracking</li><li>Average profit vs average loss</li><li>Risk per trade and per session</li><li>Drawdown timeline visualisation</li></ul><span class="tcard__tag">// In Development</span></div>
+      <div class="tcard rv rv-d6"><div class="tcard__n">// 06</div><div class="tcard__icon">🎓</div><div class="tcard__title">Education Platform</div><p class="tcard__desc">A professional curriculum that gives trading <strong>the same structured pathway as medicine or engineering</strong>.</p><ul class="tcard__list"><li>Market structure and price action</li><li>Risk management fundamentals</li><li>Trading psychology and discipline</li><li>Strategy development from first principles</li></ul><span class="tcard__tag">// In Development</span></div>
     </div>
-    <div class="tech-purpose rv" style="margin-top:1px">
+    <div class="tech-purpose rv">
       <h3>THE PURPOSE</h3>
-      <p>Every product above works toward one goal: <strong>give every VORNIX trader the professional-level tools that institutions and hedge funds use daily</strong> — but built specifically for individual traders.</p>
+      <p>Every product above works toward one goal: <strong>give every VORNIX trader the professional-level tools that institutions use daily</strong> — built specifically for individual traders.</p>
       <p>Instead of trading blindly, VORNIX traders will analyse markets intelligently, automate strategies, manage risk precisely and improve continuously using real performance data.</p>
-      <div style="margin-top:var(--s4);display:flex;gap:12px;flex-wrap:wrap">
-        <button class="btn btn-pri" onclick="nav('challenges')">Start a Challenge</button>
-        <button class="btn btn-sec" onclick="nav('contact')">Join Waitlist</button>
+      <div style="margin-top:28px;display:flex;gap:12px;flex-wrap:wrap">
+        <button class="btn-p" onclick="nav('challenges')">Start a Challenge</button>
+        <button class="btn-s" onclick="nav('contact')">Join Waitlist</button>
       </div>
     </div>
   </section>
-  <footer class="footer"><div class="footer__grid"><div><div class="footer__brand-name">VORN<span>IX</span></div><p class="footer__brand-desc">Next generation prop firm with a full technology ecosystem.</p></div><div class="footer__col"><h4>Technology</h4><ul><li><a>AI Bots</a></li><li><a>Market Analyzer</a></li><li><a>Smart Indicators</a></li><li><a>Strategy Builder</a></li><li><a>Analytics</a></li><li><a>Education</a></li></ul></div><div class="footer__col"><h4>Platform</h4><ul><li><a onclick="nav('challenges')">Challenges</a></li><li><a onclick="nav('how')">How It Works</a></li><li><a onclick="nav('about')">About</a></li></ul></div><div class="footer__col"><h4>Legal</h4><ul><li><a href="#">Terms</a></li><li><a href="#">Privacy</a></li><li><a href="#">Risk Warning</a></li></ul></div></div><div class="footer__bottom"><span class="footer__copy">© 2025 VORNIX. All rights reserved.</span><div class="footer__legal"><a href="#">Terms</a><a href="#">Privacy</a></div></div></footer>
+  <footer class="footer"><div class="footer__grid"><div><div class="footer__brand-name">VORN<span>IX</span></div><p class="footer__brand-desc">Next generation prop firm with a full technology ecosystem.</p></div><div class="footer__col"><h4>Technology</h4><ul><li><a>AI Bots</a></li><li><a>Market Analyzer</a></li><li><a>Smart Indicators</a></li><li><a>Strategy Builder</a></li></ul></div><div class="footer__col"><h4>Platform</h4><ul><li><a onclick="nav('challenges')">Challenges</a></li><li><a onclick="nav('how')">How It Works</a></li><li><a onclick="nav('about')">About</a></li></ul></div><div class="footer__col"><h4>Legal</h4><ul><li><a href="#">Terms</a></li><li><a href="#">Privacy</a></li><li><a href="#">Risk Warning</a></li></ul></div></div><div class="footer__bottom"><span class="footer__copy">© 2025 VORNIX. All rights reserved.</span><div class="footer__legal"><a href="#">Terms</a><a href="#">Privacy</a></div></div></footer>
 </main>
 
 
-<!-- ═══════════════════════════════════════════
-     PAGE: HOW IT WORKS
-═══════════════════════════════════════════ -->
+<!-- ═══════════════════════ PAGE: HOW IT WORKS ═══════════════════════ -->
 <main class="page" id="page-how">
   <header class="ph">
-    <span class="label-mono">// The Process</span>
-    <h1 class="h-lg" style="margin-bottom:0">HOW <span class="red">VORNIX WORKS</span></h1>
+    <span class="ph__eye">// The Process</span>
+    <h1 class="ph__h">HOW <span class="red">VORNIX WORKS</span></h1>
     <p class="ph__sub">Every plan follows the same journey. Choose your challenge, prove your edge, get funded and scale.</p>
   </header>
-  <section class="sec-md">
+  <section class="section">
     <div class="how-block rv">
       <div class="how-block__hd">⚡ 1-STEP PROCESS</div>
-      <div class="how-steps grid">
-        <div class="hstep gcell"><div class="hstep__n">01</div><div class="hstep__t">Purchase</div><p class="hstep__d">Choose $5K–$100K. Pay the one-time fee. Receive your evaluation account credentials immediately.</p></div>
-        <div class="hstep gcell"><div class="hstep__n">02</div><div class="hstep__t">Single Evaluation</div><p class="hstep__d">Hit 10% profit. Stay within 3% trailing daily loss and 8% static max drawdown. No time limit. No minimum days.</p></div>
-        <div class="hstep gcell"><div class="hstep__n">03</div><div class="hstep__t">Get Funded</div><p class="hstep__d">Pass the evaluation and receive your funded account. Trade live capital from Day 1.</p></div>
-        <div class="hstep gcell"><div class="hstep__n">04</div><div class="hstep__t">Withdraw &amp; Scale</div><p class="hstep__d">Request payouts from Day 1. 95% profit split. Automatic 25% scaling every 10% profit cycle.</p></div>
+      <div class="how-steps">
+        <div class="hstep"><div class="hstep__n">01</div><div class="hstep__t">Purchase</div><p class="hstep__d">Choose $5K–$100K. Pay the one-time fee. Receive evaluation account credentials immediately.</p></div>
+        <div class="hstep"><div class="hstep__n">02</div><div class="hstep__t">Single Evaluation</div><p class="hstep__d">Hit 10% profit. Stay within 3% trailing daily loss and 8% static max drawdown. No time limit. No minimum days.</p></div>
+        <div class="hstep"><div class="hstep__n">03</div><div class="hstep__t">Get Funded</div><p class="hstep__d">Pass the evaluation and receive your funded account. Trade live capital from Day 1.</p></div>
+        <div class="hstep"><div class="hstep__n">04</div><div class="hstep__t">Withdraw &amp; Scale</div><p class="hstep__d">Request payouts from Day 1. 95% profit split. Automatic 25% scaling every 10% profit cycle.</p></div>
       </div>
     </div>
     <div class="how-block rv">
       <div class="how-block__hd">🎯 2-STEP PROCESS</div>
-      <div class="how-steps grid">
-        <div class="hstep gcell"><div class="hstep__n">01</div><div class="hstep__t">Purchase</div><p class="hstep__d">Select $1K–$100K account. Pay the one-time evaluation fee and access your account instantly.</p></div>
-        <div class="hstep gcell"><div class="hstep__n">02</div><div class="hstep__t">Phase 1 — 10%</div><p class="hstep__d">Hit 10% profit. Minimum 3 trading days. Stay within 5% trailing daily loss and 10% static max drawdown.</p></div>
-        <div class="hstep gcell"><div class="hstep__n">03</div><div class="hstep__t">Phase 2 — 5%</div><p class="hstep__d">Confirm consistency with a 5% profit target. Same risk rules apply. 3 more minimum trading days.</p></div>
-        <div class="hstep gcell"><div class="hstep__n">04</div><div class="hstep__t">Funded &amp; Scale</div><p class="hstep__d">Live funded account. 90% profit split. Automatic scaling every 10% profit cycle up to $100K.</p></div>
+      <div class="how-steps">
+        <div class="hstep"><div class="hstep__n">01</div><div class="hstep__t">Purchase</div><p class="hstep__d">Select $1K–$100K account. Pay the one-time fee and access your account instantly.</p></div>
+        <div class="hstep"><div class="hstep__n">02</div><div class="hstep__t">Phase 1 — 10%</div><p class="hstep__d">Hit 10% profit. Minimum 3 trading days. Stay within 5% trailing daily loss and 10% static max drawdown.</p></div>
+        <div class="hstep"><div class="hstep__n">03</div><div class="hstep__t">Phase 2 — 5%</div><p class="hstep__d">Confirm consistency with a 5% profit target. Same risk rules. 3 more minimum trading days.</p></div>
+        <div class="hstep"><div class="hstep__n">04</div><div class="hstep__t">Funded &amp; Scale</div><p class="hstep__d">Live funded account. 90% profit split. Automatic scaling every 10% profit cycle up to $100K.</p></div>
       </div>
     </div>
     <div class="how-block rv">
       <div class="how-block__hd">🏆 3-STEP &amp; 💳 PARTIAL PAYMENT</div>
-      <div class="how-steps grid">
-        <div class="hstep gcell"><div class="hstep__n">01</div><div class="hstep__t">Purchase / Partial</div><p class="hstep__d">3-Step: full fee. Partial: 35% upfront. Both receive the same evaluation access immediately.</p></div>
-        <div class="hstep gcell"><div class="hstep__n">02</div><div class="hstep__t">Phase 1</div><p class="hstep__d">3-Step: 8% target, 3 min days. Partial: 10% target, 5 min days. No news trading on either.</p></div>
-        <div class="hstep gcell"><div class="hstep__n">03</div><div class="hstep__t">Phase 2 + Phase 3</div><p class="hstep__d">3-Step: 5%+4%. Partial: 6%+5%. 15% consistency rule active throughout all phases on both plans.</p></div>
-        <div class="hstep gcell"><div class="hstep__n">04</div><div class="hstep__t">Funded &amp; Scale</div><p class="hstep__d">80–90% split. Partial plan: 65% deducted from first payout. 15% consistency rule stays active on funded.</p></div>
+      <div class="how-steps">
+        <div class="hstep"><div class="hstep__n">01</div><div class="hstep__t">Purchase / Partial</div><p class="hstep__d">3-Step: full fee. Partial: 35% upfront. Both receive the same evaluation access immediately.</p></div>
+        <div class="hstep"><div class="hstep__n">02</div><div class="hstep__t">Phase 1</div><p class="hstep__d">3-Step: 8% target, 3 min days. Partial: 10% target, 5 min days. No news trading on either.</p></div>
+        <div class="hstep"><div class="hstep__n">03</div><div class="hstep__t">Phase 2 + Phase 3</div><p class="hstep__d">3-Step: 5%+4%. Partial: 6%+5%. 15% consistency rule active throughout all phases on both plans.</p></div>
+        <div class="hstep"><div class="hstep__n">04</div><div class="hstep__t">Funded &amp; Scale</div><p class="hstep__d">80–90% split. Partial plan: 65% deducted from first payout. 15% consistency rule stays active on funded.</p></div>
       </div>
     </div>
     <div class="gr-box rv">
-      <span class="label-mono">// Universal Rules</span>
-      <h2 class="h-md" style="margin-bottom:4px">GLOBAL <span class="red">TRADING RULES</span></h2>
-      <p class="body">These rules apply to every VORNIX account regardless of plan.</p>
+      <span class="label-mono" style="margin-bottom:10px;display:block">// Universal Rules</span>
+      <h2 class="h-md" style="margin-bottom:16px">GLOBAL <span class="red">TRADING RULES</span></h2>
+      <p style="font-size:14px;color:var(--t2);margin-bottom:22px;line-height:1.7">These rules apply to every VORNIX account regardless of plan.</p>
       <div class="gr-grid">
         <div class="gri"><div class="gri__t">All Instruments</div><p class="gri__d">Forex, Indices, Commodities (Gold, Oil, Silver), Crypto and Stocks — tradeable on every plan.</p></div>
         <div class="gri"><div class="gri__t">Trailing Daily Loss</div><p class="gri__d">Calculated from the highest equity point of the trading day. Trails upward only. Resets each new day.</p></div>
@@ -585,36 +531,34 @@
 </main>
 
 
-<!-- ═══════════════════════════════════════════
-     PAGE: ABOUT
-═══════════════════════════════════════════ -->
+<!-- ═══════════════════════ PAGE: ABOUT ═══════════════════════ -->
 <main class="page" id="page-about">
   <header class="ph">
-    <span class="label-mono">// Our Story</span>
-    <h1 class="h-lg" style="margin-bottom:0">ABOUT <span class="red">VORNIX</span></h1>
+    <span class="ph__eye">// Our Story</span>
+    <h1 class="ph__h">ABOUT <span class="red">VORNIX</span></h1>
     <p class="ph__sub">We're not just funding traders. We're building the infrastructure that turns trading into a legitimate profession.</p>
   </header>
-  <section class="sec-md">
+  <section class="section">
     <div class="about-2col">
       <div class="rv">
-        <p class="body">VORNIX was founded by <strong>Jatin Sharma</strong> after observing a fundamental gap in the global trading industry: millions of talented traders enter markets every year, yet most fail — not because they lack skill, but because the system around them is broken.</p>
-        <p class="body" style="margin-top:14px">Trading is still seen as gambling in much of the world. Yet risk exists in every profession. An engineer studies four years with no job guarantee. A doctor spends a decade. The difference is that those professions have structured pathways — and trading does not.</p>
-        <p class="body" style="margin-top:14px">VORNIX was created to change that. By combining rigorous evaluation, real capital access and a technology ecosystem, we are building the infrastructure that makes trading <strong>a legitimate, structured, scalable profession for anyone, anywhere.</strong></p>
+        <p class="body-t">VORNIX was founded by <strong>Jatin Sharma</strong> after observing a fundamental gap in the global trading industry: millions of talented traders enter markets every year, yet most fail — not because they lack skill, but because the system around them is broken.</p>
+        <p class="body-t" style="margin-top:14px">Trading is still seen as gambling in much of the world. Yet risk exists in every profession. An engineer studies four years with no job guarantee. A doctor spends a decade. The difference is that those professions have structured pathways — and trading does not.</p>
+        <p class="body-t" style="margin-top:14px">VORNIX was created to change that. By combining rigorous evaluation, real capital access and a technology ecosystem, we are building the infrastructure that makes trading <strong>a legitimate, structured, scalable profession for anyone, anywhere.</strong></p>
       </div>
       <div class="qb rv">
         <p class="qb__text">"Trading is one of the fastest-growing financial activities on earth. Yet most participants fail — not because they lack talent, but because <strong>no structured system exists to develop them.</strong>"</p>
         <div class="qb__attr">— JATIN SHARMA, FOUNDER · VORNIX</div>
       </div>
     </div>
-    <span class="label-mono">// Long-Term Vision</span>
-    <h2 class="h-md rv" style="margin-bottom:var(--s4)">VORNIX <span class="red">ROADMAP</span></h2>
-    <div class="vision grid g3">
-      <div class="vc gcell rv rv-d1"><div class="vc__icon">🎯</div><div class="vc__title">Evaluation Platform</div><p class="vc__desc">Four challenge types with rigorous, transparent rules. Live now. The foundation of everything we build.</p></div>
-      <div class="vc gcell rv rv-d2"><div class="vc__icon">📚</div><div class="vc__title">Education System</div><p class="vc__desc">A professional curriculum structured like a medical degree for traders. Launches after core platform stabilises.</p></div>
-      <div class="vc gcell rv rv-d3"><div class="vc__icon">🤖</div><div class="vc__title">AI Tools Suite</div><p class="vc__desc">Bots, smart indicators, strategy builders and performance analytics. Institution-level tools for every trader.</p></div>
-      <div class="vc gcell rv rv-d4"><div class="vc__icon">🌐</div><div class="vc__title">Global Community</div><p class="vc__desc">Funded traders become mentors and strategy contributors. A self-reinforcing ecosystem that grows with each member.</p></div>
-      <div class="vc gcell rv rv-d5"><div class="vc__icon">📊</div><div class="vc__title">Performance Data</div><p class="vc__desc">Deep analytics for every funded trader. Identify exactly what is working and fix precisely what is not.</p></div>
-      <div class="vc gcell rv rv-d6"><div class="vc__icon">🚀</div><div class="vc__title">Scale to $100K</div><p class="vc__desc">Automatic scaling program. Every 10% profit cycle increases allocation by 25%, up to $100,000.</p></div>
+    <span class="label-mono" style="display:block;margin-bottom:12px">// Long-Term Vision</span>
+    <h2 class="h-md rv" style="margin-bottom:32px">VORNIX <span class="red">ROADMAP</span></h2>
+    <div class="g3 grid vision rv">
+      <div class="vc"><div class="vc__icon">🎯</div><div class="vc__title">Evaluation Platform</div><p class="vc__desc">Four challenge types with rigorous, transparent rules. Live now. The foundation of everything we build.</p></div>
+      <div class="vc"><div class="vc__icon">📚</div><div class="vc__title">Education System</div><p class="vc__desc">A professional curriculum structured like a medical degree for traders. Launches after core platform stabilises.</p></div>
+      <div class="vc"><div class="vc__icon">🤖</div><div class="vc__title">AI Tools Suite</div><p class="vc__desc">Bots, smart indicators, strategy builders and performance analytics. Institution-level tools for every trader.</p></div>
+      <div class="vc"><div class="vc__icon">🌐</div><div class="vc__title">Global Community</div><p class="vc__desc">Funded traders become mentors and strategy contributors. A self-reinforcing ecosystem that grows with each member.</p></div>
+      <div class="vc"><div class="vc__icon">📊</div><div class="vc__title">Performance Data</div><p class="vc__desc">Deep analytics for every funded trader. Identify exactly what is working and fix precisely what is not.</p></div>
+      <div class="vc"><div class="vc__icon">🚀</div><div class="vc__title">Scale to $100K</div><p class="vc__desc">Automatic scaling program. Every 10% profit cycle increases allocation by 25%, up to $100,000.</p></div>
     </div>
     <div class="founder rv">
       <div>
@@ -632,27 +576,25 @@
 </main>
 
 
-<!-- ═══════════════════════════════════════════
-     PAGE: CONTACT
-═══════════════════════════════════════════ -->
+<!-- ═══════════════════════ PAGE: CONTACT ═══════════════════════ -->
 <main class="page" id="page-contact">
   <header class="ph">
-    <span class="label-mono">// Get In Touch</span>
-    <h1 class="h-lg" style="margin-bottom:0">CONTACT <span class="red">VORNIX</span></h1>
+    <span class="ph__eye">// Get In Touch</span>
+    <h1 class="ph__h">CONTACT <span class="red">VORNIX</span></h1>
     <p class="ph__sub">Questions about a challenge, payouts or technology waitlist. We respond within 2 hours during market hours.</p>
   </header>
-  <section class="sec-md">
+  <section class="section">
     <div class="contact-2col">
       <div>
-        <p class="body rv" style="margin-bottom:var(--s3)">Whether it's a challenge question, a payout inquiry, or you want to join the waitlist for our AI tools — reach us on any of the channels below.</p>
+        <p class="body-t rv" style="margin-bottom:24px">Whether it's a challenge question, a payout inquiry, or you want to join the waitlist for our AI tools — reach us on any of the channels below.</p>
         <div class="channels rv">
-          <div class="ch"><div class="ch__ico">✉️</div><div><div class="ch__key">Email</div><div class="ch__val"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="21525451514e535561574e534f48590f424e4c">[email&#160;protected]</a></div></div></div>
+          <div class="ch"><div class="ch__ico">✉️</div><div><div class="ch__key">Email</div><div class="ch__val">support@vornix.com</div></div></div>
           <div class="ch"><div class="ch__ico">💬</div><div><div class="ch__key">Live Chat</div><div class="ch__val">Available 24/5 on the platform</div></div></div>
           <div class="ch"><div class="ch__ico">📱</div><div><div class="ch__key">Telegram</div><div class="ch__val">@VornixSupport</div></div></div>
           <div class="ch"><div class="ch__ico">🎮</div><div><div class="ch__key">Discord</div><div class="ch__val">discord.gg/vornix</div></div></div>
           <div class="ch"><div class="ch__ico">𝕏</div><div><div class="ch__key">Twitter / X</div><div class="ch__val">@VornixHQ</div></div></div>
         </div>
-        <div class="callout rv" style="margin-top:var(--s3)"><div class="callout__ttl">📬 Response Times</div><p>Challenge and account questions: <strong>under 2 hours</strong> during market hours. Payout inquiries: <strong>1–3 business days</strong>. Technology waitlist: ongoing.</p></div>
+        <div class="callout rv" style="margin-top:20px"><div class="callout__ttl">📬 Response Times</div><p>Challenge and account questions: <strong>under 2 hours</strong> during market hours. Payout inquiries: <strong>1–3 business days</strong>.</p></div>
       </div>
       <div class="contact-form rv">
         <div class="form-row">
@@ -676,28 +618,27 @@
       </div>
     </div>
   </section>
-  <section class="sec-md band" style="padding-top:0">
-    <span class="label-mono">// FAQ</span>
-    <h2 class="h-md rv" style="margin-bottom:var(--s3)">COMMON <span class="red">QUESTIONS</span></h2>
-    <div class="faq rv">
-      <div class="faq__item"><div class="faq__q">Which challenge plan should I choose?<span class="faq__ic">+</span></div><div class="faq__a">Speed: 1-Step. Balance + news trading: 2-Step. Maximum structure with strict rules: 3-Step. Cost concern: Partial Payment at 35% upfront.</div></div>
-      <div class="faq__item"><div class="faq__q">What is the 15% consistency rule exactly?<span class="faq__ic">+</span></div><div class="faq__a">On 3-Step and Partial plans, no single profitable trade may contribute more than 15% of total accumulated profit. If total profit = $1,000, no single trade can have made more than $150. Active in all phases and the funded account.</div></div>
-      <div class="faq__item"><div class="faq__q">What is the news trading rule on 3-Step and Partial?<span class="faq__ic">+</span></div><div class="faq__a">No trades may be opened within 5 minutes before or after a high-impact news event. If such a trade closes in profit — the profit is disqualified. If in loss — the full loss is counted. Applies in evaluation phases and the live funded account.</div></div>
-      <div class="faq__item"><div class="faq__q">How does the trailing daily loss work?<span class="faq__ic">+</span></div><div class="faq__a">The daily loss limit is calculated from your highest equity point during that trading day. It trails upward as equity grows but never moves downward. It resets at the start of each new trading day.</div></div>
-      <div class="faq__item"><div class="faq__q">How does the Partial Payment plan work?<span class="faq__ic">+</span></div><div class="faq__a">Pay 35% of the challenge fee upfront. Complete all 3 evaluation phases. Once funded and your first profit withdrawal is processed, the remaining 65% of the fee is automatically deducted from that withdrawal. No additional payment ever comes out of pocket.</div></div>
-      <div class="faq__item"><div class="faq__q">When can I withdraw profits from a funded account?<span class="faq__ic">+</span></div><div class="faq__a">Profit withdrawals are available from Day 1 of your funded account. Processed via cryptocurrency, Wise and bank transfer within 1–3 business days.</div></div>
-      <div class="faq__item"><div class="faq__q">Can traders from India join VORNIX?<span class="faq__ic">+</span></div><div class="faq__a">Absolutely. VORNIX accepts traders globally. Payouts are available via crypto and Wise for international traders. VORNIX was built with India's rapidly growing trading community specifically in mind.</div></div>
-      <div class="faq__item"><div class="faq__q">When do AI tools and the education platform launch?<span class="faq__ic">+</span></div><div class="faq__a">The evaluation and funding platform is live now. All technology products are in active development. Join the waitlist via the contact form above to be among the first to access these products when they launch.</div></div>
-    </div>
-  </section>
-  <footer class="footer"><div class="footer__grid"><div><div class="footer__brand-name">VORN<span>IX</span></div><p class="footer__brand-desc">Next generation prop firm. Education, evaluation and technology unified for every trader.</p></div><div class="footer__col"><h4>Challenges</h4><ul><li><a onclick="nav('challenges');setTab('one')">1-Step</a></li><li><a onclick="nav('challenges');setTab('two')">2-Step</a></li><li><a onclick="nav('challenges');setTab('three')">3-Step</a></li><li><a onclick="nav('challenges');setTab('partial')">Partial</a></li></ul></div><div class="footer__col"><h4>Company</h4><ul><li><a onclick="nav('tech')">Technology</a></li><li><a onclick="nav('how')">How It Works</a></li><li><a onclick="nav('about')">About</a></li></ul></div><div class="footer__col"><h4>Legal</h4><ul><li><a href="#">Terms &amp; Conditions</a></li><li><a href="#">Privacy Policy</a></li><li><a href="#">Risk Warning</a></li><li><a href="#">Refund Policy</a></li></ul></div></div><div class="footer__bottom"><span class="footer__copy">© 2025 VORNIX. All rights reserved. Trading involves significant risk of loss.</span><div class="footer__legal"><a href="#">Terms</a><a href="#">Privacy</a><a href="#">Risk</a></div></div></footer>
+
+  <div class="section--dark">
+    <section class="section" style="padding-top:var(--s4)">
+      <span class="s-eye">// FAQ</span>
+      <h2 class="s-head rv" style="margin-bottom:36px">COMMON <span class="red">QUESTIONS</span></h2>
+      <div class="faq rv">
+        <div class="faq__item"><div class="faq__q">Which challenge plan should I choose?<span class="faq__ic">+</span></div><div class="faq__a">Speed: 1-Step. Balance + news trading: 2-Step. Maximum structure with strict rules: 3-Step. Cost concern: Partial Payment at 35% upfront.</div></div>
+        <div class="faq__item"><div class="faq__q">What is the 15% consistency rule exactly?<span class="faq__ic">+</span></div><div class="faq__a">On 3-Step and Partial plans, no single profitable trade may contribute more than 15% of total accumulated profit. If total profit = $1,000, no single trade can have made more than $150. Active in all phases and the funded account.</div></div>
+        <div class="faq__item"><div class="faq__q">What is the news trading rule on 3-Step and Partial?<span class="faq__ic">+</span></div><div class="faq__a">No trades may be opened within 5 minutes before or after a high-impact news event. If such a trade closes in profit — the profit is disqualified. If in loss — the full loss is counted. Applies in all phases and the funded account.</div></div>
+        <div class="faq__item"><div class="faq__q">How does the trailing daily loss work?<span class="faq__ic">+</span></div><div class="faq__a">The daily loss limit is calculated from your highest equity point during that trading day. It trails upward as equity grows but never moves downward. It resets at the start of each new trading day.</div></div>
+        <div class="faq__item"><div class="faq__q">How does the Partial Payment plan work?<span class="faq__ic">+</span></div><div class="faq__a">Pay 35% of the challenge fee upfront. Complete all 3 evaluation phases. Once funded and your first profit withdrawal is processed, the remaining 65% of the fee is automatically deducted from that withdrawal. No additional payment ever comes out of pocket.</div></div>
+        <div class="faq__item"><div class="faq__q">When can I withdraw profits from a funded account?<span class="faq__ic">+</span></div><div class="faq__a">Profit withdrawals are available from Day 1 of your funded account. Processed via cryptocurrency, Wise and bank transfer within 1–3 business days.</div></div>
+        <div class="faq__item"><div class="faq__q">Can traders from India join VORNIX?<span class="faq__ic">+</span></div><div class="faq__a">Absolutely. VORNIX accepts traders globally. Payouts are available via crypto and Wise for international traders. VORNIX was built with India's rapidly growing trading community specifically in mind.</div></div>
+        <div class="faq__item"><div class="faq__q">When do AI tools and the education platform launch?<span class="faq__ic">+</span></div><div class="faq__a">The evaluation and funding platform is live now. All technology products are in active development. Join the waitlist via the contact form above to be among the first to access these products when they launch.</div></div>
+      </div>
+    </section>
+  </div>
+
+  <footer class="footer"><div class="footer__grid"><div><div class="footer__brand-name">VORN<span>IX</span></div><p class="footer__brand-desc">Next generation prop firm.</p></div><div class="footer__col"><h4>Challenges</h4><ul><li><a onclick="nav('challenges');setTab('one')">1-Step</a></li><li><a onclick="nav('challenges');setTab('two')">2-Step</a></li><li><a onclick="nav('challenges');setTab('three')">3-Step</a></li><li><a onclick="nav('challenges');setTab('partial')">Partial</a></li></ul></div><div class="footer__col"><h4>Company</h4><ul><li><a onclick="nav('tech')">Technology</a></li><li><a onclick="nav('how')">How It Works</a></li><li><a onclick="nav('about')">About</a></li></ul></div><div class="footer__col"><h4>Legal</h4><ul><li><a href="#">Terms</a></li><li><a href="#">Privacy</a></li><li><a href="#">Risk Warning</a></li></ul></div></div><div class="footer__bottom"><span class="footer__copy">© 2025 VORNIX. All rights reserved.</span><div class="footer__legal"><a href="#">Terms</a><a href="#">Privacy</a></div></div></footer>
 </main>
 
-<!-- Styles for tech-purpose (not in external CSS) -->
-<style>
-.tech-purpose { padding: 36px 32px; background: var(--bg-1); border-left: 3px solid var(--cr); }
-.tech-purpose h3 { font-family: var(--ff-display); font-size: 1.6rem; color: var(--t-white); letter-spacing: 2px; margin-bottom: 12px; }
-.tech-purpose p { font-size: .9rem; color: var(--t-2); line-height: 1.8; }
-.tech-purpose p + p { margin-top: 10px; }
-.tech-purpose p strong { color: var(--t-1); }
-.co
+<script src="app.js"></script>
+</body>
+</html>
