@@ -3,752 +3,1037 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VORNIX — Next Generation Prop Firm</title>
-<meta name="description" content="VORNIX funds skilled traders with capital up to $100K. Four evaluation paths. Keep up to 95% of your profits. Learn. Prove. Trade. Grow.">
+<title>VORNIX — Structure Trading as a Profession</title>
+<meta name="description" content="VORNIX is a purpose-driven prop firm. Learn. Prove. Trade. Grow. Capital up to $100K, up to 95% profit split.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;500;600;700;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════════
+   VORNIX — HOME PAGE
+   Theme: Clean · Modern · 3D · Professional
+   Light base with deep sections · Glass cards · 3D depth
+   ═══════════════════════════════════════════════════════ */
+
+:root {
+  /* Light backgrounds */
+  --white:   #FFFFFF;
+  --off:     #F8F9FC;
+  --soft:    #F1F3F9;
+  --muted:   #E8EBF4;
+
+  /* Dark sections */
+  --dark:    #05060F;
+  --dark-2:  #090B18;
+  --dark-3:  #0E1020;
+
+  /* Gold accent */
+  --gold:    #C8920A;
+  --gold-hi: #F5B120;
+  --gold-lo: rgba(200,146,10,.08);
+  --gold-bd: rgba(200,146,10,.20);
+
+  /* Emerald accent */
+  --grn:     #059669;
+  --grn-hi:  #10B981;
+  --grn-lo:  rgba(5,150,105,.08);
+  --grn-bd:  rgba(5,150,105,.18);
+
+  /* Red */
+  --red:     #DC2626;
+  --red-hi:  #EF4444;
+  --red-lo:  rgba(220,38,38,.08);
+  --red-bd:  rgba(220,38,38,.18);
+
+  /* Text */
+  --ink:     #0A0B14;
+  --ink-2:   #2D3055;
+  --ink-3:   #6B7280;
+  --ink-4:   #9CA3AF;
+
+  /* Borders */
+  --bd:      rgba(0,0,0,.06);
+  --bd-2:    rgba(0,0,0,.10);
+  --bd-3:    rgba(0,0,0,.16);
+
+  /* Fonts */
+  --f-display: 'Syne', sans-serif;
+  --f-body:    'DM Sans', sans-serif;
+  --f-mono:    'JetBrains Mono', monospace;
+
+  /* Spacing */
+  --pad: clamp(20px, 5vw, 80px);
+  --nav: 70px;
+  --mw:  1280px;
+
+  /* 3D shadows */
+  --shadow-sm:  0 2px 8px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+  --shadow-md:  0 8px 24px rgba(0,0,0,.08), 0 2px 6px rgba(0,0,0,.05);
+  --shadow-lg:  0 20px 48px rgba(0,0,0,.10), 0 6px 16px rgba(0,0,0,.06);
+  --shadow-xl:  0 32px 80px rgba(0,0,0,.14), 0 10px 24px rgba(0,0,0,.08);
+  --shadow-dark:0 40px 100px rgba(0,0,0,.5), 0 12px 32px rgba(0,0,0,.3);
+}
+
+/* ── RESET ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; scroll-behavior: smooth; }
+body {
+  font-family: var(--f-body);
+  background: var(--white);
+  color: var(--ink);
+  line-height: 1.7;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; text-decoration: none; }
+ul { list-style: none; }
+button { font-family: inherit; cursor: pointer; border: none; }
+
+/* ── REVEAL ── */
+.rv {
+  opacity: 0; transform: translateY(32px);
+  transition: opacity .7s cubic-bezier(.22,1,.36,1), transform .7s cubic-bezier(.22,1,.36,1);
+}
+.rv.in { opacity: 1; transform: none; }
+.rv-d1{transition-delay:.08s} .rv-d2{transition-delay:.16s} .rv-d3{transition-delay:.24s}
+.rv-d4{transition-delay:.32s} .rv-d5{transition-delay:.40s} .rv-d6{transition-delay:.48s}
+
+/* ══════════════ NAV ══════════════ */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  height: var(--nav);
+  display: flex; align-items: center; padding: 0 var(--pad);
+  background: rgba(255,255,255,.92);
+  backdrop-filter: blur(24px);
+  border-bottom: 1px solid var(--bd);
+  box-shadow: 0 1px 0 var(--bd), 0 4px 20px rgba(0,0,0,.04);
+  transition: box-shadow .3s;
+}
+.nav.scrolled { box-shadow: 0 4px 32px rgba(0,0,0,.10), 0 1px 0 var(--bd-2); }
+
+.nav__brand { display: flex; align-items: center; gap: 12px; cursor: pointer; flex-shrink: 0; }
+.nav__wordmark { font-family: var(--f-display); font-size: 22px; font-weight: 800; letter-spacing: 2px; color: var(--ink); text-transform: uppercase; }
+.nav__wordmark span { color: var(--gold); }
+.nav__tag { font-family: var(--f-mono); font-size: 8px; letter-spacing: 2px; color: var(--ink-4); text-transform: uppercase; border-left: 1px solid var(--bd-2); padding-left: 12px; line-height: 1.4; }
+
+.nav__links { display: flex; align-items: center; list-style: none; margin-left: 28px; flex: 1; }
+.nav__link {
+  font-family: var(--f-display); font-size: 12px; font-weight: 600;
+  letter-spacing: 1.5px; text-transform: uppercase; color: var(--ink-3);
+  padding: 8px 13px; cursor: pointer; transition: color .2s; background: none; position: relative;
+}
+.nav__link::after {
+  content: ''; position: absolute; bottom: 4px; left: 13px; right: 13px; height: 2px;
+  background: var(--gold); border-radius: 2px; transform: scaleX(0);
+  transition: transform .25s; transform-origin: left;
+}
+.nav__link:hover { color: var(--ink-2); }
+.nav__link.is-active { color: var(--ink); }
+.nav__link.is-active::after, .nav__link:hover::after { transform: scaleX(1); }
+
+.nav__right { display: flex; align-items: center; gap: 12px; margin-left: auto; }
+.nav__login { font-family: var(--f-display); font-size: 12px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--ink-3); transition: color .2s; cursor: pointer; }
+.nav__login:hover { color: var(--ink); }
+.nav__cta {
+  font-family: var(--f-display); font-size: 11.5px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+  background: var(--ink); color: var(--white);
+  padding: 10px 24px; transition: all .22s; border-radius: 4px;
+  box-shadow: 0 4px 14px rgba(10,11,20,.2), inset 0 1px 0 rgba(255,255,255,.08);
+}
+.nav__cta:hover { background: var(--gold); box-shadow: 0 8px 24px rgba(200,146,10,.35); transform: translateY(-1px); }
+
+.nav__ham { display: none; flex-direction: column; justify-content: space-between; width: 26px; height: 18px; background: none; border: none; cursor: pointer; padding: 0; flex-shrink: 0; margin-left: auto; }
+.nav__ham span { display: block; height: 2px; background: var(--ink); border-radius: 2px; transition: transform .25s, opacity .2s; }
+.nav__ham.is-open span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+.nav__ham.is-open span:nth-child(2) { opacity: 0; }
+.nav__ham.is-open span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+.nav__drawer {
+  position: fixed; top: var(--nav); left: 0; right: 0; bottom: 0; z-index: 99;
+  background: rgba(255,255,255,.98); backdrop-filter: blur(24px);
+  padding: 36px var(--pad); display: flex; flex-direction: column; gap: 2px;
+  transform: translateX(-100%); transition: transform .3s ease; overflow-y: auto;
+  border-top: 1px solid var(--bd);
+}
+.nav__drawer.is-open { transform: none; }
+.nav__drawer-link { font-family: var(--f-display); font-size: 26px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--ink-3); padding: 15px 0; border-bottom: 1px solid var(--bd); cursor: pointer; transition: color .2s, padding-left .2s; }
+.nav__drawer-link:hover, .nav__drawer-link.is-active { color: var(--ink); padding-left: 10px; }
+.nav__drawer-cta { margin-top: 28px; background: var(--ink); color: var(--white); font-family: var(--f-display); font-size: 15px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; padding: 18px; cursor: pointer; transition: all .2s; border-radius: 6px; }
+.nav__drawer-cta:hover { background: var(--gold); }
+.nav__drawer-foot { margin-top: auto; padding-top: 28px; font-size: 10px; color: var(--ink-4); letter-spacing: 2.5px; font-family: var(--f-mono); }
+
+/* ══════════════ HERO ══════════════ */
+.hero {
+  position: relative; overflow: hidden;
+  background: var(--dark);
+  padding: calc(var(--nav) + 80px) var(--pad) 100px;
+  min-height: 100vh;
+  display: flex; align-items: center;
+}
+
+/* 3D grid floor */
+.hero::before {
+  content: '';
+  position: absolute; inset: 0; z-index: 0;
+  background:
+    linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+  background-size: 60px 60px;
+  transform: perspective(600px) rotateX(30deg) scale(1.5);
+  transform-origin: center bottom;
+  mask-image: linear-gradient(to top, rgba(0,0,0,.7) 0%, transparent 70%);
+  -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,.7) 0%, transparent 70%);
+}
+/* Radial glow */
+.hero::after {
+  content: '';
+  position: absolute; inset: 0; z-index: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 20%, rgba(200,146,10,.12) 0%, transparent 55%),
+    radial-gradient(ellipse 40% 40% at 80% 70%, rgba(16,185,129,.06) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.hero__inner {
+  position: relative; z-index: 1;
+  max-width: var(--mw); margin: 0 auto; width: 100%;
+  display: grid; grid-template-columns: 1fr 480px; gap: 80px; align-items: center;
+}
+
+/* Live badge */
+.hero__badge {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12);
+  backdrop-filter: blur(12px);
+  padding: 8px 18px; margin-bottom: 36px; border-radius: 100px;
+  font-family: var(--f-mono); font-size: 11px; color: rgba(255,255,255,.7); letter-spacing: 2px; text-transform: uppercase;
+}
+.hero__badge::before {
+  content: ''; width: 7px; height: 7px; border-radius: 50%;
+  background: var(--grn-hi); box-shadow: 0 0 10px var(--grn-hi);
+  animation: live-pulse 2s infinite;
+}
+@keyframes live-pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(.75)} }
+
+.hero__h1 {
+  font-family: var(--f-display); font-size: clamp(56px, 8.5vw, 112px);
+  font-weight: 800; letter-spacing: -2px; line-height: .88; color: var(--white);
+  margin-bottom: 32px;
+}
+.hero__h1 .gold  { color: var(--gold-hi); display: block; }
+.hero__h1 .green { color: var(--grn-hi); display: block; }
+.hero__h1 .ghost {
+  display: block; color: transparent;
+  -webkit-text-stroke: 1.5px rgba(255,255,255,.12);
+  letter-spacing: 4px;
+}
+
+/* Tagline pills */
+.hero__tagline { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-bottom: 32px; }
+.hero__step {
+  font-family: var(--f-display); font-size: 11px; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase;
+  color: rgba(255,255,255,.9);
+  background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.14);
+  backdrop-filter: blur(8px); padding: 7px 16px; border-radius: 4px;
+  transition: all .2s;
+}
+.hero__step:hover { background: var(--gold-lo); border-color: var(--gold-bd); color: var(--gold-hi); }
+.hero__arrow { color: var(--gold-hi); opacity: .5; font-weight: 700; font-size: 12px; }
+
+.hero__desc {
+  font-size: 16px; color: rgba(255,255,255,.65); line-height: 1.82;
+  max-width: 500px; margin-bottom: 44px;
+}
+.hero__desc strong { color: rgba(255,255,255,.95); font-weight: 500; }
+.hero__ctas { display: flex; gap: 14px; flex-wrap: wrap; }
+
+.btn-hero-p {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--f-display); font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+  background: var(--gold-hi); color: #0A0B14;
+  padding: 15px 36px; border-radius: 6px; cursor: pointer; transition: all .22s; border: none;
+  box-shadow: 0 8px 32px rgba(200,146,10,.4), inset 0 1px 0 rgba(255,255,255,.25);
+}
+.btn-hero-p:hover { background: #FFD060; box-shadow: 0 14px 44px rgba(200,146,10,.55); transform: translateY(-2px); }
+
+.btn-hero-o {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--f-display); font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+  color: rgba(255,255,255,.8); background: rgba(255,255,255,.07);
+  border: 1px solid rgba(255,255,255,.18); backdrop-filter: blur(8px);
+  padding: 14px 36px; border-radius: 6px; cursor: pointer; transition: all .22s;
+}
+.btn-hero-o:hover { background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.3); color: var(--white); }
+
+/* Hero 3D panel */
+.hero__panel {
+  position: relative; z-index: 1;
+  perspective: 1000px;
+}
+.hero__cards {
+  display: flex; flex-direction: column; gap: 10px;
+  transform: perspective(1000px) rotateY(-8deg) rotateX(4deg);
+  transform-style: preserve-3d;
+  transition: transform .4s ease;
+}
+.hero__cards:hover { transform: perspective(1000px) rotateY(-3deg) rotateX(2deg); }
+
+.hcard {
+  background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.1);
+  backdrop-filter: blur(20px);
+  padding: 20px 24px;
+  border-radius: 12px;
+  display: flex; align-items: center; gap: 18px;
+  box-shadow: 0 8px 32px rgba(0,0,0,.3), inset 0 1px 0 rgba(255,255,255,.08);
+  transition: all .2s;
+  transform: translateZ(0);
+}
+.hcard:hover {
+  background: rgba(255,255,255,.07);
+  border-color: rgba(200,146,10,.3);
+  box-shadow: 0 12px 40px rgba(0,0,0,.4), 0 0 20px rgba(200,146,10,.08);
+  transform: translateZ(10px);
+}
+.hcard__val { font-family: var(--f-display); font-size: 36px; font-weight: 800; line-height: 1; min-width: 80px; }
+.hcard__val--green { color: var(--grn-hi); text-shadow: 0 0 20px rgba(16,185,129,.4); }
+.hcard__val--gold  { color: var(--gold-hi); text-shadow: 0 0 20px rgba(200,146,10,.4); }
+.hcard__val--white { color: var(--white); }
+.hcard__label { font-family: var(--f-display); font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(255,255,255,.8); margin-bottom: 3px; }
+.hcard__note  { font-size: 12px; color: rgba(255,255,255,.4); line-height: 1.4; }
+
+/* ══════════════ STATS STRIP ══════════════ */
+.strip {
+  background: var(--white);
+  border-bottom: 1px solid var(--bd-2);
+  display: grid; grid-template-columns: repeat(4,1fr);
+  box-shadow: var(--shadow-sm);
+  position: relative; z-index: 1;
+}
+.strip-i {
+  padding: 32px var(--pad); text-align: center;
+  border-right: 1px solid var(--bd);
+  transition: background .2s;
+  position: relative;
+}
+.strip-i:hover { background: var(--off); }
+.strip-i:last-child { border-right: none; }
+.strip-i__n { font-family: var(--f-display); font-size: 48px; font-weight: 800; color: var(--ink); line-height: 1; margin-bottom: 6px; letter-spacing: -1px; }
+.strip-i__n span { color: var(--gold); }
+.strip-i__l { font-family: var(--f-mono); font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--ink-3); }
+
+/* ══════════════ SECTION SYSTEM ══════════════ */
+.section { max-width: var(--mw); margin: 0 auto; padding: 96px var(--pad); }
+.section--sm { padding: 64px var(--pad); }
+.band { border-top: 1px solid var(--bd); border-bottom: 1px solid var(--bd); }
+.band--light { background: var(--off); }
+.band--dark  { background: var(--dark); }
+.band--soft  { background: var(--soft); }
+
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--f-mono); font-size: 11px; color: var(--gold);
+  letter-spacing: 3px; text-transform: uppercase; margin-bottom: 18px;
+}
+.eyebrow::before { content: ''; display: inline-block; width: 24px; height: 2px; background: var(--gold); border-radius: 2px; }
+.eyebrow--green { color: var(--grn); }
+.eyebrow--green::before { background: var(--grn); }
+.eyebrow--white { color: rgba(255,255,255,.6); }
+.eyebrow--white::before { background: rgba(255,255,255,.4); }
+
+.display {
+  font-family: var(--f-display); font-size: clamp(34px, 4.5vw, 56px);
+  font-weight: 800; letter-spacing: -1.5px; color: var(--ink); line-height: 1.05;
+}
+.display--white { color: var(--white); }
+.display .hl  { color: var(--gold); }
+.display .hlg { color: var(--grn); }
+.display .hlw { color: var(--white); }
+
+.lead { font-size: 16px; color: var(--ink-3); line-height: 1.82; max-width: 640px; }
+.lead--white { color: rgba(255,255,255,.65); }
+.lead strong { color: var(--ink-2); font-weight: 600; }
+.lead--white strong { color: rgba(255,255,255,.9); }
+
+/* Primary button — light bg */
+.btn-p {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--f-display); font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+  background: var(--ink); color: var(--white);
+  padding: 13px 32px; border-radius: 6px; cursor: pointer; transition: all .22s; border: none;
+  box-shadow: 0 4px 16px rgba(10,11,20,.2), inset 0 1px 0 rgba(255,255,255,.08);
+}
+.btn-p:hover { background: var(--gold); box-shadow: 0 8px 28px rgba(200,146,10,.35); transform: translateY(-1px); }
+.btn-p--gold { background: var(--gold); box-shadow: 0 4px 16px rgba(200,146,10,.3); }
+.btn-p--gold:hover { background: #e8a820; }
+.btn-p--white { background: var(--white); color: var(--ink); box-shadow: 0 4px 16px rgba(0,0,0,.15); }
+.btn-p--white:hover { background: var(--off); }
+
+.btn-o {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--f-display); font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+  background: transparent; color: var(--ink-2);
+  border: 1.5px solid var(--bd-3); padding: 12px 32px; border-radius: 6px; cursor: pointer; transition: all .22s;
+}
+.btn-o:hover { border-color: var(--ink); color: var(--ink); background: var(--soft); }
+.btn-o--white { color: rgba(255,255,255,.8); border-color: rgba(255,255,255,.2); }
+.btn-o--white:hover { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.4); color: var(--white); }
+
+/* ══════════════ PROBLEM SECTION ══════════════ */
+.problem-header { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; margin-bottom: 56px; }
+.problem-hl { font-family: var(--f-display); font-size: clamp(26px, 3.5vw, 42px); font-weight: 800; letter-spacing: -1px; color: var(--ink); line-height: 1.1; }
+.problem-hl span { color: var(--gold); display: block; }
+.problem-body { font-size: 15.5px; color: var(--ink-3); line-height: 1.85; }
+.problem-body p + p { margin-top: 14px; }
+.problem-body strong { color: var(--ink-2); font-weight: 600; }
+
+.problem-cards { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+.prob-card {
+  background: var(--white);
+  border: 1px solid var(--bd);
+  border-radius: 16px; padding: 36px 30px;
+  position: relative; overflow: hidden;
+  box-shadow: var(--shadow-md);
+  transition: all .3s;
+}
+.prob-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(to right, var(--red-hi), #F87171);
+}
+.prob-card:hover { box-shadow: var(--shadow-xl); transform: translateY(-6px); border-color: var(--bd-2); }
+.prob-card__icon { font-size: 36px; margin-bottom: 20px; }
+.prob-card__title { font-family: var(--f-display); font-size: 19px; font-weight: 700; color: var(--ink); margin-bottom: 12px; }
+.prob-card__text { font-size: 14px; color: var(--ink-3); line-height: 1.78; margin-bottom: 24px; }
+.prob-card__stat { font-family: var(--f-display); font-size: 40px; font-weight: 800; color: var(--red); line-height: 1; margin-bottom: 4px; letter-spacing: -1px; }
+.prob-card__stat-l { font-family: var(--f-mono); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--ink-3); }
+
+/* ══════════════ MARKET NUMBERS ══════════════ */
+.mstats { display: grid; grid-template-columns: repeat(4,1fr); gap: 20px; }
+.mstat {
+  background: var(--white); border: 1.5px solid var(--gold-bd); border-radius: 14px;
+  padding: 28px 24px; text-align: center;
+  box-shadow: var(--shadow-md), 0 0 0 0 rgba(200,146,10,0);
+  transition: all .28s;
+}
+.mstat:hover { transform: translateY(-4px); box-shadow: var(--shadow-xl), 0 0 30px rgba(200,146,10,.08); border-color: var(--gold); }
+.mstat__val { font-family: var(--f-display); font-size: 36px; font-weight: 800; color: var(--gold); line-height: 1; margin-bottom: 8px; letter-spacing: -1px; }
+.mstat__label { font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--ink); margin-bottom: 6px; }
+.mstat__note { font-size: 12px; color: var(--ink-3); line-height: 1.5; }
+
+/* ══════════════ PLAN CARDS ══════════════ */
+.plan-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 20px; }
+.plan-card {
+  background: var(--white); border: 1.5px solid var(--bd);
+  border-radius: 16px; padding: 32px 26px;
+  cursor: pointer; position: relative; overflow: hidden;
+  box-shadow: var(--shadow-md);
+  transition: all .3s;
+}
+.plan-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: transparent; transition: background .3s;
+}
+.plan-card:hover {
+  box-shadow: var(--shadow-xl);
+  transform: translateY(-8px);
+  border-color: var(--gold-bd);
+}
+.plan-card:hover::before { background: linear-gradient(to right, var(--gold), var(--gold-hi)); }
+.plan-card__badge { font-family: var(--f-mono); font-size: 10px; color: var(--gold); letter-spacing: 1px; display: block; margin-bottom: 14px; }
+.plan-card__name { font-family: var(--f-display); font-size: 28px; font-weight: 800; color: var(--ink); margin-bottom: 4px; letter-spacing: -0.5px; }
+.plan-card__sub { font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--ink-4); display: block; margin-bottom: 20px; }
+.plan-card__split { font-family: var(--f-display); font-size: 54px; font-weight: 800; color: var(--grn); line-height: 1; margin-bottom: 2px; letter-spacing: -2px; }
+.plan-card__split-l { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--ink-3); display: block; margin-bottom: 18px; }
+.plan-card__desc { font-size: 13.5px; color: var(--ink-3); line-height: 1.72; margin-bottom: 22px; }
+.plan-card__cta { font-family: var(--f-display); font-size: 11px; font-weight: 700; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; display: flex; align-items: center; gap: 6px; }
+
+/* ══════════════ PHASE VISION (dark bg) ══════════════ */
+.phase-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+.phase-card {
+  background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.09);
+  border-radius: 16px; padding: 44px 36px; position: relative; overflow: hidden;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 16px 48px rgba(0,0,0,.3), inset 0 1px 0 rgba(255,255,255,.06);
+  transition: all .3s;
+}
+.phase-card:hover {
+  background: rgba(255,255,255,.07);
+  transform: translateY(-5px);
+  box-shadow: 0 28px 70px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.1);
+}
+.phase-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+.phase-card--1::before { background: linear-gradient(to right, var(--gold), var(--gold-hi)); }
+.phase-card--2::before { background: linear-gradient(to right, #7C3AED, #A78BFA); }
+.phase-card--3::before { background: linear-gradient(to right, #0891B2, #67E8F9); }
+.phase-card__tag { font-family: var(--f-mono); font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase; display: block; margin-bottom: 20px; }
+.phase-card--1 .phase-card__tag { color: var(--gold-hi); }
+.phase-card--2 .phase-card__tag { color: #A78BFA; }
+.phase-card--3 .phase-card__tag { color: #67E8F9; }
+.phase-card__icon { font-size: 40px; margin-bottom: 20px; }
+.phase-card__title { font-family: var(--f-display); font-size: 22px; font-weight: 700; color: var(--white); margin-bottom: 14px; }
+.phase-card__desc { font-size: 14.5px; color: rgba(255,255,255,.65); line-height: 1.8; margin-bottom: 24px; }
+.phase-card__items { display: flex; flex-direction: column; gap: 10px; }
+.phase-card__item { display: flex; align-items: flex-start; gap: 10px; font-size: 13.5px; color: rgba(255,255,255,.75); line-height: 1.55; }
+.phase-card--1 .phase-card__item::before { content: '→'; color: var(--gold-hi); flex-shrink: 0; font-weight: 700; }
+.phase-card--2 .phase-card__item::before { content: '→'; color: #A78BFA; flex-shrink: 0; font-weight: 700; }
+.phase-card--3 .phase-card__item::before { content: '→'; color: #67E8F9; flex-shrink: 0; font-weight: 700; }
+.phase-card__status { display: inline-block; margin-top: 28px; font-family: var(--f-mono); font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; padding: 5px 14px; border: 1px solid; border-radius: 4px; }
+.phase-card--1 .phase-card__status { color: var(--grn-hi); border-color: rgba(16,185,129,.3); background: rgba(16,185,129,.1); }
+.phase-card--2 .phase-card__status { color: #A78BFA; border-color: rgba(167,139,250,.25); background: rgba(124,58,237,.1); }
+.phase-card--3 .phase-card__status { color: #67E8F9; border-color: rgba(103,232,249,.2); background: rgba(8,145,178,.08); }
+
+/* ══════════════ JOURNEY (light bg) ══════════════ */
+.eco-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 20px; }
+.eco-card {
+  background: var(--white); border: 1.5px solid var(--bd);
+  border-radius: 14px; padding: 36px 28px; position: relative; overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: all .3s;
+}
+.eco-card::after {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(to right, var(--gold), var(--gold-hi));
+}
+.eco-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-4px); border-color: var(--gold-bd); }
+.eco-n { font-family: var(--f-mono); font-size: 10px; color: var(--gold); letter-spacing: 2px; margin-bottom: 20px; }
+.eco-icon { font-size: 34px; margin-bottom: 16px; }
+.eco-title { font-family: var(--f-display); font-size: 20px; font-weight: 700; color: var(--ink); margin-bottom: 12px; }
+.eco-desc { font-size: 14px; color: var(--ink-3); line-height: 1.72; }
+
+/* ══════════════ DIFFERENCE ══════════════ */
+.diff-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.diff-col { border-radius: 14px; padding: 44px 40px; }
+.diff-col--other { background: var(--soft); border: 1.5px solid var(--bd); }
+.diff-col--vornix { background: var(--white); border: 2px solid var(--gold-bd); box-shadow: var(--shadow-lg), 0 0 0 1px var(--gold-bd); }
+.diff-col__head { font-family: var(--f-display); font-size: 17px; font-weight: 700; margin-bottom: 28px; padding-bottom: 18px; border-bottom: 1.5px solid var(--bd); }
+.diff-col--other .diff-col__head { color: var(--ink-3); }
+.diff-col--vornix .diff-col__head { color: var(--gold); }
+.diff-item { display: flex; align-items: flex-start; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--bd); font-size: 14.5px; color: var(--ink-2); line-height: 1.6; }
+.diff-item:last-child { border-bottom: none; }
+.diff-item span { flex-shrink: 0; font-size: 15px; }
+
+/* ══════════════ TECH PREVIEW (light bg) ══════════════ */
+.tech-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+.tc {
+  background: var(--white); border: 1.5px solid var(--bd); border-radius: 14px;
+  padding: 32px 28px; position: relative; overflow: hidden;
+  box-shadow: var(--shadow-sm); transition: all .3s;
+}
+.tc::after {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+  background: transparent; transition: background .3s;
+}
+.tc:hover { box-shadow: var(--shadow-lg); transform: translateY(-4px); border-color: var(--gold-bd); }
+.tc:hover::after { background: linear-gradient(to right, transparent, var(--gold), transparent); }
+.tc__num { font-family: var(--f-mono); font-size: 10px; color: var(--gold); letter-spacing: 1px; margin-bottom: 14px; }
+.tc__icon { font-size: 28px; margin-bottom: 14px; }
+.tc__title { font-family: var(--f-display); font-size: 18px; font-weight: 700; color: var(--ink); margin-bottom: 10px; }
+.tc__desc  { font-size: 13.5px; color: var(--ink-3); line-height: 1.72; margin-bottom: 16px; }
+.tc__badge { font-family: var(--f-mono); font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); border: 1.5px solid var(--gold-bd); background: var(--gold-lo); padding: 4px 12px; border-radius: 4px; display: inline-block; }
+
+/* ══════════════ FOOTER ══════════════ */
+.footer {
+  background: var(--dark); border-top: 1px solid rgba(255,255,255,.06);
+  padding: 64px var(--pad);
+}
+.footer__inner { max-width: var(--mw); margin: 0 auto; }
+.footer__grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 60px; margin-bottom: 48px; }
+.footer__brand-name { font-family: var(--f-display); font-size: 28px; font-weight: 800; letter-spacing: 2px; color: var(--white); margin-bottom: 12px; }
+.footer__brand-name span { color: var(--gold-hi); }
+.footer__brand-desc { font-size: 13.5px; color: rgba(255,255,255,.4); line-height: 1.78; max-width: 240px; }
+.footer__col h4 { font-family: var(--f-mono); font-size: 9px; font-weight: 500; letter-spacing: 3px; text-transform: uppercase; color: var(--gold-hi); margin-bottom: 18px; opacity: .8; }
+.footer__col ul li { margin-bottom: 10px; }
+.footer__col ul a { font-size: 13.5px; color: rgba(255,255,255,.4); cursor: pointer; transition: color .2s; }
+.footer__col ul a:hover { color: rgba(255,255,255,.85); }
+.footer__bottom { display: flex; justify-content: space-between; align-items: center; padding-top: 24px; border-top: 1px solid rgba(255,255,255,.06); flex-wrap: wrap; gap: 12px; }
+.footer__copy { font-size: 12px; color: rgba(255,255,255,.3); }
+.footer__legal { display: flex; gap: 22px; }
+.footer__legal a { font-size: 12px; color: rgba(255,255,255,.3); transition: color .2s; cursor: pointer; }
+.footer__legal a:hover { color: rgba(255,255,255,.7); }
+
+/* ══════════════ RESPONSIVE ══════════════ */
+@media (max-width: 1100px) {
+  .nav__links { display: none; }
+  .nav__right .nav__login { display: none; }
+  .nav__ham { display: flex; }
+  .hero__inner { grid-template-columns: 1fr; }
+  .hero__panel { display: none; }
+  .plan-grid { grid-template-columns: repeat(2,1fr); }
+  .tech-grid { grid-template-columns: repeat(2,1fr); }
+  .eco-grid { grid-template-columns: repeat(2,1fr); }
+  .phase-grid { grid-template-columns: 1fr; }
+  .problem-cards { grid-template-columns: 1fr 1fr; }
+  .problem-header { grid-template-columns: 1fr; gap: 32px; }
+  .mstats { grid-template-columns: repeat(2,1fr); }
+  .diff-grid { grid-template-columns: 1fr; }
+  .footer__grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 680px) {
+  .strip { grid-template-columns: repeat(2,1fr); }
+  .strip-i { border-bottom: 1px solid var(--bd); }
+  .plan-grid, .tech-grid, .eco-grid { grid-template-columns: 1fr; }
+  .problem-cards, .mstats { grid-template-columns: 1fr; }
+  .hero__ctas { flex-direction: column; }
+  .footer__grid { grid-template-columns: 1fr; }
+}
+</style>
 </head>
 <body>
 
-<canvas id="bg-canvas"></canvas>
-<div id="bg-veil"></div>
-
-<!-- ═══ NAV ═══ -->
-<nav class="nav" role="navigation" aria-label="Main navigation">
-  <div class="nav__logo" onclick="nav('home')" role="button" tabindex="0" aria-label="VORNIX Home">
-    <svg class="nav__logo-svg" viewBox="0 0 172 38" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="lg-w" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#F0F4FF" stop-opacity=".95"/><stop offset="100%" stop-color="#6B7EB8"/></linearGradient>
-        <linearGradient id="lg-g" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#F5C842"/><stop offset="100%" stop-color="#8A6A10"/></linearGradient>
-        <linearGradient id="lg-e" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#34D399"/><stop offset="100%" stop-color="#065F46"/></linearGradient>
-        <filter id="glow-g" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="1" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-      </defs>
-      <g filter="url(#glow-g)">
-        <rect x="1" y="14" width="5" height="13" fill="url(#lg-g)" rx=".3"/>
-        <line x1="3.5" y1="8" x2="3.5" y2="14" stroke="#F5C842" stroke-width="1.2" opacity=".7"/>
-        <line x1="3.5" y1="27" x2="3.5" y2="32" stroke="#F5C842" stroke-width="1.2" opacity=".5"/>
-        <rect x="9" y="18" width="5" height="7" fill="rgba(255,255,255,.07)" rx=".3"/>
-        <line x1="11.5" y1="13" x2="11.5" y2="18" stroke="rgba(255,255,255,.09)" stroke-width="1.2"/>
-        <line x1="11.5" y1="25" x2="11.5" y2="29" stroke="rgba(255,255,255,.07)" stroke-width="1.2"/>
-        <rect x="17" y="11" width="5" height="14" fill="url(#lg-e)" rx=".3"/>
-        <line x1="19.5" y1="6" x2="19.5" y2="11" stroke="#34D399" stroke-width="1.2" opacity=".6"/>
-        <line x1="19.5" y1="25" x2="19.5" y2="30" stroke="#34D399" stroke-width="1.2" opacity=".5"/>
-      </g>
-      <polyline points="3.5,26 11.5,22 19.5,14" stroke="#F5C842" stroke-width=".8" opacity=".4" stroke-dasharray="2,2"/>
-      <path d="M30 7L38 31L46 7" stroke="url(#lg-w)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-      <ellipse cx="56.5" cy="19" rx="7" ry="12" stroke="url(#lg-w)" stroke-width="2.7" fill="none"/>
-      <path d="M68 7v24M68 7h9c3 0 5 2.5 5 6s-2 6-5 6H68M76 19l7.5 12" stroke="url(#lg-w)" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-      <path d="M88 31V7L102 31V7" stroke="url(#lg-w)" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-      <line x1="108" y1="7" x2="108" y2="31" stroke="url(#lg-w)" stroke-width="2.7" stroke-linecap="round"/>
-      <path d="M114 7l13 24M127 7l-13 24" stroke="url(#lg-g)" stroke-width="2.8" stroke-linecap="round" filter="url(#glow-g)"/>
-      <line x1="30" y1="36" x2="127" y2="36" stroke="rgba(212,160,23,.10)" stroke-width=".8"/>
-      <line x1="30" y1="36" x2="72"  y2="36" stroke="rgba(212,160,23,.65)" stroke-width="1.4"/>
-      <text x="133" y="16" font-family="'Barlow Condensed',sans-serif" font-size="6" fill="#2D3A5A" letter-spacing="1.5">PROP</text>
-      <text x="133" y="26" font-family="'Barlow Condensed',sans-serif" font-size="6" fill="#2D3A5A" letter-spacing="1.5">FIRM</text>
-    </svg>
+<!-- ══════════ NAV ══════════ -->
+<nav class="nav" id="main-nav">
+  <div class="nav__brand" onclick="window.location.href='index.html'" tabindex="0" role="button" aria-label="VORNIX Home">
+    <div class="nav__wordmark">VORN<span>IX</span></div>
+    <div class="nav__tag">Prop<br>Firm</div>
   </div>
   <ul class="nav__links" role="list">
-    <li><a class="nav__link is-active" id="nl-home"       onclick="nav('home')">Home</a></li>
-    <li><a class="nav__link"           id="nl-challenges" onclick="nav('challenges')">Challenges</a></li>
-    <li><a class="nav__link"           id="nl-tech"       onclick="nav('tech')">Technology</a></li>
-    <li><a class="nav__link"           id="nl-how"        onclick="nav('how')">How It Works</a></li>
-    <li><a class="nav__link"           id="nl-about"      onclick="nav('about')">About</a></li>
-    <li><a class="nav__link"           id="nl-contact"    onclick="nav('contact')">Contact</a></li>
+    <li><a class="nav__link is-active" href="index.html">Home</a></li>
+    <li><a class="nav__link" href="challenges.html">Challenges</a></li>
+    <li><a class="nav__link" href="academy.html">Academy</a></li>
+    <li><a class="nav__link" href="technology.html">Technology</a></li>
+    <li><a class="nav__link" href="rules.html">Rules</a></li>
+    <li><a class="nav__link" href="about.html">About</a></li>
+    <li><a class="nav__link" href="contact.html">Contact</a></li>
   </ul>
   <div class="nav__right">
     <a href="login.html" class="nav__login">Login</a>
     <button class="nav__cta" onclick="window.location.href='signup.html'">Get Funded</button>
   </div>
-  <button class="nav__ham" id="nav-ham" onclick="hamMenu()" aria-label="Toggle menu" aria-expanded="false">
+  <button class="nav__ham" id="nav-ham" onclick="toggleMenu()" aria-label="Toggle menu" aria-expanded="false">
     <span></span><span></span><span></span>
   </button>
 </nav>
 
+<!-- Mobile Drawer -->
 <div class="nav__drawer" id="nav-drawer" role="dialog" aria-label="Mobile menu">
-  <a class="nav__drawer-link is-active" id="ml-home"       onclick="nav('home');closeDrawer()">Home</a>
-  <a class="nav__drawer-link"           id="ml-challenges" onclick="nav('challenges');closeDrawer()">Challenges</a>
-  <a class="nav__drawer-link"           id="ml-tech"       onclick="nav('tech');closeDrawer()">Technology</a>
-  <a class="nav__drawer-link"           id="ml-how"        onclick="nav('how');closeDrawer()">How It Works</a>
-  <a class="nav__drawer-link"           id="ml-about"      onclick="nav('about');closeDrawer()">About</a>
-  <a class="nav__drawer-link"           id="ml-contact"    onclick="nav('contact');closeDrawer()">Contact</a>
-  <a class="nav__drawer-link"           href="login.html">Login →</a>
+  <a class="nav__drawer-link is-active" href="index.html">Home</a>
+  <a class="nav__drawer-link" href="challenges.html">Challenges</a>
+  <a class="nav__drawer-link" href="academy.html">Academy</a>
+  <a class="nav__drawer-link" href="technology.html">Technology</a>
+  <a class="nav__drawer-link" href="rules.html">Rules</a>
+  <a class="nav__drawer-link" href="about.html">About</a>
+  <a class="nav__drawer-link" href="contact.html">Contact</a>
+  <a class="nav__drawer-link" href="login.html">Login →</a>
   <button class="nav__drawer-cta" onclick="window.location.href='signup.html'">Get Funded →</button>
-  <p class="nav__drawer-foot">VORNIX — NEXT GENERATION PROP FIRM</p>
+  <p class="nav__drawer-foot">VORNIX — STRUCTURE TRADING AS A PROFESSION</p>
 </div>
 
 
-<!-- ═══════════ PAGE: HOME ═══════════ -->
-<main class="page is-active" id="page-home">
-
-  <!-- HERO -->
-  <section class="hero" aria-labelledby="hero-h1">
-    <div class="hero__left">
-      <span class="hero__eye">// Next Generation Prop Firm</span>
-      <h1 class="hero__h1" id="hero-h1">
+<!-- ══════════ HERO ══════════ -->
+<section class="hero">
+  <div class="hero__inner">
+    <div class="hero__left rv">
+      <div class="hero__badge">Purpose-Driven Proprietary Trading Firm</div>
+      <h1 class="hero__h1">
         LEARN.
         <span class="gold">PROVE.</span>
-        <span class="grn">TRADE.</span>
-        <span class="grow">GROW.</span>
+        <span class="green">TRADE.</span>
+        <span class="ghost">GROW.</span>
       </h1>
       <div class="hero__tagline">
         <span class="hero__step">Learn</span>
-        <span class="hero__arr">→</span>
+        <span class="hero__arrow">→</span>
         <span class="hero__step">Prove</span>
-        <span class="hero__arr">→</span>
+        <span class="hero__arrow">→</span>
         <span class="hero__step">Trade</span>
-        <span class="hero__arr">→</span>
+        <span class="hero__arrow">→</span>
         <span class="hero__step">Grow</span>
       </div>
-      <p class="hero__desc">VORNIX funds traders who <strong>prove they can perform</strong>. Four evaluation paths, capital up to $100K, and up to <strong>95% of every dollar you generate</strong>. A global prop firm built to make trading a legitimate profession.</p>
+      <p class="hero__desc">
+        VORNIX funds traders who <strong>prove they can perform</strong>. Four evaluation paths, capital up to <strong>$100,000</strong>, and up to <strong>95% of every dollar you generate</strong>. Built to make trading a legitimate profession — for anyone, anywhere.
+      </p>
       <div class="hero__ctas">
-        <button class="btn-p" onclick="window.location.href='signup.html'">Start Your Challenge</button>
-        <button class="btn-s" onclick="nav('how')">How It Works</button>
+        <button class="btn-hero-p" onclick="window.location.href='signup.html'">Start Your Challenge →</button>
+        <button class="btn-hero-o" onclick="window.location.href='challenges.html'">View All Plans</button>
       </div>
     </div>
+
     <div class="hero__panel" aria-hidden="true">
-      <div class="hero__stats">
-        <div class="hs"><div class="hs__v g">95%</div><div class="hs__l">Max Profit Split</div></div>
-        <div class="hs"><div class="hs__v">$100K</div><div class="hs__l">Max Capital</div></div>
-        <div class="hs"><div class="hs__v">4</div><div class="hs__l">Challenge Types</div></div>
-        <div class="hs"><div class="hs__v">Day 1</div><div class="hs__l">Withdrawals</div></div>
+      <div class="hero__cards">
+        <div class="hcard">
+          <div class="hcard__val hcard__val--green">95%</div>
+          <div>
+            <div class="hcard__label">Max Profit Split</div>
+            <div class="hcard__note">Keep the majority of what you earn</div>
+          </div>
+        </div>
+        <div class="hcard">
+          <div class="hcard__val hcard__val--gold">$100K</div>
+          <div>
+            <div class="hcard__label">Max Capital</div>
+            <div class="hcard__note">Scale from $1,000 to $100,000</div>
+          </div>
+        </div>
+        <div class="hcard">
+          <div class="hcard__val hcard__val--white">4</div>
+          <div>
+            <div class="hcard__label">Challenge Types</div>
+            <div class="hcard__note">1-Step, 2-Step, 3-Step, Partial</div>
+          </div>
+        </div>
+        <div class="hcard">
+          <div class="hcard__val hcard__val--green">Day 1</div>
+          <div>
+            <div class="hcard__label">Withdrawals</div>
+            <div class="hcard__note">No waiting — withdraw from day one</div>
+          </div>
+        </div>
       </div>
     </div>
-  </section>
-
-  <!-- STATS STRIP -->
-  <div class="strip" role="list">
-    <div class="strip-i"><div class="strip-i__n"><span>95</span>%</div><div class="strip-i__l">Max Profit Split</div></div>
-    <div class="strip-i"><div class="strip-i__n">$<span>100</span>K</div><div class="strip-i__l">Max Funded Capital</div></div>
-    <div class="strip-i"><div class="strip-i__n"><span>4</span></div><div class="strip-i__l">Challenge Types</div></div>
-    <div class="strip-i"><div class="strip-i__n"><span>24</span>/5</div><div class="strip-i__l">Support Available</div></div>
   </div>
+</section>
 
-  <!-- THE PROBLEM — from pitch deck -->
-  <section class="section" aria-labelledby="problem-h2">
-    <span class="s-eye">// Why VORNIX Exists</span>
-    <h2 class="s-head" id="problem-h2">THE PROBLEM WITH <span class="gold">TRADING TODAY</span></h2>
-    <p class="s-sub">Millions of talented traders enter markets every year and fail — not because they lack skill, but because the system around them is broken.</p>
-    <div class="problem-grid">
+
+<!-- ══════════ STATS STRIP ══════════ -->
+<div class="strip">
+  <div class="strip-i"><div class="strip-i__n"><span>95</span>%</div><div class="strip-i__l">Max Profit Split</div></div>
+  <div class="strip-i"><div class="strip-i__n">$<span>100</span>K</div><div class="strip-i__l">Max Funded Capital</div></div>
+  <div class="strip-i"><div class="strip-i__n"><span>4</span></div><div class="strip-i__l">Challenge Types</div></div>
+  <div class="strip-i"><div class="strip-i__n"><span>24</span>/5</div><div class="strip-i__l">Support Available</div></div>
+</div>
+
+
+<!-- ══════════ THE PROBLEM ══════════ -->
+<div class="band band--light">
+  <div class="section">
+    <div class="eyebrow rv">// Why VORNIX Exists</div>
+    <div class="problem-header rv">
+      <div class="problem-hl">
+        The trading system<br>is broken.
+        <span>We are the fix.</span>
+      </div>
+      <div class="problem-body">
+        <p>Indian parents rarely say "I want my child to become a professional trader" — because trading is still seen as gambling, not a profession. Yet risk exists in every career path.</p>
+        <p>The real problem is not the traders. It is that <strong>no structured system exists to develop them</strong> — no standardized education, no regulated mentors, no capital access for skilled traders. VORNIX changes all of that.</p>
+      </div>
+    </div>
+    <div class="problem-cards">
       <div class="prob-card rv rv-d1">
         <div class="prob-card__icon">🎲</div>
-        <div class="prob-card__title">Seen as Gambling</div>
-        <p class="prob-card__desc">Society — especially in India — still treats trading as speculation, not a profession. There is no structured pathway that gives trading the same legitimacy as medicine or engineering.</p>
+        <div class="prob-card__title">Treated as Gambling</div>
+        <p class="prob-card__text">Society views trading as speculation, not a profession. No structured career pathway gives trading the same legitimacy as medicine or engineering.</p>
         <div class="prob-card__stat">90%</div>
-        <div class="prob-card__stat-l">of Indian retail traders lose money</div>
+        <div class="prob-card__stat-l">of retail traders in India lose money</div>
       </div>
       <div class="prob-card rv rv-d2">
         <div class="prob-card__icon">📚</div>
         <div class="prob-card__title">No Structured Education</div>
-        <p class="prob-card__desc">Trading is learned randomly — no standardized curriculum, unregulated mentors, and strategies taught without risk management. Most traders are self-taught and self-confused.</p>
-        <div class="prob-card__stat">0</div>
+        <p class="prob-card__text">No standardized curriculum. Unregulated, misleading mentors. Strategies taught without risk management. Most traders are self-taught and self-confused.</p>
+        <div class="prob-card__stat">Zero</div>
         <div class="prob-card__stat-l">standardized trading curricula globally</div>
       </div>
       <div class="prob-card rv rv-d3">
         <div class="prob-card__icon">💸</div>
         <div class="prob-card__title">Capital Constraints</div>
-        <p class="prob-card__desc">85%+ of active traders have little tradable capital, limiting meaningful trading. Without structured funding, skilled traders cannot scale. One wrong decision risks their entire financial stability.</p>
+        <p class="prob-card__text">85%+ of active traders have little tradable capital. Without structured funding, skilled traders cannot scale. One wrong decision risks their entire financial stability.</p>
         <div class="prob-card__stat">85%+</div>
         <div class="prob-card__stat-l">of traders lack sufficient capital to scale</div>
       </div>
     </div>
-  </section>
+  </div>
+</div>
 
-  <!-- MARKET SIZE — from pitch deck data -->
-  <div class="market-strip">
-    <div class="market-strip__inner">
-      <div class="market-strip__label">// Global Opportunity</div>
-      <div class="market-grid">
-        <div class="mg-item rv rv-d1">
-          <div class="mg-item__val">15.1 Cr</div>
-          <div class="mg-item__label">India Demat Accounts</div>
-          <div class="mg-item__note">Up from 4.1 Cr in 2020 — growing fast</div>
-        </div>
-        <div class="mg-item rv rv-d2">
-          <div class="mg-item__val">$7B+</div>
-          <div class="mg-item__label">Prop Industry Revenue</div>
-          <div class="mg-item__note">Global retail prop trading in 2024</div>
-        </div>
-        <div class="mg-item rv rv-d3">
-          <div class="mg-item__val">5 Cr+</div>
-          <div class="mg-item__label">Traders Participated</div>
-          <div class="mg-item__note">In prop challenges globally till date</div>
-        </div>
-        <div class="mg-item rv rv-d4">
-          <div class="mg-item__val">Zero</div>
-          <div class="mg-item__label">India-Based Global Leader</div>
-          <div class="mg-item__note">No Indian firm dominates this space — yet</div>
-        </div>
-      </div>
+
+<!-- ══════════ MARKET OPPORTUNITY ══════════ -->
+<div class="band band--soft" style="border-top:1.5px solid rgba(200,146,10,.15);border-bottom:1.5px solid rgba(200,146,10,.15)">
+  <div class="section section--sm">
+    <div class="eyebrow rv">// The Opportunity</div>
+    <div class="display rv" style="margin-bottom:14px">A <span class="hl">$7 Billion</span> industry with <span class="hl">zero</span> India-based global leader.</div>
+    <p class="lead rv" style="margin-bottom:44px">India's demat accounts grew from 4.1 crore in 2020 to 15.1 crore in 2024. Participation is rising fast — but the failure rate stays near 90%. The cause: <strong>lack of structure, not lack of talent.</strong></p>
+    <div class="mstats">
+      <div class="mstat rv rv-d1"><div class="mstat__val">15.1Cr</div><div class="mstat__label">India Demat Accounts</div><div class="mstat__note">Up from 4.1 Cr in 2020 — growing at 50% per year</div></div>
+      <div class="mstat rv rv-d2"><div class="mstat__val">$7B+</div><div class="mstat__label">Global Prop Industry</div><div class="mstat__note">Total 2024 estimated revenue — highly fragmented</div></div>
+      <div class="mstat rv rv-d3"><div class="mstat__val">5Cr+</div><div class="mstat__label">Traders Participated</div><div class="mstat__note">In prop challenges globally till date</div></div>
+      <div class="mstat rv rv-d4"><div class="mstat__val">Zero</div><div class="mstat__label">India-Based Global Leader</div><div class="mstat__note">The gap VORNIX is built to fill</div></div>
     </div>
   </div>
+</div>
 
-  <!-- PLANS PREVIEW -->
-  <section class="section" aria-labelledby="plans-h2">
-    <span class="s-eye">// Choose Your Path</span>
-    <h2 class="s-head" id="plans-h2">4 WAYS TO GET <span class="gold">FUNDED</span></h2>
-    <p class="s-sub">All plans include Forex, Indices, Commodities, Crypto and Stocks. Accounts from $1,000 to $100,000.</p>
+
+<!-- ══════════ CHALLENGES PREVIEW ══════════ -->
+<div class="band band--light">
+  <div class="section">
+    <div class="eyebrow rv">// Choose Your Path</div>
+    <div class="display rv" style="margin-bottom:14px">4 ways to get <span class="hl">funded.</span></div>
+    <p class="lead rv" style="margin-bottom:48px">All plans include Forex, Indices, Commodities, Crypto and Stocks. Accounts from $1,000 to $100,000. Pick the path that suits your trading style.</p>
     <div class="plan-grid">
-      <div class="plan-card-home rv rv-d1" onclick="nav('challenges');setTab('one')" role="button" tabindex="0">
-        <span class="pch__badge">// Fastest Path</span>
-        <div class="pch__name">1-STEP</div>
-        <span class="pch__tag">Single Phase</span>
-        <div class="pch__split">95%</div>
-        <div class="pch__split-l">Profit Split</div>
-        <p class="pch__desc">10% target. No time limit. No minimum days. News trading and EA/Algo allowed. Fastest route to a funded account.</p>
-        <span class="pch__cta">View Plan →</span>
+      <div class="plan-card rv rv-d1" onclick="window.location.href='challenges.html#one'" role="button" tabindex="0">
+        <span class="plan-card__badge">// Fastest Path</span>
+        <div class="plan-card__name">1-STEP</div>
+        <span class="plan-card__sub">Single Phase</span>
+        <div class="plan-card__split">95%</div>
+        <div class="plan-card__split-l">Profit Split</div>
+        <p class="plan-card__desc">10% target. No time limit. No minimum days. News trading and EA/Algo allowed. Fastest route to funded capital.</p>
+        <div class="plan-card__cta">View Plan →</div>
       </div>
-      <div class="plan-card-home rv rv-d2" onclick="nav('challenges');setTab('two')" role="button" tabindex="0">
-        <span class="pch__badge">// Balanced</span>
-        <div class="pch__name">2-STEP</div>
-        <span class="pch__tag">Two Phases — From $1K</span>
-        <div class="pch__split">90%</div>
-        <div class="pch__split-l">Profit Split</div>
-        <p class="pch__desc">10%+5% targets. News trading and EA allowed. Accounts from $1K to $100K. 3 minimum days per phase.</p>
-        <span class="pch__cta">View Plan →</span>
+      <div class="plan-card rv rv-d2" onclick="window.location.href='challenges.html#two'" role="button" tabindex="0">
+        <span class="plan-card__badge">// Balanced</span>
+        <div class="plan-card__name">2-STEP</div>
+        <span class="plan-card__sub">Two Phases — From $1K</span>
+        <div class="plan-card__split">90%</div>
+        <div class="plan-card__split-l">Profit Split</div>
+        <p class="plan-card__desc">10%+5% targets. News trading and EA allowed. Accounts from $1K to $100K. Proven consistency required.</p>
+        <div class="plan-card__cta">View Plan →</div>
       </div>
-      <div class="plan-card-home rv rv-d3" onclick="nav('challenges');setTab('three')" role="button" tabindex="0">
-        <span class="pch__badge">// Structured</span>
-        <div class="pch__name">3-STEP</div>
-        <span class="pch__tag">Three Phases</span>
-        <div class="pch__split">80–90%</div>
-        <div class="pch__split-l">Profit Split</div>
-        <p class="pch__desc">8%+5%+4% targets. Strict 15% consistency rule. Most disciplined evaluation available.</p>
-        <span class="pch__cta">View Plan →</span>
+      <div class="plan-card rv rv-d3" onclick="window.location.href='challenges.html#three'" role="button" tabindex="0">
+        <span class="plan-card__badge">// Structured</span>
+        <div class="plan-card__name">3-STEP</div>
+        <span class="plan-card__sub">Three Phases</span>
+        <div class="plan-card__split">80–90%</div>
+        <div class="plan-card__split-l">Profit Split</div>
+        <p class="plan-card__desc">8%+5%+4% targets. Strict 15% consistency rule. The most disciplined evaluation available.</p>
+        <div class="plan-card__cta">View Plan →</div>
       </div>
-      <div class="plan-card-home rv rv-d4" onclick="nav('challenges');setTab('partial')" role="button" tabindex="0">
-        <span class="pch__badge">// Low Entry Cost</span>
-        <div class="pch__name">PARTIAL</div>
-        <span class="pch__tag">35% Upfront Only</span>
-        <div class="pch__split">80–90%</div>
-        <div class="pch__split-l">Profit Split</div>
-        <p class="pch__desc">Pay only 35% upfront. Remaining 65% deducted from first profit withdrawal. Lowest barrier to entry.</p>
-        <span class="pch__cta">View Plan →</span>
+      <div class="plan-card rv rv-d4" onclick="window.location.href='challenges.html#partial'" role="button" tabindex="0">
+        <span class="plan-card__badge">// Lowest Entry</span>
+        <div class="plan-card__name">PARTIAL</div>
+        <span class="plan-card__sub">35% Upfront Only</span>
+        <div class="plan-card__split">80–90%</div>
+        <div class="plan-card__split-l">Profit Split</div>
+        <p class="plan-card__desc">Pay only 35% upfront. Remaining 65% deducted from first profit withdrawal. Lowest barrier to entry.</p>
+        <div class="plan-card__cta">View Plan →</div>
       </div>
     </div>
-  </section>
-
-  <!-- VORNIX 3-PHASE VISION — from pitch deck -->
-  <div class="section--dark">
-    <section class="section" aria-labelledby="vision-h2">
-      <span class="s-eye">// Our Three-Phase Vision</span>
-      <h2 class="s-head" id="vision-h2">BUILDING THE COMPLETE <span class="gold">TRADER ECOSYSTEM</span></h2>
-      <p class="s-sub">VORNIX is not just a prop firm. We are building the infrastructure to make trading a legitimate, structured, scalable profession — globally.</p>
-      <div class="phase-grid">
-        <div class="phase-card rv rv-d1">
-          <div class="phase-card__num">// Phase 01 — Live Now</div>
-          <div class="phase-card__icon">💰</div>
-          <div class="phase-card__title">Funding Platform</div>
-          <p class="phase-card__desc">The foundation of VORNIX. Evaluation-based funding that gives skilled traders access to real capital — without risking their own money beyond the challenge fee.</p>
-          <div class="phase-card__list">
-            <div class="phase-card__item">Four challenge types — 1-Step, 2-Step, 3-Step, Partial</div>
-            <div class="phase-card__item">Capital from $1K to $100K with up to 95% profit split</div>
-            <div class="phase-card__item">Withdrawal from Day 1 — crypto, Wise, bank transfer</div>
-            <div class="phase-card__item">Automatic 25% scaling every 10% profit cycle</div>
-          </div>
-          <span class="phase-card__badge">Live Now</span>
-        </div>
-        <div class="phase-card rv rv-d2">
-          <div class="phase-card__num">// Phase 02 — In Development</div>
-          <div class="phase-card__icon">🎓</div>
-          <div class="phase-card__title">Structured Education</div>
-          <p class="phase-card__desc">A professional curriculum built with top-performing funded traders as mentors. The same structured pathway that medicine and engineering have — applied to trading.</p>
-          <div class="phase-card__list">
-            <div class="phase-card__item">Top funded traders become vetted mentors</div>
-            <div class="phase-card__item">Beginner to advanced — market structure, risk, psychology</div>
-            <div class="phase-card__item">Real strategies from real traders with a live track record</div>
-            <div class="phase-card__item">Quality-controlled — no random "gurus" or get-rich content</div>
-          </div>
-          <span class="phase-card__badge">Coming Soon</span>
-        </div>
-        <div class="phase-card rv rv-d3">
-          <div class="phase-card__num">// Phase 03 — In Development</div>
-          <div class="phase-card__icon">🤖</div>
-          <div class="phase-card__title">AI &amp; Technology</div>
-          <p class="phase-card__desc">Institution-level tools built for individual traders. Modernising the way traders analyse markets, build strategies, and manage performance — with AI and automation.</p>
-          <div class="phase-card__list">
-            <div class="phase-card__item">AI trading bots — adaptive, smart, automated execution</div>
-            <div class="phase-card__item">Market analyzer — real-time trend and risk insights</div>
-            <div class="phase-card__item">Smart indicators — filters noise, clarifies signals</div>
-            <div class="phase-card__item">Performance analytics — win rate, drawdown, full reporting</div>
-          </div>
-          <span class="phase-card__badge">Coming Soon</span>
-        </div>
-      </div>
-    </section>
+    <div style="margin-top:40px;display:flex;gap:14px;flex-wrap:wrap" class="rv">
+      <button class="btn-p btn-p--gold" onclick="window.location.href='challenges.html'">Compare All Plans →</button>
+      <button class="btn-o" onclick="window.location.href='signup.html'">Start a Challenge</button>
+    </div>
   </div>
+</div>
 
-  <!-- JOURNEY -->
-  <section class="section" aria-labelledby="journey-h2">
-    <span class="s-eye">// The Journey</span>
-    <h2 class="s-head" id="journey-h2">LEARN → PROVE → TRADE → <span class="gold">GROW</span></h2>
+
+<!-- ══════════ 3-PHASE VISION (dark) ══════════ -->
+<div class="band band--dark">
+  <div class="section">
+    <div class="eyebrow eyebrow--white rv">// Our Three-Phase Vision</div>
+    <div class="display display--white rv" style="margin-bottom:14px">Building the complete <span class="hlw" style="color:var(--gold-hi)">trader ecosystem.</span></div>
+    <p class="lead lead--white rv" style="margin-bottom:48px">VORNIX is not just a prop firm. We are building the infrastructure to make trading a legitimate, structured profession — globally. Three phases. One ecosystem.</p>
+    <div class="phase-grid">
+      <div class="phase-card phase-card--1 rv rv-d1">
+        <span class="phase-card__tag">// Phase 01 — Live Now</span>
+        <div class="phase-card__icon">💰</div>
+        <div class="phase-card__title">Funding Platform</div>
+        <p class="phase-card__desc">Evaluation-based funding that gives skilled traders access to real capital — without risking their own money beyond the challenge fee.</p>
+        <div class="phase-card__items">
+          <div class="phase-card__item">4 challenge types with transparent rules</div>
+          <div class="phase-card__item">Capital from $1K to $100K, up to 95% split</div>
+          <div class="phase-card__item">Withdraw from Day 1 — crypto, Wise, bank</div>
+          <div class="phase-card__item">Automatic 25% scaling every 10% profit cycle</div>
+        </div>
+        <span class="phase-card__status">✓ Live Now</span>
+      </div>
+      <div class="phase-card phase-card--2 rv rv-d2">
+        <span class="phase-card__tag">// Phase 02 — Coming Soon</span>
+        <div class="phase-card__icon">🎓</div>
+        <div class="phase-card__title">VORNIX Academy</div>
+        <p class="phase-card__desc">A professional curriculum built with top-performing funded traders as vetted mentors. The same structured pathway medicine has — applied to trading.</p>
+        <div class="phase-card__items">
+          <div class="phase-card__item">Top funded traders become vetted mentors</div>
+          <div class="phase-card__item">Beginner to mastery — market structure, risk, psychology</div>
+          <div class="phase-card__item">Real strategies from traders with live track records</div>
+          <div class="phase-card__item">Quality controlled — no random gurus, no get-rich content</div>
+        </div>
+        <span class="phase-card__status">Coming Soon</span>
+      </div>
+      <div class="phase-card phase-card--3 rv rv-d3">
+        <span class="phase-card__tag">// Phase 03 — Coming Soon</span>
+        <div class="phase-card__icon">🤖</div>
+        <div class="phase-card__title">AI &amp; Technology</div>
+        <p class="phase-card__desc">Institution-level tools built for individual traders. AI bots, market analyzers, smart indicators and performance analytics.</p>
+        <div class="phase-card__items">
+          <div class="phase-card__item">AI trading bots — adaptive, smart, automated</div>
+          <div class="phase-card__item">Market analyzer — real-time trend and risk insights</div>
+          <div class="phase-card__item">Smart indicators — filters noise, clarifies signals</div>
+          <div class="phase-card__item">Performance analytics — win rate, drawdown, full data</div>
+        </div>
+        <span class="phase-card__status">Coming Soon</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════ LEARN PROVE TRADE GROW (light) ══════════ -->
+<div class="band band--light">
+  <div class="section">
+    <div class="eyebrow rv">// The Journey</div>
+    <div class="display rv" style="margin-bottom:48px">Learn → Prove → Trade → <span class="hl">Grow.</span></div>
     <div class="eco-grid">
-      <div class="eco-card rv rv-d1"><div class="eco-n">01 — LEARN</div><div class="eco-icon">📚</div><div class="eco-title">Education</div><p class="eco-desc">Master market structure, risk management, psychology and strategy through our structured curriculum built by real funded traders.</p></div>
-      <div class="eco-card rv rv-d2"><div class="eco-n">02 — PROVE</div><div class="eco-icon">🎯</div><div class="eco-title">Evaluation</div><p class="eco-desc">Pass one of four evaluation paths. Demonstrate real discipline, consistency and sound risk management with our transparent rules.</p></div>
-      <div class="eco-card rv rv-d3"><div class="eco-n">03 — TRADE</div><div class="eco-icon">💰</div><div class="eco-title">Get Funded</div><p class="eco-desc">Access $1K to $100K in funded capital. Keep up to 95% of every dollar you generate. Withdraw from Day 1 — no waiting.</p></div>
-      <div class="eco-card rv rv-d4"><div class="eco-n">04 — GROW</div><div class="eco-icon">🚀</div><div class="eco-title">Scale Up</div><p class="eco-desc">Automatic scaling every 10% profit cycle. 25% account increase each time. Up to $100K maximum. Your career, not a one-time payout.</p></div>
-    </div>
-  </section>
-
-  <!-- WHY VORNIX IS DIFFERENT -->
-  <div class="section--dark">
-    <section class="section" aria-labelledby="diff-h2">
-      <span class="s-eye">// The Vornix Difference</span>
-      <h2 class="s-head" id="diff-h2">WHY WE ARE <span class="gold">DIFFERENT</span></h2>
-      <p class="s-sub">Most prop firms exist to collect challenge fees, not to develop traders. VORNIX was built from day one to be the opposite.</p>
-      <div class="diff-grid">
-        <div class="diff-col diff-col--other rv rv-d1">
-          <div class="diff-col__title">❌ Other Prop Firms</div>
-          <div class="diff-item"><span class="diff-item__icon">—</span>Evaluation-based funding only — no trader development</div>
-          <div class="diff-item"><span class="diff-item__icon">—</span>Revenue focused on challenge fees and failed attempts</div>
-          <div class="diff-item"><span class="diff-item__icon">—</span>No education or structured learning pathway</div>
-          <div class="diff-item"><span class="diff-item__icon">—</span>Standalone tools with no integration or guidance</div>
-          <div class="diff-item"><span class="diff-item__icon">—</span>No India-based global leader exists</div>
-        </div>
-        <div class="diff-col diff-col--vornix rv rv-d2">
-          <div class="diff-col__title">✓ VORNIX</div>
-          <div class="diff-item"><span class="diff-item__icon">✓</span>Capital access + education + technology — one ecosystem</div>
-          <div class="diff-item"><span class="diff-item__icon">✓</span>Real skill validation — assessed before and after funding</div>
-          <div class="diff-item"><span class="diff-item__icon">✓</span>Structured learning from vetted, funded traders</div>
-          <div class="diff-item"><span class="diff-item__icon">✓</span>Integrated tools — technology and mentorship together</div>
-          <div class="diff-item"><span class="diff-item__icon">✓</span>Built in India, for the world — filling a $7B gap</div>
-        </div>
+      <div class="eco-card rv rv-d1">
+        <div class="eco-n">01 — LEARN</div>
+        <div class="eco-icon">📚</div>
+        <div class="eco-title">Education</div>
+        <p class="eco-desc">Master market structure, risk management, psychology and strategy through our structured curriculum built by real funded traders.</p>
       </div>
-    </section>
-  </div>
-
-  <!-- TECH PREVIEW -->
-  <section class="section" aria-labelledby="tech-h2">
-    <span class="s-eye">// Our Products</span>
-    <h2 class="s-head" id="tech-h2">TRADER <span class="gold">TECHNOLOGY</span></h2>
-    <p class="s-sub">Institution-level tools built for individual traders. Six products launching after the evaluation platform stabilises.</p>
-    <div class="tech-grid">
-      <div class="tc-card rv rv-d1"><div class="tc-n">// 01</div><div class="tc-icon">🤖</div><div class="tc-title">AI Trading Bots</div><p class="tc-desc">Automated bots that identify opportunities and execute trades with algorithmic precision. Enhance discipline, remove emotion.</p><span class="tc-soon">Coming Soon</span></div>
-      <div class="tc-card rv rv-d2"><div class="tc-n">// 02</div><div class="tc-icon">📊</div><div class="tc-title">Market Analyzer</div><p class="tc-desc">Professional analysis dashboard with trend data, volatility insights and live risk metrics for every instrument.</p><span class="tc-soon">Coming Soon</span></div>
-      <div class="tc-card rv rv-d3"><div class="tc-n">// 03</div><div class="tc-icon">📈</div><div class="tc-title">Smart Indicators</div><p class="tc-desc">Proprietary indicators that identify trends clearly and filter false signals — compatible with MT4 and MT5.</p><span class="tc-soon">Coming Soon</span></div>
-      <div class="tc-card rv rv-d4"><div class="tc-n">// 04</div><div class="tc-icon">⚙️</div><div class="tc-title">Strategy Builder</div><p class="tc-desc">No-code strategy creation. Build, backtest and deploy automated strategies without writing a single line of code.</p><span class="tc-soon">Coming Soon</span></div>
-      <div class="tc-card rv rv-d5"><div class="tc-n">// 05</div><div class="tc-icon">🎓</div><div class="tc-title">Education Platform</div><p class="tc-desc">Structured professional curriculum from beginner to advanced — built with vetted, successful traders as educators.</p><span class="tc-soon">Coming Soon</span></div>
-      <div class="tc-card rv rv-d6"><div class="tc-n">// 06</div><div class="tc-icon">🔬</div><div class="tc-title">Performance Analytics</div><p class="tc-desc">Deep reporting: win rate, average P&amp;L, risk per trade, drawdown timeline — identify exactly what works.</p><span class="tc-soon">Coming Soon</span></div>
+      <div class="eco-card rv rv-d2">
+        <div class="eco-n">02 — PROVE</div>
+        <div class="eco-icon">🎯</div>
+        <div class="eco-title">Evaluation</div>
+        <p class="eco-desc">Pass one of four challenge paths. Demonstrate real discipline, consistency and sound risk management with transparent rules.</p>
+      </div>
+      <div class="eco-card rv rv-d3">
+        <div class="eco-n">03 — TRADE</div>
+        <div class="eco-icon">💰</div>
+        <div class="eco-title">Get Funded</div>
+        <p class="eco-desc">Access $1K to $100K in funded capital. Keep up to 95% of every dollar you generate. Withdraw from Day 1 — no waiting.</p>
+      </div>
+      <div class="eco-card rv rv-d4">
+        <div class="eco-n">04 — GROW</div>
+        <div class="eco-icon">🚀</div>
+        <div class="eco-title">Scale Up</div>
+        <p class="eco-desc">Automatic scaling every 10% profit cycle. 25% increase each time. Up to $100K maximum. Your career — not a one-time payout.</p>
+      </div>
     </div>
-    <div style="margin-top:40px"><button class="btn-p" onclick="nav('tech')">Explore All Products</button></div>
-  </section>
+  </div>
+</div>
 
-  <footer class="footer">
+
+<!-- ══════════ WHY VORNIX IS DIFFERENT ══════════ -->
+<div class="band band--soft">
+  <div class="section">
+    <div class="eyebrow rv">// The VORNIX Difference</div>
+    <div class="display rv" style="margin-bottom:14px">Why we are <span class="hl">different.</span></div>
+    <p class="lead rv" style="margin-bottom:44px">Most prop firms exist to collect challenge fees — not develop traders. VORNIX was built from day one to be the opposite.</p>
+    <div class="diff-grid">
+      <div class="diff-col diff-col--other rv rv-d1">
+        <div class="diff-col__head">❌ Other Prop Firms</div>
+        <div class="diff-item"><span>—</span>Evaluation-based funding only — no trader development</div>
+        <div class="diff-item"><span>—</span>Revenue model focused on failed challenges and resets</div>
+        <div class="diff-item"><span>—</span>No education or structured learning pathway provided</div>
+        <div class="diff-item"><span>—</span>Standalone tools with no integration or real guidance</div>
+        <div class="diff-item"><span>—</span>No India-based global leader in this space exists</div>
+      </div>
+      <div class="diff-col diff-col--vornix rv rv-d2">
+        <div class="diff-col__head">✓ VORNIX</div>
+        <div class="diff-item"><span>→</span>Capital + Academy + Technology — one complete ecosystem</div>
+        <div class="diff-item"><span>→</span>Real skill validation — assessed before and after funding</div>
+        <div class="diff-item"><span>→</span>Structured learning from vetted, funded traders as mentors</div>
+        <div class="diff-item"><span>→</span>Integrated tools — technology, mentorship and capital together</div>
+        <div class="diff-item"><span>→</span>Built in India, for the world — filling a $7B market gap</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════ TECH PREVIEW ══════════ -->
+<div class="band band--light">
+  <div class="section">
+    <div class="eyebrow rv">// Our Products</div>
+    <div class="display rv" style="margin-bottom:14px">Trader <span class="hl">Technology.</span></div>
+    <p class="lead rv" style="margin-bottom:48px">Institution-level tools built for individual traders. Six products launching after the evaluation platform stabilises.</p>
+    <div class="tech-grid">
+      <div class="tc rv rv-d1"><div class="tc__num">// 01</div><div class="tc__icon">🤖</div><div class="tc__title">AI Trading Bots</div><p class="tc__desc">Automated bots that identify opportunities and execute trades with algorithmic precision. Enhance discipline, remove emotion.</p><span class="tc__badge">Coming Soon</span></div>
+      <div class="tc rv rv-d2"><div class="tc__num">// 02</div><div class="tc__icon">📊</div><div class="tc__title">Market Analyzer</div><p class="tc__desc">Professional dashboard with trend data, volatility insights and live risk metrics for every instrument and session.</p><span class="tc__badge">Coming Soon</span></div>
+      <div class="tc rv rv-d3"><div class="tc__num">// 03</div><div class="tc__icon">📈</div><div class="tc__title">Smart Indicators</div><p class="tc__desc">Proprietary indicators that identify trends clearly and filter false signals. Compatible with MT4 and MT5.</p><span class="tc__badge">Coming Soon</span></div>
+      <div class="tc rv rv-d4"><div class="tc__num">// 04</div><div class="tc__icon">⚙️</div><div class="tc__title">Strategy Builder</div><p class="tc__desc">No-code strategy creation. Build, backtest and deploy automated strategies without writing a single line of code.</p><span class="tc__badge">Coming Soon</span></div>
+      <div class="tc rv rv-d5"><div class="tc__num">// 05</div><div class="tc__icon">🎓</div><div class="tc__title">Academy Platform</div><p class="tc__desc">Structured professional curriculum — from market structure to advanced psychology — built by vetted educators.</p><span class="tc__badge">Coming Soon</span></div>
+      <div class="tc rv rv-d6"><div class="tc__num">// 06</div><div class="tc__icon">🔬</div><div class="tc__title">Performance Analytics</div><p class="tc__desc">Deep reporting: win rate, average P&amp;L, risk per trade, drawdown timeline. Identify exactly what works.</p><span class="tc__badge">Coming Soon</span></div>
+    </div>
+    <div style="margin-top:44px" class="rv">
+      <button class="btn-p" onclick="window.location.href='technology.html'">Explore All Products →</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════ FOOTER ══════════ -->
+<footer class="footer">
+  <div class="footer__inner">
     <div class="footer__grid">
       <div>
         <div class="footer__brand-name">VORN<span>IX</span></div>
-        <p class="footer__brand-desc">A purpose-driven proprietary trading firm. Education, evaluation and technology — built to make trading a legitimate profession worldwide. Founded by Jatin Sharma.</p>
+        <p class="footer__brand-desc">A purpose-driven proprietary trading firm. Education, evaluation and technology built to make trading a legitimate career worldwide. Founded by Jatin Sharma.</p>
       </div>
-      <div class="footer__col"><h4>Challenges</h4><ul><li><a onclick="nav('challenges');setTab('one')">1-Step</a></li><li><a onclick="nav('challenges');setTab('two')">2-Step</a></li><li><a onclick="nav('challenges');setTab('three')">3-Step</a></li><li><a onclick="nav('challenges');setTab('partial')">Partial Payment</a></li></ul></div>
-      <div class="footer__col"><h4>Company</h4><ul><li><a onclick="nav('tech')">Technology</a></li><li><a onclick="nav('how')">How It Works</a></li><li><a onclick="nav('about')">About</a></li><li><a onclick="nav('contact')">Contact</a></li></ul></div>
-      <div class="footer__col"><h4>Legal</h4><ul><li><a href="#">Terms &amp; Conditions</a></li><li><a href="#">Privacy Policy</a></li><li><a href="#">Risk Disclaimer</a></li><li><a href="#">Refund Policy</a></li></ul></div>
+      <div class="footer__col">
+        <h4>Challenges</h4>
+        <ul>
+          <li><a href="challenges.html#one">1-Step</a></li>
+          <li><a href="challenges.html#two">2-Step</a></li>
+          <li><a href="challenges.html#three">3-Step</a></li>
+          <li><a href="challenges.html#partial">Partial Payment</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="academy.html">Academy</a></li>
+          <li><a href="technology.html">Technology</a></li>
+          <li><a href="rules.html">Trading Rules</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="#">Terms &amp; Conditions</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Risk Disclaimer</a></li>
+          <li><a href="#">Refund Policy</a></li>
+        </ul>
+      </div>
     </div>
     <div class="footer__bottom">
       <span class="footer__copy">© 2025 VORNIX. All rights reserved. Trading involves significant risk of loss.</span>
-      <div class="footer__legal"><a href="#">Terms</a><a href="#">Privacy</a><a href="#">Risk Warning</a></div>
-    </div>
-  </footer>
-</main>
-
-
-<!-- ═══════════ PAGE: CHALLENGES ═══════════ -->
-<main class="page" id="page-challenges">
-  <header class="ph">
-    <span class="ph__eye">// Evaluation Plans</span>
-    <h1 class="ph__h">CHOOSE YOUR <span class="gold">CHALLENGE</span></h1>
-    <p class="ph__sub">Four paths to a funded account. All plans include Forex, Indices, Commodities, Crypto and Stocks.</p>
-  </header>
-
-  <div class="tabs" role="tablist">
-    <button class="tab is-active" id="tab-one"     onclick="setTab('one')"     role="tab">⚡ 1-Step <span class="tab-pill pill-gold">95%</span></button>
-    <button class="tab"           id="tab-two"     onclick="setTab('two')"     role="tab">🎯 2-Step <span class="tab-pill pill-blue">90%</span></button>
-    <button class="tab"           id="tab-three"   onclick="setTab('three')"   role="tab">🏆 3-Step <span class="tab-pill pill-red">80–90%</span></button>
-    <button class="tab"           id="tab-partial" onclick="setTab('partial')" role="tab">💳 Partial <span class="tab-pill pill-green">35% Up</span></button>
-  </div>
-
-  <div class="panel is-active" id="panel-one">
-    <div class="plan-ov">
-      <div class="rv">
-        <div class="plan-name">⚡ 1-STEP CHALLENGE</div>
-        <div class="plan-sub">Single Phase — 95% Profit Split</div>
-        <p class="body-t">Hit <strong>10% profit</strong> in a single phase. No time limit. No minimum trading days. News trading and EA/Algo both allowed. Fastest path to a funded account.</p>
-        <p class="body-t">Consistency rule: <strong>no single trade may exceed 40% of total profit</strong>.</p>
-        <div class="flags">
-          <span class="flag flag-ok">✓ News Trading</span><span class="flag flag-ok">✓ EA / Algo</span>
-          <span class="flag flag-gold">★ No Min. Days</span><span class="flag flag-ok">✓ No Time Limit</span>
-        </div>
+      <div class="footer__legal">
+        <a href="#">Terms</a>
+        <a href="#">Privacy</a>
+        <a href="#">Risk Warning</a>
       </div>
-      <div class="rv">
-        <div class="rules">
-          <div class="rc"><div class="rc__icon">🎯</div><div class="rc__val rc__val--g">10%</div><div class="rc__lbl">Profit Target</div></div>
-          <div class="rc"><div class="rc__icon">📉</div><div class="rc__val rc__val--r">3%</div><div class="rc__lbl">Daily Loss</div><div class="rc__note">Trailing from day high</div></div>
-          <div class="rc"><div class="rc__icon">🛑</div><div class="rc__val rc__val--r">8%</div><div class="rc__lbl">Max Drawdown</div><div class="rc__note">Static from initial</div></div>
-          <div class="rc"><div class="rc__icon">💰</div><div class="rc__val rc__val--g">95%</div><div class="rc__lbl">Profit Split</div></div>
-          <div class="rc"><div class="rc__icon">📊</div><div class="rc__val">40%</div><div class="rc__lbl">Consistency Cap</div><div class="rc__note">Max per single trade</div></div>
-          <div class="rc"><div class="rc__icon">📅</div><div class="rc__val rc__val--au">NONE</div><div class="rc__lbl">Min Trading Days</div></div>
-        </div>
-      </div>
-    </div>
-    <div class="tbl-wrap rv">
-      <table class="tbl">
-        <thead><tr><th>Phase</th><th>Target</th><th>Daily Loss</th><th>Max DD</th><th>Min Days</th><th>News Trading</th></tr></thead>
-        <tbody>
-          <tr><td class="tc-ph">EVAL</td><td class="tc-grn">10%</td><td class="tc-red">3% Trailing</td><td class="tc-red">8% Static</td><td class="tc-gold">None</td><td class="tc-grn">Allowed</td></tr>
-          <tr><td class="tc-ph">FUNDED</td><td>—</td><td class="tc-red">3% Trailing</td><td class="tc-red">8% Static</td><td>—</td><td class="tc-grn">Allowed</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="tbl-wrap rv">
-      <span class="label-mono" style="margin:32px 0 14px;display:block">// 1-Step — Account Sizes &amp; Pricing</span>
-      <table class="tbl">
-        <thead><tr><th>Account Size</th><th>Challenge Fee</th><th>Profit Split</th><th>Daily Loss</th><th>Max Drawdown</th><th></th></tr></thead>
-        <tbody>
-          <tr><td class="tc-acc">$5,000</td><td class="tc-fee">$49</td><td class="tc-spl">95%</td><td>3% Trailing</td><td>8% Static</td><td><button class="tbl-btn" onclick="window.location.href='signup.html'">Start →</button></td></tr>
-          <tr><td class="tc-acc">$10,000</td><td class="tc-fee">$89</td><td class="tc-spl">95%</td><td>3% Trailing</td><td>8% Static</td><td><button class="tbl-btn" onclick="window.location.href='signup.html'">Start →</button></td></tr>
-          <tr><td class="tc-acc">$25,000</td><td class="tc-fee">$189</td><td class="tc-spl">95%</td><td>3% Trailing</td><td>8% Static</td><td><button class="tbl-btn" onclick="window.location.href='signup.html'">Start →</button></td></tr>
-          <tr><td class="tc-acc">$50,000</td><td class="tc-fee">$289</td><td class="tc-spl">95%</td><td>3% Trailing</td><td>8% Static</td><td><button class="tbl-btn" onclick="window.location.href='signup.html'">Start →</button></td></tr>
-          <tr><td class="tc-acc">$100,000</td><td class="tc-fee">$489</td><td class="tc-spl">95%</td><td>3% Trailing</td><td>8% Static</td><td><button class="tbl-btn" onclick="window.location.href='signup.html'">Start →</button></td></tr>
-        </tbody>
-      </table>
     </div>
   </div>
+</footer>
 
-  <div class="panel" id="panel-two">
-    <div class="plan-ov">
-      <div class="rv">
-        <div class="plan-name">🎯 2-STEP CHALLENGE</div>
-        <div class="plan-sub">Two Phases — 90% Profit Split</div>
-        <p class="body-t">Two evaluation phases that verify <strong>consistent, repeatable performance</strong>. News trading and EA/Algo allowed. Accounts from <strong>$1K to $100K</strong>.</p>
-        <p class="body-t">Consistency rule: <strong>no single trade may exceed 40% of total profit</strong>. Minimum 3 trading days per phase.</p>
-        <div class="flags">
-          <span class="flag flag-ok">✓ News Trading</span><span class="flag flag-ok">✓ EA / Algo</span>
-          <span class="flag flag-nt">3 Min. Days / Phase</span>
-        </div>
-      </div>
-      <div class="rv">
-        <div class="rules">
-          <div class="rc"><div class="rc__icon">🎯</div><div class="rc__val rc__val--g">10+5%</div><div class="rc__lbl">Phase 1 + Phase 2</div></div>
-          <div class="rc"><div class="rc__icon">📉</div><div class="rc__val rc__val--r">5%</div><div class="rc__lbl">Daily Loss</div><div class="rc__note">Trailing from day high</div></div>
-          <div class="rc"><div class="rc__icon">🛑</div><div class="rc__val rc__val--r">10%</div><div class="rc__lbl">Max Drawdown</div><div class="rc__note">Static from initial</div></div>
-          <div class="rc"><div class="rc__icon">💰</div><div class="rc__val rc__val--g">90%</div><div class="rc__lbl">Profit Split</div></div>
-          <div class="rc"><div class="rc__icon">📊</div><div class="rc__val">40%</div><div class="rc__lbl">Consistency Cap</div><div class="rc__note">Max per single trade</div></div>
-          <div class="rc"><div class="rc__icon">📅</div><div class="rc__val">3 Days</div><div class="rc__lbl">Min Trading Days</div><div class="rc__note">Per phase</div></div>
-        </div>
-      </div>
-    </div>
-    <div class="tbl-wrap rv">
-      <table class="tbl">
-        <thead><tr><th>Phase</th><th>Target</th><th>Daily Loss</th><th>Max DD</th><th>Min Days</th><th>News</th></tr></thead>
-        <tbody>
-          <tr><td class="tc-ph">PHASE 1</td><td class="tc-grn">10%</td><td class="tc-red">5% Trailing</td><td class="tc-red">10% Static</td><td>3 Days</td><td class="tc-grn">Allowed</td></tr>
-          <tr><td class="tc-ph">PHASE 2</td><td class="tc-grn">5%</td><td class="tc-red">5% Trailing</td><td class="tc-red">10% Static</td><td>3 Days</td><td class="tc-grn">Allowed</td></tr>
-          <tr><td class="tc-ph">FUNDED</td><td>—</td><td class="tc-red">5% Trailing</td><td class="tc-red">10% Static</td><td>—</td><td class="tc-grn">Allowed</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="tbl-wrap rv">
-      <span class="label-mono" style="margin:32px 0 14px;display:block">// 2-Step — Account Sizes &amp; Pricing</span>
-      <table class="tbl">
-        <thead><tr><th>Account Size</th><th>Challenge Fee</th><th>Profit Split</th><th>Daily Loss</th><th>Max Drawdown</th><th></th></tr></thead>
-        <tbody>
-          <tr><td class="tc-acc">$1,000</td><td class="tc-fee">$15</td><td class="tc-spl">90%</td><td>5% Trailing</td><td>10% Static</td><td><button class="tbl-btn" onclick="window.location.href='signup.html'">Start →</button></td></tr>
-          <tr><td class="tc-acc">$2,500</td><td class="tc-fee">$29</td><td class="tc-spl">90%</td><td>5% Trailing</td><td>10% Static</td><td><button class="tbl-btn" onclick="window.location.href='signup.html'">Start →</button></td></tr>
-          <tr><td class="tc-acc">$5,000</td><td class="tc-fee">$49</td><td class="tc-spl">90%</td><td>5% Trailing</td><td>10% Static</td><td><button class="tbl-btn" onclick="window.location.href='signup.html'">Start →</button></td></tr>
-          <tr><td class="tc-acc">$10,000</td><td class="tc-fee">$79</td><td class="tc-spl">90%</td><td>5% Trailing</td><td>10% Static</td><td><button class="tbl-btn" onclick="window.location.href='signup.html'">Start →</button></td></tr>
-          <tr><td class="tc-acc">$25,000</td><td class="tc-fee">$169</td><td class="tc-spl">90%</td><td>5% Trailing</td><td>10% Static</td><td><button class="tbl-btn" onclick="window.location.href='signup.html'">Start →</button></td></tr>
-          <tr><td class="tc-acc">$50,000</td><td class="tc-fee">$259</td><td class="tc-spl">90%</td><td>5% Trailing</td><td>10% Static</td><td><button class="tbl-btn" onclick="window.location.href='signup.html'">Start →</button></td></tr>
-          <tr><td class="tc-acc">$100,000</td><td class="tc-fee">$429</td><td class="tc-spl">90%</td><td>5% Trailing</td><td>10% Static</td><td><button class="tbl-btn" onclick="window.location.href='signup.html'">Start →</button></td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
+<script>
+'use strict';
 
-  <div class="panel" id="panel-three">
-    <div class="plan-ov">
-      <div class="rv">
-        <div class="plan-name">🏆 3-STEP CHALLENGE</div>
-        <div class="plan-sub">Three Phases — 80% to 90% Split</div>
-        <p class="body-t">Three evaluation phases. Strict <strong>15% consistency rule</strong>. No news trading. Most disciplined evaluation available.</p>
-        <p class="body-t">The 15% consistency rule and no-news restriction apply in <strong>all phases and the funded account</strong>.</p>
-        <div class="flags">
-          <span class="flag flag-no">✕ No News Trading</span><span class="flag flag-ok">✓ EA / Algo</span>
-          <span class="flag flag-nt">3 Min. Days / Phase</span><span class="flag flag-no">15% Consistency Cap</span>
-        </div>
-      </div>
-      <div class="rv">
-        <div class="rules">
-          <div class="rc"><div class="rc__icon">🎯</div><div class="rc__val rc__val--g">8+5+4%</div><div class="rc__lbl">Phases 1, 2 &amp; 3</div></div>
-          <div class="rc"><div class="rc__icon">📉</div><div class="rc__val rc__val--r">6%</div><div class="rc__lbl">Daily Loss</div><div class="rc__note">Trailing from day high</div></div>
-          <div class="rc"><div class="rc__icon">🛑</div><div class="rc__val rc__val--r">12%</div><div class="rc__lbl">Max Drawdown</div><div class="rc__note">Static from initial</div></div>
-          <div class="rc"><div class="rc__icon">💰</div><div class="rc__val rc__val--g">80–90%</div><div class="rc__lbl">Profit Split</div></div>
-          <div class="rc"><div class="rc__icon">📊</div><div class="rc__val rc__val--r">15%</div><div class="rc__lbl">Consistency Cap</div><div class="rc__note">Max per single trade</div></div>
-          <div class="rc"><div class="rc__icon">📅</div><div class="rc__val">3 Days</div><div class="rc__lbl">Min Trading Days</div><div class="rc__note">Per phase</div></div>
-        </div>
-      </div>
-    </div>
-    <div style="padding:0 var(--g)">
-      <div class="callout rv"><div class="callout__ttl">⚠ News Trading Rule</div><p>Any trade within <strong>5 minutes before or after a high-impact news event</strong>: if in profit — profit is <strong>disqualified</strong>. If in loss — loss is <strong>fully counted</strong>.</p></div>
-      <div class="callout callout-gold rv" style="margin-top:10px"><div class="callout__ttl">📊 15% Consistency Rule</div><p>No single profitable trade may exceed <strong>15% of total accumulated profit</strong>. E.g. total profit $1,000 → no single trade may have contributed more than $150.</p></div>
-    </div>
-    <div class="tbl-wrap rv" style="margin-top:24px">
-      <table class="tbl">
-        <thead><tr><th>Phase</th><th>Target</th><th>Daily Loss</th><th>Max DD</th><th>Min Days</th><th>News</th></tr></thead>
-        <tbody>
-          <tr><td class="tc-ph">PHASE 1</td><td class="tc-grn">8%</td><td class="tc-red">6% Trailing</td><td class="tc-red">12% Static</td><td>3 Days</td><td class="tc-red">Not Allowed</td></tr>
-          <tr><td class="tc-ph">PHASE 2</td><td class="tc-grn">5%</td><td class="tc-red">6% Trailing</td><td class="tc-red">12% Static</td><td>3 Days</td><td class="tc-red">Not Allowed</td></tr>
-          <tr><td class="tc-ph">PHASE 3</td><td class="tc-grn">4%</td><td class="tc-red">6% Trailing</td><td class="tc-red">12% Static</td><td>3 Days</td><td class="tc-red">Not Allowed</td></tr>
-          <tr><td class="tc-ph">FUNDED</td><td>—</td><td class="tc-red">6% Trailing</td><td class="tc-red">12% Static</td><td>—</td><td class="tc-red">Not Allowed</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="tbl-wrap rv">
-      <span class="label-mono" style="margin:32px 0 14px;display:block">// 3-Step — Account Sizes &amp; Pricing</span>
-      <table class="tbl">
-        <thead><tr><th>Account Size</th><th>Challenge Fee</th><th>Profit Split</th><th>Daily Loss</th><th>Max Drawdown</th><th></th></tr></thead>
-        <tbody>
-          <tr><td class="tc-acc">$1,000</td><td class="tc-fee">$12</td><td class="tc-spl">80→90%</td><td>6% Trailing</td><td>12% Static</td><td><button class="tbl-btn" onclick="window.location.href='signup.html'">Start →</button></td></tr>
-          <tr><td class="tc-acc">$2,500</td><td class="tc-fee">$24</td><td class="tc-spl">80→90%</td><td>6% Trailing</td><td>12% Static</td><td><button class="tbl-btn" onclick="window.location.href='signup.html'">Start →</button></td></tr>
-          <tr><td class="tc-acc">$5,000</td><td class="tc-fee">$39</td><td class="tc-spl">80→90%</td><td>6% Trailing</td><td>12% Static</td><td><button class="tbl-btn" onclick="window.location.href='signup.html'">Start →</button></td></tr>
-          <tr><td class="tc-acc">$10,000</td><td class="tc-fee">$69</td><td class="tc-spl">80→90%</td><td>6% Trailing</td><td>12% Static</td><td><button class="tbl-btn" onclick="window.location.href='signup.html'">Start →</button></td></tr>
-          <tr><td class="tc-acc">$25,000</td><td class="tc-fee">$139</td><td class="tc-spl">80→90%</td><td>6% Trailing</td><td>12% Static</td><td><button class="tbl-btn" onclick="window.location.href='signup.html'">Start →</button></td></tr>
-          <tr><td class="tc-acc">$50,000</td><td class="tc-fee">$229</td><td class="tc-spl">80→90%</td><td>6% Trailing</td><td>12% Static</td><td><button class="tbl-btn" onclick="window.location.href='signup.html'">Start →</button></td></tr>
-          <tr><td class="tc-acc">$100,000</td><td class="tc-fee">$389</td><td class="tc-spl">80→90%</td><td>6% Trailing</td><td>12% Static</td><td><button class="tbl-btn" onclick="window.location.href='signup.html'">Start →</button></td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
+/* ── Nav scroll ── */
+window.addEventListener('scroll', () => {
+  document.getElementById('main-nav').classList.toggle('scrolled', window.scrollY > 20);
+}, { passive: true });
 
-  <div class="panel" id="panel-partial">
-    <div class="plan-ov">
-      <div class="rv">
-        <div class="plan-name">💳 PARTIAL PAYMENT</div>
-        <div class="plan-sub">Three Phases — Pay Only 35% Upfront</div>
-        <p class="body-t">Pay <strong>only 35% of the challenge fee upfront</strong>. The remaining 65% is deducted from your first profit withdrawal. Lower barrier — stricter evaluation.</p>
-        <p class="body-t">The 15% consistency rule and no-news restriction apply throughout all phases and the funded account.</p>
-        <div class="flags">
-          <span class="flag flag-gold">★ 35% Upfront Only</span><span class="flag flag-no">✕ No News Trading</span>
-          <span class="flag flag-nt">5 Min. Days / Phase</span><span class="flag flag-no">15% Consistency Cap</span>
-        </div>
-      </div>
-      <div class="rv">
-        <div class="rules">
-          <div class="rc"><div class="rc__icon">🎯</div><div class="rc__val rc__val--g">10+6+5%</div><div class="rc__lbl">Phases 1, 2 &amp; 3</div></div>
-          <div class="rc"><div class="rc__icon">📉</div><div class="rc__val rc__val--r">5%</div><div class="rc__lbl">Daily Loss</div><div class="rc__note">Trailing — stricter</div></div>
-          <div class="rc"><div class="rc__icon">🛑</div><div class="rc__val rc__val--r">10%</div><div class="rc__lbl">Max Drawdown</div><div class="rc__note">Static — stricter</div></div>
-          <div class="rc"><div class="rc__icon">💰</div><div class="rc__val rc__val--g">80–90%</div><div class="rc__lbl">Profit Split</div></div>
-          <div class="rc"><div class="rc__icon">📊</div><div class="rc__val rc__val--r">15%</div><div class="rc__lbl">Consistency Cap</div><div class="rc__note">Max per single trade</div></div>
-          <div class="rc"><div class="rc__icon">📅</div><div class="rc__val">5 Days</div><div class="rc__lbl">Min Trading Days</div><div class="rc__note">Per phase</div></div>
-        </div>
-      </div>
-    </div>
-    <div style="padding:0 var(--g)">
-      <div class="callout callout-gold rv"><div class="callout__ttl">💳 How Partial Payment Works</div><p>Pay <strong>35% upfront</strong>. Complete all three evaluation phases. Once funded and your first profit withdrawal is processed, the remaining <strong>65% is automatically deducted</strong> from that withdrawal. No additional out-of-pocket payment ever.</p></div>
-    </div>
-    <div class="tbl-wrap rv" style="margin-top:24px">
-      <span class="label-mono" style="margin:0 0 14px;display:block">// Partial Payment — 35% Upfront Pricing</span>
-      <table class="tbl">
-        <thead><tr><th>Account Size</th><th>Upfront (35%)</th><th>From Profits (65%)</th><th>Total Fee</th><th>Split</th><th></th></tr></thead>
-        <tbody>
-          <tr><td class="tc-acc">$1,000</td><td class="tc-up">$7</td><td class="tc-dim">$13</td><td class="tc-dim">$20</td><td class="tc-spl">80→90%</td><td><button class="tbl-btn" onclick="window.location.href='signup.html'">Start →</button></td></tr>
-          <tr><td class="tc-acc">$2,500</td><td class="tc-up">$12</td><td class="tc-dim">$23</td><td class="tc-dim">$35</td><td class="tc-spl">80→90%</td><td><button class="tbl-btn" onclick="window.location.href='signup.html'">Start →</button></td></tr>
-          <tr><td class="tc-acc">$5,000</td><td class="tc-up">$19</td><td class="tc-dim">$36</td><td class="tc-dim">$55</td><td class="tc-spl">80→90%</td><td><button class="tbl-btn" onclick="window.location.href='signup.html'">Start →</button></td></tr>
-          <tr><td class="tc-acc">$10,000</td><td class="tc-up">$33</td><td class="tc-dim">$62</td><td class="tc-dim">$95</td><td class="tc-spl">80→90%</td><td><button class="tbl-btn" onclick="window.location.href='signup.html'">Start →</button></td></tr>
-          <tr><td class="tc-acc">$25,000</td><td class="tc-up">$68</td><td class="tc-dim">$127</td><td class="tc-dim">$195</td><td class="tc-spl">80→90%</td><td><button class="tbl-btn" onclick="window.location.href='signup.html'">Start →</button></td></tr>
-          <tr><td class="tc-acc">$50,000</td><td class="tc-up">$105</td><td class="tc-dim">$194</td><td class="tc-dim">$299</td><td class="tc-spl">80→90%</td><td><button class="tbl-btn" onclick="window.location.href='signup.html'">Start →</button></td></tr>
-          <tr><td class="tc-acc">$100,000</td><td class="tc-up">$171</td><td class="tc-dim">$318</td><td class="tc-dim">$489</td><td class="tc-spl">80→90%</td><td><button class="tbl-btn" onclick="window.location.href='signup.html'">Start →</button></td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
+/* ── Mobile menu ── */
+let _menuOpen = false;
+function toggleMenu() {
+  _menuOpen = !_menuOpen;
+  const ham = document.getElementById('nav-ham');
+  const drawer = document.getElementById('nav-drawer');
+  ham.classList.toggle('is-open', _menuOpen);
+  ham.setAttribute('aria-expanded', _menuOpen);
+  drawer.classList.toggle('is-open', _menuOpen);
+  document.body.style.overflow = _menuOpen ? 'hidden' : '';
+}
+window.addEventListener('resize', () => { if (window.innerWidth >= 1100 && _menuOpen) toggleMenu(); }, { passive: true });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && _menuOpen) toggleMenu(); });
 
-  <footer class="footer"><div class="footer__grid"><div><div class="footer__brand-name">VORN<span>IX</span></div><p class="footer__brand-desc">4 evaluation paths. Capital up to $100K.</p></div><div class="footer__col"><h4>Plans</h4><ul><li><a onclick="setTab('one')">1-Step</a></li><li><a onclick="setTab('two')">2-Step</a></li><li><a onclick="setTab('three')">3-Step</a></li><li><a onclick="setTab('partial')">Partial</a></li></ul></div><div class="footer__col"><h4>Platform</h4><ul><li><a onclick="nav('how')">How It Works</a></li><li><a onclick="nav('tech')">Technology</a></li><li><a onclick="nav('contact')">Contact</a></li></ul></div><div class="footer__col"><h4>Legal</h4><ul><li><a href="#">Terms</a></li><li><a href="#">Privacy</a></li><li><a href="#">Risk Warning</a></li><li><a href="#">Refund Policy</a></li></ul></div></div><div class="footer__bottom"><span class="footer__copy">© 2025 VORNIX. All rights reserved.</span><div class="footer__legal"><a href="#">Terms</a><a href="#">Privacy</a><a href="#">Risk</a></div></div></footer>
-</main>
+/* ── Scroll reveal ── */
+function initReveal() {
+  if (!('IntersectionObserver' in window)) {
+    document.querySelectorAll('.rv').forEach(el => el.classList.add('in'));
+    return;
+  }
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        const hasDelay = Array.from(e.target.classList).some(c => c.startsWith('rv-d'));
+        if (!hasDelay) e.target.style.transitionDelay = '0ms';
+        e.target.classList.add('in');
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.06, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.rv').forEach(el => obs.observe(el));
+}
 
-
-<!-- ═══════════ PAGE: TECHNOLOGY ═══════════ -->
-<main class="page" id="page-tech">
-  <header class="ph"><span class="ph__eye">// Our Products</span><h1 class="ph__h">VORNIX <span class="gold">TECHNOLOGY</span></h1><p class="ph__sub">Institution-level tools built for individual traders. We are building a technology ecosystem that makes traders smarter, more disciplined and more profitable.</p></header>
-  <section class="section">
-    <div class="g2 grid">
-      <div class="tcard rv rv-d1"><div class="tcard__n">// 01</div><div class="tcard__icon">🤖</div><div class="tcard__title">AI Trading Bots</div><p class="tcard__desc">Automated bots that identify opportunities and execute trades. <strong>The goal is not to replace traders — it's to enhance discipline and remove emotion.</strong></p><ul class="tcard__list"><li>Identify opportunities automatically</li><li>Execute trades based on your strategy rules</li><li>Manage positions and exits automatically</li><li>Adapt continuously to changing conditions</li></ul><span class="tcard__tag">// In Development</span></div>
-      <div class="tcard rv rv-d2"><div class="tcard__n">// 02</div><div class="tcard__icon">📊</div><div class="tcard__title">Market Analyzer</div><p class="tcard__desc">Professional analysis dashboard that gives traders <strong>data-driven insights instead of gut feelings</strong>.</p><ul class="tcard__list"><li>Real-time market trend analysis</li><li>Volatility and momentum insights</li><li>Risk metrics per instrument and session</li><li>Live trade performance tracking</li></ul><span class="tcard__tag">// In Development</span></div>
-      <div class="tcard rv rv-d3"><div class="tcard__n">// 03</div><div class="tcard__icon">📈</div><div class="tcard__title">Smart Indicators</div><p class="tcard__desc">Proprietary algorithmic indicators that <strong>simplify complex market analysis</strong>. Traditional indicators confuse. Ours clarify.</p><ul class="tcard__list"><li>Identify trend direction with clarity</li><li>Highlight potential entry and exit zones</li><li>Filter false and noisy signals</li><li>Compatible with MT4 and MT5</li></ul><span class="tcard__tag">// In Development</span></div>
-      <div class="tcard rv rv-d4"><div class="tcard__n">// 04</div><div class="tcard__icon">⚙️</div><div class="tcard__title">Strategy Builder</div><p class="tcard__desc">No-code strategy creation. Build, backtest and deploy automated strategies <strong>without writing a single line of code</strong>.</p><ul class="tcard__list"><li>Use pre-built, backtested strategies</li><li>Customise parameters to your style</li><li>Test on historical market data</li><li>Deploy directly on funded accounts</li></ul><span class="tcard__tag">// In Development</span></div>
-      <div class="tcard rv rv-d5"><div class="tcard__n">// 05</div><div class="tcard__icon">🔬</div><div class="tcard__title">Performance Analytics</div><p class="tcard__desc">Deep reporting that helps traders <strong>identify exactly what is working and what is not</strong>.</p><ul class="tcard__list"><li>Win rate and expectancy tracking</li><li>Average profit vs average loss</li><li>Risk per trade and per session</li><li>Drawdown timeline visualisation</li></ul><span class="tcard__tag">// In Development</span></div>
-      <div class="tcard rv rv-d6"><div class="tcard__n">// 06</div><div class="tcard__icon">🎓</div><div class="tcard__title">Education Platform</div><p class="tcard__desc">A professional curriculum that gives trading <strong>the same structured pathway as medicine or engineering</strong>.</p><ul class="tcard__list"><li>Market structure and price action</li><li>Risk management fundamentals</li><li>Trading psychology and discipline</li><li>Strategy development from first principles</li></ul><span class="tcard__tag">// In Development</span></div>
-    </div>
-    <div class="tech-purpose rv">
-      <h3>THE PURPOSE</h3>
-      <p>Every product above works toward one goal: <strong>give every VORNIX trader the professional-level tools that institutions use daily</strong> — built specifically for individual traders.</p>
-      <p>Instead of trading blindly, VORNIX traders will analyse markets intelligently, automate strategies, manage risk precisely and improve continuously using real performance data.</p>
-      <div style="margin-top:28px;display:flex;gap:12px;flex-wrap:wrap">
-        <button class="btn-p" onclick="nav('challenges')">Start a Challenge</button>
-        <button class="btn-s" onclick="nav('contact')">Join Waitlist</button>
-      </div>
-    </div>
-  </section>
-  <footer class="footer"><div class="footer__grid"><div><div class="footer__brand-name">VORN<span>IX</span></div><p class="footer__brand-desc">Next generation prop firm with a full technology ecosystem.</p></div><div class="footer__col"><h4>Technology</h4><ul><li><a>AI Bots</a></li><li><a>Market Analyzer</a></li><li><a>Smart Indicators</a></li><li><a>Strategy Builder</a></li></ul></div><div class="footer__col"><h4>Platform</h4><ul><li><a onclick="nav('challenges')">Challenges</a></li><li><a onclick="nav('how')">How It Works</a></li><li><a onclick="nav('about')">About</a></li></ul></div><div class="footer__col"><h4>Legal</h4><ul><li><a href="#">Terms</a></li><li><a href="#">Privacy</a></li><li><a href="#">Risk Warning</a></li></ul></div></div><div class="footer__bottom"><span class="footer__copy">© 2025 VORNIX. All rights reserved.</span><div class="footer__legal"><a href="#">Terms</a><a href="#">Privacy</a></div></div></footer>
-</main>
-
-
-<!-- ═══════════ PAGE: HOW IT WORKS ═══════════ -->
-<main class="page" id="page-how">
-  <header class="ph"><span class="ph__eye">// The Process</span><h1 class="ph__h">HOW <span class="gold">VORNIX WORKS</span></h1><p class="ph__sub">Every plan follows the same journey. Choose your challenge, prove your edge, get funded and scale.</p></header>
-  <section class="section">
-    <div class="how-block rv"><div class="how-block__hd">⚡ 1-STEP PROCESS</div><div class="how-steps"><div class="hstep"><div class="hstep__n">01</div><div class="hstep__t">Purchase</div><p class="hstep__d">Choose $5K–$100K. Pay the one-time fee. Receive evaluation account credentials immediately.</p></div><div class="hstep"><div class="hstep__n">02</div><div class="hstep__t">Single Evaluation</div><p class="hstep__d">Hit 10% profit. Stay within 3% trailing daily loss and 8% static max drawdown. No time limit. No minimum days.</p></div><div class="hstep"><div class="hstep__n">03</div><div class="hstep__t">Get Funded</div><p class="hstep__d">Pass the evaluation and receive your funded account. Trade live capital from Day 1.</p></div><div class="hstep"><div class="hstep__n">04</div><div class="hstep__t">Withdraw &amp; Scale</div><p class="hstep__d">Request payouts from Day 1. 95% profit split. Automatic 25% scaling every 10% profit cycle.</p></div></div></div>
-    <div class="how-block rv"><div class="how-block__hd">🎯 2-STEP PROCESS</div><div class="how-steps"><div class="hstep"><div class="hstep__n">01</div><div class="hstep__t">Purchase</div><p class="hstep__d">Select $1K–$100K account. Pay the one-time fee and access your account instantly.</p></div><div class="hstep"><div class="hstep__n">02</div><div class="hstep__t">Phase 1 — 10%</div><p class="hstep__d">Hit 10% profit. Minimum 3 trading days. Stay within 5% trailing daily loss and 10% static max drawdown.</p></div><div class="hstep"><div class="hstep__n">03</div><div class="hstep__t">Phase 2 — 5%</div><p class="hstep__d">Confirm consistency with a 5% profit target. Same risk rules. 3 more minimum trading days.</p></div><div class="hstep"><div class="hstep__n">04</div><div class="hstep__t">Funded &amp; Scale</div><p class="hstep__d">Live funded account. 90% profit split. Automatic scaling every 10% profit cycle up to $100K.</p></div></div></div>
-    <div class="how-block rv"><div class="how-block__hd">🏆 3-STEP &amp; 💳 PARTIAL PAYMENT</div><div class="how-steps"><div class="hstep"><div class="hstep__n">01</div><div class="hstep__t">Purchase / Partial</div><p class="hstep__d">3-Step: full fee. Partial: 35% upfront. Both receive the same evaluation access immediately.</p></div><div class="hstep"><div class="hstep__n">02</div><div class="hstep__t">Phase 1</div><p class="hstep__d">3-Step: 8% target, 3 min days. Partial: 10% target, 5 min days. No news trading on either.</p></div><div class="hstep"><div class="hstep__n">03</div><div class="hstep__t">Phase 2 + Phase 3</div><p class="hstep__d">3-Step: 5%+4%. Partial: 6%+5%. 15% consistency rule active throughout all phases on both plans.</p></div><div class="hstep"><div class="hstep__n">04</div><div class="hstep__t">Funded &amp; Scale</div><p class="hstep__d">80–90% split. Partial plan: 65% deducted from first payout. 15% consistency rule stays active on funded.</p></div></div></div>
-    <div class="gr-box rv">
-      <span class="label-mono" style="margin-bottom:10px;display:block">// Universal Rules</span>
-      <h2 class="h-md" style="margin-bottom:16px">GLOBAL <span class="gold">TRADING RULES</span></h2>
-      <p style="font-size:14px;color:var(--t1);margin-bottom:22px;line-height:1.75">These rules apply to every VORNIX account regardless of plan.</p>
-      <div class="gr-grid">
-        <div class="gri"><div class="gri__t">All Instruments</div><p class="gri__d">Forex, Indices, Commodities (Gold, Oil, Silver), Crypto and Stocks — tradeable on every plan.</p></div>
-        <div class="gri"><div class="gri__t">Trailing Daily Loss</div><p class="gri__d">Calculated from the highest equity point of the trading day. Trails upward only. Resets each new day.</p></div>
-        <div class="gri"><div class="gri__t">Static Max Drawdown</div><p class="gri__d">Calculated from the initial account balance only. Never adjusts regardless of profits generated.</p></div>
-        <div class="gri"><div class="gri__t">Profit Withdrawals</div><p class="gri__d">Available from Day 1 of a funded account. Processed via crypto, Wise or bank in 1–3 business days.</p></div>
-        <div class="gri"><div class="gri__t">Scaling Program</div><p class="gri__d">Every 10% cumulative profit on a funded account = 25% automatic increase in allocation. Up to $100K.</p></div>
-        <div class="gri"><div class="gri__t">Challenge Reset</div><p class="gri__d">If evaluation rules are breached, purchase a reset at a discounted fee and continue from the same phase.</p></div>
-      </div>
-    </div>
-  </section>
-  <footer class="footer"><div class="footer__grid"><div><div class="footer__brand-name">VORN<span>IX</span></div><p class="footer__brand-desc">Learn. Prove. Trade. Grow.</p></div><div class="footer__col"><h4>Challenges</h4><ul><li><a onclick="nav('challenges');setTab('one')">1-Step</a></li><li><a onclick="nav('challenges');setTab('two')">2-Step</a></li><li><a onclick="nav('challenges');setTab('three')">3-Step</a></li><li><a onclick="nav('challenges');setTab('partial')">Partial</a></li></ul></div><div class="footer__col"><h4>Company</h4><ul><li><a onclick="nav('tech')">Technology</a></li><li><a onclick="nav('about')">About</a></li><li><a onclick="nav('contact')">Contact</a></li></ul></div><div class="footer__col"><h4>Legal</h4><ul><li><a href="#">Terms</a></li><li><a href="#">Privacy</a></li><li><a href="#">Risk Warning</a></li></ul></div></div><div class="footer__bottom"><span class="footer__copy">© 2025 VORNIX. All rights reserved.</span><div class="footer__legal"><a href="#">Terms</a><a href="#">Privacy</a></div></div></footer>
-</main>
-
-
-<!-- ═══════════ PAGE: ABOUT ═══════════ -->
-<main class="page" id="page-about">
-  <header class="ph"><span class="ph__eye">// Our Story</span><h1 class="ph__h">ABOUT <span class="gold">VORNIX</span></h1><p class="ph__sub">We are not just funding traders. We are building the infrastructure that turns trading into a legitimate profession — globally.</p></header>
-  <section class="section">
-
-    <!-- MISSION STATEMENT -->
-    <div class="about-2col">
-      <div class="rv">
-        <p class="body-t">VORNIX was founded by <strong>Jatin Sharma</strong> after observing a fundamental gap in the global trading industry: millions of talented traders enter markets every year, yet most fail — not because they lack skill, but because the system around them is broken.</p>
-        <p class="body-t" style="margin-top:14px">Indian parents rarely say "I want my child to become a professional trader" — because trading is still seen as gambling, not a profession. Yet risk exists in every career. An engineer studies four years with no job guarantee. A doctor spends a decade. The difference is those professions have structured pathways. <strong>Trading does not — and VORNIX is here to change that.</strong></p>
-        <p class="body-t" style="margin-top:14px">By combining rigorous evaluation, real capital access and a technology ecosystem, we are building the infrastructure that makes trading a legitimate, structured, scalable profession for anyone, anywhere — whether you're starting with ₹5,000 in India or trading professionally in Europe.</p>
-      </div>
-      <div class="qb rv">
-        <p class="qb__text">"Trading is one of the fastest-growing financial activities on earth. Yet most participants fail — not because they lack talent, but because <strong>no structured system exists to develop them.</strong> VORNIX is that system."</p>
-        <div class="qb__attr">— JATIN SHARMA, FOUNDER · VORNIX</div>
-      </div>
-    </div>
-
-    <!-- MARKET OPPORTUNITY -->
-    <span class="s-eye" style="margin-top:var(--s4);display:inline-flex">// The Opportunity</span>
-    <h2 class="h-md rv" style="margin-bottom:16px">A <span class="gold">$7 BILLION</span> INDUSTRY WITH NO INDIAN LEADER</h2>
-    <p style="font-size:15px;color:var(--t1);max-width:720px;line-height:1.78;margin-bottom:32px" class="rv">Despite 100–200+ active prop firms globally and 5 crore+ traders having participated in challenges, there is no India-based global leader in this space. India's demat accounts have grown from 4.1 crore in 2020 to 15.1 crore in 2024 — participation is rising fast, but failure remains near 90%. The reason is not lack of interest. It is lack of structure.</p>
-
-    <div class="market-grid rv" style="margin-bottom:var(--s4)">
-      <div class="mg-item">
-        <div class="mg-item__val">15.1 Cr</div>
-        <div class="mg-item__label">India Demat Accounts (2024)</div>
-        <div class="mg-item__note">Up from 4.1 Cr in 2020</div>
-      </div>
-      <div class="mg-item">
-        <div class="mg-item__val">$7B+</div>
-        <div class="mg-item__label">Global Prop Industry (2024)</div>
-        <div class="mg-item__note">Estimated total revenue</div>
-      </div>
-      <div class="mg-item">
-        <div class="mg-item__val">200+</div>
-        <div class="mg-item__label">Active Prop Firms Worldwide</div>
-        <div class="mg-item__note">None India-based and globally dominant</div>
-      </div>
-      <div class="mg-item">
-        <div class="mg-item__val">~90%</div>
-        <div class="mg-item__label">Traders Fail Consistently</div>
-        <div class="mg-item__note">Due to lack of structure, not lack of skill</div>
-      </div>
-    </div>
-
-    <!-- ROADMAP -->
-    <span class="label-mono" style="display:block;margin-bottom:12px">// Long-Term Vision</span>
-    <h2 class="h-md rv" style="margin-bottom:32px">VORNIX <span class="gold">ROADMAP</span></h2>
-    <div class="g3 grid vision rv">
-      <div class="vc"><div class="vc__icon">🎯</div><div class="vc__title">Evaluation Platform</div><p class="vc__desc">Four challenge types with rigorous, transparent rules. Live now. The foundation of everything we build.</p></div>
-      <div class="vc"><div class="vc__icon">📚</div><div class="vc__title">Education System</div><p class="vc__desc">A professional curriculum built by real funded traders — structured like a medical degree, not a YouTube course.</p></div>
-      <div class="vc"><div class="vc__icon">🤖</div><div class="vc__title">AI Tools Suite</div><p class="vc__desc">Bots, smart indicators, strategy builders and performance analytics. Institution-level tools for every trader.</p></div>
-      <div class="vc"><div class="vc__icon">🌐</div><div class="vc__title">Global Community</div><p class="vc__desc">Funded traders become mentors and strategy contributors. A self-reinforcing ecosystem that grows with each member.</p></div>
-      <div class="vc"><div class="vc__icon">📊</div><div class="vc__title">Performance Data</div><p class="vc__desc">Deep analytics for every funded trader. Identify exactly what is working and fix precisely what is not.</p></div>
-      <div class="vc"><div class="vc__icon">🚀</div><div class="vc__title">Scale to $100K</div><p class="vc__desc">Automatic scaling program. Every 10% profit cycle increases allocation by 25%, up to $100,000.</p></div>
-    </div>
-
-    <!-- FOUNDER -->
-    <div class="founder rv">
-      <div>
-        <div class="founder__mark">VORN<span>IX</span></div>
-        <div class="founder__sub">// NEXT GEN PROP FIRM</div>
-      </div>
-      <div class="founder__text">
-        <h3>BUILT BY JATIN SHARMA</h3>
-        <p>Jatin Sharma founded VORNIX after identifying that the prop trading industry is fundamentally failing traders. <strong>Most firms exist to collect challenge fees</strong> — not to develop traders. VORNIX was designed from day one to be different: a complete ecosystem where traders learn, prove themselves, access real capital, and scale their careers with institutional-level tools.</p>
-        <p>The vision is clear: give every trader — whether starting with ₹5,000 in India or trading professionally in Europe — the <strong>education, capital and technology</strong> to build a real career. Participation is rising globally. Failure is a structural problem. <strong>VORNIX is the structure.</strong></p>
-      </div>
-    </div>
-  </section>
-  <footer class="footer"><div class="footer__grid"><div><div class="footer__brand-name">VORN<span>IX</span></div><p class="footer__brand-desc">Next generation prop firm. Built by Jatin Sharma.</p></div><div class="footer__col"><h4>Challenges</h4><ul><li><a onclick="nav('challenges');setTab('one')">1-Step</a></li><li><a onclick="nav('challenges');setTab('two')">2-Step</a></li><li><a onclick="nav('challenges');setTab('three')">3-Step</a></li><li><a onclick="nav('challenges');setTab('partial')">Partial</a></li></ul></div><div class="footer__col"><h4>Company</h4><ul><li><a onclick="nav('tech')">Technology</a></li><li><a onclick="nav('how')">How It Works</a></li><li><a onclick="nav('contact')">Contact</a></li></ul></div><div class="footer__col"><h4>Legal</h4><ul><li><a href="#">Terms</a></li><li><a href="#">Privacy</a></li><li><a href="#">Risk Warning</a></li></ul></div></div><div class="footer__bottom"><span class="footer__copy">© 2025 VORNIX. All rights reserved.</span><div class="footer__legal"><a href="#">Terms</a><a href="#">Privacy</a></div></div></footer>
-</main>
-
-
-<!-- ═══════════ PAGE: CONTACT ═══════════ -->
-<main class="page" id="page-contact">
-  <header class="ph"><span class="ph__eye">// Get In Touch</span><h1 class="ph__h">CONTACT <span class="gold">VORNIX</span></h1><p class="ph__sub">Questions about a challenge, payouts or technology waitlist. We respond within 2 hours during market hours.</p></header>
-  <section class="section">
-    <div class="contact-2col">
-      <div>
-        <p class="body-t rv" style="margin-bottom:24px">Whether it's a challenge question, a payout inquiry, or you want to join the waitlist for our AI tools and education platform — reach us on any channel below.</p>
-        <div class="channels rv">
-          <div class="ch"><div class="ch__ico">✉️</div><div><div class="ch__key">Email</div><div class="ch__val">support@vornix.com</div></div></div>
-          <div class="ch"><div class="ch__ico">💬</div><div><div class="ch__key">Live Chat</div><div class="ch__val">Available 24/5 on the platform</div></div></div>
-          <div class="ch"><div class="ch__ico">📱</div><div><div class="ch__key">Telegram</div><div class="ch__val">@VornixSupport</div></div></div>
-          <div class="ch"><div class="ch__ico">🎮</div><div><div class="ch__key">Discord</div><div class="ch__val">discord.gg/vornix</div></div></div>
-          <div class="ch"><div class="ch__ico">𝕏</div><div><div class="ch__key">Twitter / X</div><div class="ch__val">@VornixHQ</div></div></div>
-        </div>
-        <div class="callout rv" style="margin-top:20px"><div class="callout__ttl">📬 Response Times</div><p>Challenge and account questions: <strong>under 2 hours</strong> during market hours. Payout inquiries: <strong>1–3 business days</strong>.</p></div>
-      </div>
-      <div class="contact-form rv">
-        <div class="form-row">
-          <div class="fg"><label class="fl">First Name</label><input type="text" class="fi" placeholder="Jatin"></div>
-          <div class="fg"><label class="fl">Last Name</label><input type="text" class="fi" placeholder="Sharma"></div>
-        </div>
-        <div class="fg"><label class="fl">Email Address</label><input type="email" class="fi" placeholder="you@email.com"></div>
-        <div class="fg">
-          <label class="fl">Topic</label>
-          <select class="fs">
-            <option value="">Select a topic...</option>
-            <option>1-Step Challenge</option><option>2-Step Challenge</option>
-            <option>3-Step Challenge</option><option>Partial Payment Plan</option>
-            <option>Funded Account Support</option><option>Payout Inquiry</option>
-            <option>AI Tools / Education Waitlist</option>
-            <option>Partnership / Affiliate</option><option>Other</option>
-          </select>
-        </div>
-        <div class="fg"><label class="fl">Message</label><textarea class="ft" placeholder="Tell us what you need..."></textarea></div>
-        <button class="f-submit">Send Message →</button>
-      </div>
-    </div>
-  </section>
-  <div class="section--dark">
-    <section class="section" style="padding-top:var(--s4)">
-      <span class="s-eye">// FAQ</span>
-      <h2 class="s-head rv" style="margin-bottom:36px">COMMON <span class="gold">QUESTIONS</span></h2>
-      <div class="faq rv">
-        <div class="faq__item"><div class="faq__q">Which challenge plan should I choose?<span class="faq__ic">+</span></div><div class="faq__a">Speed: 1-Step. Balance + news trading: 2-Step. Maximum structure with strict rules: 3-Step. Cost concern: Partial Payment at 35% upfront.</div></div>
-        <div class="faq__item"><div class="faq__q">What is the 15% consistency rule exactly?<span class="faq__ic">+</span></div><div class="faq__a">On 3-Step and Partial plans, no single profitable trade may contribute more than 15% of total accumulated profit. If total profit = $1,000, no single trade can have made more than $150. Active in all phases and the funded account.</div></div>
-        <div class="faq__item"><div class="faq__q">What is the news trading rule on 3-Step and Partial?<span class="faq__ic">+</span></div><div class="faq__a">No trades may be opened within 5 minutes before or after a high-impact news event. If such a trade closes in profit — the profit is disqualified. If in loss — the full loss is counted. Applies in all phases and the funded account.</div></div>
-        <div class="faq__item"><div class="faq__q">How does the trailing daily loss work?<span class="faq__ic">+</span></div><div class="faq__a">The daily loss limit is calculated from your highest equity point during that trading day. It trails upward as equity grows but never moves downward. It resets at the start of each new trading day.</div></div>
-        <div class="faq__item"><div class="faq__q">How does the Partial Payment plan work?<span class="faq__ic">+</span></div><div class="faq__a">Pay 35% of the challenge fee upfront. Complete all 3 evaluation phases. Once funded and your first profit withdrawal is processed, the remaining 65% of the fee is automatically deducted from that withdrawal. No additional payment ever comes out of pocket.</div></div>
-        <div class="faq__item"><div class="faq__q">When can I withdraw profits from a funded account?<span class="faq__ic">+</span></div><div class="faq__a">Profit withdrawals are available from Day 1 of your funded account. Processed via cryptocurrency, Wise and bank transfer within 1–3 business days.</div></div>
-        <div class="faq__item"><div class="faq__q">Can traders from India join VORNIX?<span class="faq__ic">+</span></div><div class="faq__a">Absolutely. VORNIX accepts traders globally. Payouts are available via crypto and Wise for international traders. VORNIX was built with India's rapidly growing trading community specifically in mind.</div></div>
-        <div class="faq__item"><div class="faq__q">When do AI tools and the education platform launch?<span class="faq__ic">+</span></div><div class="faq__a">The evaluation and funding platform is live now. All technology products are in active development. Join the waitlist via the contact form above to be among the first to access these products when they launch.</div></div>
-      </div>
-    </section>
-  </div>
-  <footer class="footer"><div class="footer__grid"><div><div class="footer__brand-name">VORN<span>IX</span></div><p class="footer__brand-desc">Next generation prop firm.</p></div><div class="footer__col"><h4>Challenges</h4><ul><li><a onclick="nav('challenges');setTab('one')">1-Step</a></li><li><a onclick="nav('challenges');setTab('two')">2-Step</a></li><li><a onclick="nav('challenges');setTab('three')">3-Step</a></li><li><a onclick="nav('challenges');setTab('partial')">Partial</a></li></ul></div><div class="footer__col"><h4>Company</h4><ul><li><a onclick="nav('tech')">Technology</a></li><li><a onclick="nav('how')">How It Works</a></li><li><a onclick="nav('about')">About</a></li></ul></div><div class="footer__col"><h4>Legal</h4><ul><li><a href="#">Terms</a></li><li><a href="#">Privacy</a></li><li><a href="#">Risk Warning</a></li></ul></div></div><div class="footer__bottom"><span class="footer__copy">© 2025 VORNIX. All rights reserved.</span><div class="footer__legal"><a href="#">Terms</a><a href="#">Privacy</a></div></div></footer>
-</main>
-
-<script src="app.js"></script>
+/* Trigger hero immediately */
+document.addEventListener('DOMContentLoaded', () => {
+  initReveal();
+  document.querySelectorAll('.hero .rv').forEach(el => {
+    void el.offsetWidth;
+    el.classList.add('in');
+  });
+});
+</script>
 </body>
 </html>
