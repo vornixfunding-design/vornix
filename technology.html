@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Technology — VORNIX</title>
+<meta name="description" content="VORNIX Technology — institution-level tools built for individual traders. AI bots, market analyzer, smart indicators and more.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;500;600;700;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<canvas id="bg-canvas"></canvas>
+<div id="bg-veil"></div>
+
+<nav class="nav" id="main-nav">
+  <div class="nav__logo" onclick="location.href='index.html'" role="button" tabindex="0">
+    <svg class="nav__logo-svg" viewBox="0 0 172 38" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="lg-w" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FFF" stop-opacity=".95"/><stop offset="100%" stop-color="#8890AA"/></linearGradient><linearGradient id="lg-r" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#E8001A"/><stop offset="100%" stop-color="#7A0008"/></linearGradient><linearGradient id="lg-g" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#22B972"/><stop offset="100%" stop-color="#0E5E3A"/></linearGradient><filter id="glow-r" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="1" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><g filter="url(#glow-r)"><rect x="1" y="14" width="5" height="13" fill="url(#lg-r)" rx=".3"/><line x1="3.5" y1="8" x2="3.5" y2="14" stroke="#B8000F" stroke-width="1.2" opacity=".7"/><line x1="3.5" y1="27" x2="3.5" y2="32" stroke="#B8000F" stroke-width="1.2" opacity=".5"/><rect x="9" y="18" width="5" height="7" fill="rgba(255,255,255,.08)" rx=".3"/><line x1="11.5" y1="13" x2="11.5" y2="18" stroke="rgba(255,255,255,.1)" stroke-width="1.2"/><line x1="11.5" y1="25" x2="11.5" y2="29" stroke="rgba(255,255,255,.08)" stroke-width="1.2"/><rect x="17" y="11" width="5" height="14" fill="url(#lg-g)" rx=".3"/><line x1="19.5" y1="6" x2="19.5" y2="11" stroke="#22B972" stroke-width="1.2" opacity=".6"/><line x1="19.5" y1="25" x2="19.5" y2="30" stroke="#22B972" stroke-width="1.2" opacity=".5"/></g><polyline points="3.5,26 11.5,22 19.5,14" stroke="#B8000F" stroke-width=".8" opacity=".4" stroke-dasharray="2,2"/><path d="M30 7L38 31L46 7" stroke="url(#lg-w)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/><ellipse cx="56.5" cy="19" rx="7" ry="12" stroke="url(#lg-w)" stroke-width="2.7" fill="none"/><path d="M68 7v24M68 7h9c3 0 5 2.5 5 6s-2 6-5 6H68M76 19l7.5 12" stroke="url(#lg-w)" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M88 31V7L102 31V7" stroke="url(#lg-w)" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round" fill="none"/><line x1="108" y1="7" x2="108" y2="31" stroke="url(#lg-w)" stroke-width="2.7" stroke-linecap="round"/><path d="M114 7l13 24M127 7l-13 24" stroke="url(#lg-r)" stroke-width="2.8" stroke-linecap="round" filter="url(#glow-r)"/><line x1="30" y1="36" x2="127" y2="36" stroke="rgba(184,0,15,.10)" stroke-width=".8"/><line x1="30" y1="36" x2="72" y2="36" stroke="rgba(184,0,15,.65)" stroke-width="1.4"/><text x="133" y="16" font-family="'Barlow Condensed',sans-serif" font-size="6" fill="#6B7A9E" letter-spacing="1.5">PROP</text><text x="133" y="26" font-family="'Barlow Condensed',sans-serif" font-size="6" fill="#6B7A9E" letter-spacing="1.5">FIRM</text></svg>
+  </div>
+  <ul class="nav__links" role="list">
+    <li><a class="nav__link" href="index.html">Home</a></li>
+    <li><a class="nav__link" href="evaluations.html">Evaluations</a></li>
+    <li><a class="nav__link" href="academy.html">Academy</a></li>
+    <li><a class="nav__link is-active" href="technology.html">Technology</a></li>
+    <li><a class="nav__link" href="rules.html">Rules</a></li>
+    <li><a class="nav__link" href="how-it-works.html">How It Works</a></li>
+    <li><a class="nav__link" href="about.html">About</a></li>
+    <li><a class="nav__link" href="contact.html">Contact</a></li>
+  </ul>
+  <div class="nav__right">
+    <a href="login.html" class="nav__login">Login</a>
+    <button class="nav__cta" onclick="location.href='signup.html'">Get Funded</button>
+  </div>
+  <button class="nav__ham" id="nav-ham" onclick="navToggle()" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
+</nav>
+<div class="nav__drawer" id="nav-drawer">
+  <a class="nav__drawer-link" href="index.html">Home</a>
+  <a class="nav__drawer-link" href="evaluations.html">Evaluations</a>
+  <a class="nav__drawer-link" href="academy.html">Academy</a>
+  <a class="nav__drawer-link is-active" href="technology.html">Technology</a>
+  <a class="nav__drawer-link" href="rules.html">Rules</a>
+  <a class="nav__drawer-link" href="how-it-works.html">How It Works</a>
+  <a class="nav__drawer-link" href="about.html">About</a>
+  <a class="nav__drawer-link" href="contact.html">Contact</a>
+  <a class="nav__drawer-link" href="login.html">Login &rarr;</a>
+  <button class="nav__drawer-cta" onclick="location.href='signup.html'">Get Funded &rarr;</button>
+  <p class="nav__drawer-foot">VORNIX &mdash; STRUCTURE TRADING AS A PROFESSION</p>
+</div>
+
+<header class="ph">
+  <span class="ph__eye">// Our Products</span>
+  <h1 class="ph__h">VORNIX <span class="red">TECHNOLOGY</span></h1>
+  <p class="ph__sub">We are building a technology ecosystem to make traders smarter, more disciplined and more consistently profitable.</p>
+</header>
+
+<section class="section">
+  <div class="g2 grid">
+    <div class="tcard rv rv-d1"><div class="tcard__n">// 01</div><div class="tcard__icon">&#129302;</div><div class="tcard__title">AI Trading Bots</div><p class="tcard__desc">Automated bots that identify opportunities and execute trades. <strong>The goal is not to replace traders &mdash; it is to enhance discipline and eliminate emotion.</strong></p><ul class="tcard__list"><li>Identify market opportunities automatically</li><li>Execute trades based on defined strategy rules</li><li>Manage positions and exits systematically</li><li>Adapt continuously to changing market conditions</li></ul><span class="tcard__tag">// In Development</span></div>
+    <div class="tcard rv rv-d2"><div class="tcard__n">// 02</div><div class="tcard__icon">&#128202;</div><div class="tcard__title">Market Analyzer</div><p class="tcard__desc">Professional analysis dashboard that gives traders <strong>data-driven insights instead of gut feelings</strong>. Built for serious market analysis at every timeframe.</p><ul class="tcard__list"><li>Real-time market trend analysis</li><li>Volatility and momentum insights</li><li>Risk metrics per instrument and session</li><li>Live trade performance tracking</li></ul><span class="tcard__tag">// In Development</span></div>
+    <div class="tcard rv rv-d3"><div class="tcard__n">// 03</div><div class="tcard__icon">&#128200;</div><div class="tcard__title">Smart Indicators</div><p class="tcard__desc">Proprietary algorithmic indicators that <strong>simplify complex market analysis</strong>. Traditional indicators confuse. Ours clarify.</p><ul class="tcard__list"><li>Identify trend direction with precision</li><li>Highlight potential entry and exit zones</li><li>Filter false and noisy signals effectively</li><li>Compatible with MT4 and MT5</li></ul><span class="tcard__tag">// In Development</span></div>
+    <div class="tcard rv rv-d4"><div class="tcard__n">// 04</div><div class="tcard__icon">&#9881;&#65039;</div><div class="tcard__title">Strategy Builder</div><p class="tcard__desc">No-code strategy creation. Build, backtest and deploy automated strategies <strong>without writing a single line of code</strong>.</p><ul class="tcard__list"><li>Use pre-built, backtested strategy templates</li><li>Customise parameters to your trading style</li><li>Test on historical market data</li><li>Deploy directly on funded accounts</li></ul><span class="tcard__tag">// In Development</span></div>
+    <div class="tcard rv rv-d5"><div class="tcard__n">// 05</div><div class="tcard__icon">&#128300;</div><div class="tcard__title">Performance Analytics</div><p class="tcard__desc">Deep reporting that helps traders <strong>identify exactly what is working and what is not</strong>. Institution-level analytics for individual traders.</p><ul class="tcard__list"><li>Win rate and expectancy tracking</li><li>Average profit vs average loss analysis</li><li>Risk per trade and per session</li><li>Full drawdown timeline visualisation</li></ul><span class="tcard__tag">// In Development</span></div>
+    <div class="tcard rv rv-d6"><div class="tcard__n">// 06</div><div class="tcard__icon">&#127891;</div><div class="tcard__title">Education Platform</div><p class="tcard__desc">A professional curriculum that gives trading <strong>the same structured pathway as medicine or engineering</strong>. Built by verified funded traders.</p><ul class="tcard__list"><li>Market structure and price action</li><li>Risk management fundamentals</li><li>Trading psychology and discipline</li><li>Strategy development from first principles</li></ul><span class="tcard__tag">// In Development</span></div>
+  </div>
+  <div class="tech-purpose rv">
+    <h3>THE PURPOSE</h3>
+    <p>Every product above works toward one goal: <strong>give every VORNIX trader the professional-level tools that institutions use daily</strong> &mdash; built specifically for individual traders worldwide.</p>
+    <p>Instead of trading blindly, VORNIX traders will analyse markets intelligently, automate strategies, manage risk precisely and improve continuously using real performance data.</p>
+    <div style="margin-top:28px;display:flex;gap:12px;flex-wrap:wrap">
+      <button class="btn-p" onclick="location.href='evaluations.html'">Begin an Evaluation</button>
+      <button class="btn-s" onclick="location.href='contact.html'">Join Tech Waitlist</button>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer__grid">
+    <div><div class="footer__brand-name">VORN<span>IX</span></div><p class="footer__brand-desc">Next generation prop firm with a full technology ecosystem.</p></div>
+    <div class="footer__col"><h4>Technology</h4><ul><li><a href="#">AI Bots</a></li><li><a href="#">Market Analyzer</a></li><li><a href="#">Smart Indicators</a></li><li><a href="#">Strategy Builder</a></li></ul></div>
+    <div class="footer__col"><h4>Platform</h4><ul><li><a href="evaluations.html">Evaluations</a></li><li><a href="academy.html">Academy</a></li><li><a href="rules.html">Rules</a></li><li><a href="about.html">About</a></li></ul></div>
+    <div class="footer__col"><h4>Legal</h4><ul><li><a href="#">Terms</a></li><li><a href="#">Privacy</a></li><li><a href="#">Risk Warning</a></li></ul></div>
+  </div>
+  <div class="footer__bottom">
+    <span class="footer__copy">&copy; 2025 VORNIX. All rights reserved.</span>
+    <div class="footer__legal"><a href="#">Terms</a><a href="#">Privacy</a></div>
+  </div>
+</footer>
+
+<script>
+window.addEventListener('scroll',()=>document.getElementById('main-nav').classList.toggle('scrolled',scrollY>20),{passive:true});
+let _open=false;
+function navToggle(){_open=!_open;document.getElementById('nav-ham').classList.toggle('is-open',_open);document.getElementById('nav-ham').setAttribute('aria-expanded',_open);document.getElementById('nav-drawer').classList.toggle('is-open',_open);document.body.style.overflow=_open?'hidden':'';}
+window.addEventListener('resize',()=>{if(innerWidth>=1100&&_open)navToggle();},{passive:true});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&_open)navToggle();});
+const _obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');_obs.unobserve(e.target);}}),{threshold:.06,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.rv').forEach(el=>_obs.observe(el));
+</script>
+<script src="app.js"></script>
+</body>
+</html>
