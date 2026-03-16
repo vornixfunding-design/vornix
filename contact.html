@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact — VORNIX</title>
+<meta name="description" content="Contact VORNIX — evaluation questions, payout inquiries, Academy and technology waitlist.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;500;600;700;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<canvas id="bg-canvas"></canvas>
+<div id="bg-veil"></div>
+
+<nav class="nav" id="main-nav">
+  <div class="nav__logo" onclick="location.href='index.html'" role="button" tabindex="0">
+    <svg class="nav__logo-svg" viewBox="0 0 172 38" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="lg-w" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FFF" stop-opacity=".95"/><stop offset="100%" stop-color="#8890AA"/></linearGradient><linearGradient id="lg-r" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#E8001A"/><stop offset="100%" stop-color="#7A0008"/></linearGradient><linearGradient id="lg-g" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#22B972"/><stop offset="100%" stop-color="#0E5E3A"/></linearGradient><filter id="glow-r" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="1" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><g filter="url(#glow-r)"><rect x="1" y="14" width="5" height="13" fill="url(#lg-r)" rx=".3"/><line x1="3.5" y1="8" x2="3.5" y2="14" stroke="#B8000F" stroke-width="1.2" opacity=".7"/><line x1="3.5" y1="27" x2="3.5" y2="32" stroke="#B8000F" stroke-width="1.2" opacity=".5"/><rect x="9" y="18" width="5" height="7" fill="rgba(255,255,255,.08)" rx=".3"/><line x1="11.5" y1="13" x2="11.5" y2="18" stroke="rgba(255,255,255,.1)" stroke-width="1.2"/><line x1="11.5" y1="25" x2="11.5" y2="29" stroke="rgba(255,255,255,.08)" stroke-width="1.2"/><rect x="17" y="11" width="5" height="14" fill="url(#lg-g)" rx=".3"/><line x1="19.5" y1="6" x2="19.5" y2="11" stroke="#22B972" stroke-width="1.2" opacity=".6"/><line x1="19.5" y1="25" x2="19.5" y2="30" stroke="#22B972" stroke-width="1.2" opacity=".5"/></g><polyline points="3.5,26 11.5,22 19.5,14" stroke="#B8000F" stroke-width=".8" opacity=".4" stroke-dasharray="2,2"/><path d="M30 7L38 31L46 7" stroke="url(#lg-w)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/><ellipse cx="56.5" cy="19" rx="7" ry="12" stroke="url(#lg-w)" stroke-width="2.7" fill="none"/><path d="M68 7v24M68 7h9c3 0 5 2.5 5 6s-2 6-5 6H68M76 19l7.5 12" stroke="url(#lg-w)" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M88 31V7L102 31V7" stroke="url(#lg-w)" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round" fill="none"/><line x1="108" y1="7" x2="108" y2="31" stroke="url(#lg-w)" stroke-width="2.7" stroke-linecap="round"/><path d="M114 7l13 24M127 7l-13 24" stroke="url(#lg-r)" stroke-width="2.8" stroke-linecap="round" filter="url(#glow-r)"/><line x1="30" y1="36" x2="127" y2="36" stroke="rgba(184,0,15,.10)" stroke-width=".8"/><line x1="30" y1="36" x2="72" y2="36" stroke="rgba(184,0,15,.65)" stroke-width="1.4"/><text x="133" y="16" font-family="'Barlow Condensed',sans-serif" font-size="6" fill="#6B7A9E" letter-spacing="1.5">PROP</text><text x="133" y="26" font-family="'Barlow Condensed',sans-serif" font-size="6" fill="#6B7A9E" letter-spacing="1.5">FIRM</text></svg>
+  </div>
+  <ul class="nav__links" role="list">
+    <li><a class="nav__link" href="index.html">Home</a></li>
+    <li><a class="nav__link" href="evaluations.html">Evaluations</a></li>
+    <li><a class="nav__link" href="academy.html">Academy</a></li>
+    <li><a class="nav__link" href="technology.html">Technology</a></li>
+    <li><a class="nav__link" href="rules.html">Rules</a></li>
+    <li><a class="nav__link" href="how-it-works.html">How It Works</a></li>
+    <li><a class="nav__link" href="about.html">About</a></li>
+    <li><a class="nav__link is-active" href="contact.html">Contact</a></li>
+  </ul>
+  <div class="nav__right">
+    <a href="login.html" class="nav__login">Login</a>
+    <button class="nav__cta" onclick="location.href='signup.html'">Get Funded</button>
+  </div>
+  <button class="nav__ham" id="nav-ham" onclick="navToggle()" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
+</nav>
+<div class="nav__drawer" id="nav-drawer">
+  <a class="nav__drawer-link" href="index.html">Home</a>
+  <a class="nav__drawer-link" href="evaluations.html">Evaluations</a>
+  <a class="nav__drawer-link" href="academy.html">Academy</a>
+  <a class="nav__drawer-link" href="technology.html">Technology</a>
+  <a class="nav__drawer-link" href="rules.html">Rules</a>
+  <a class="nav__drawer-link" href="how-it-works.html">How It Works</a>
+  <a class="nav__drawer-link" href="about.html">About</a>
+  <a class="nav__drawer-link is-active" href="contact.html">Contact</a>
+  <a class="nav__drawer-link" href="login.html">Login &rarr;</a>
+  <button class="nav__drawer-cta" onclick="location.href='signup.html'">Get Funded &rarr;</button>
+  <p class="nav__drawer-foot">VORNIX &mdash; STRUCTURE TRADING AS A PROFESSION</p>
+</div>
+
+<header class="ph">
+  <span class="ph__eye">// Get In Touch</span>
+  <h1 class="ph__h">CONTACT <span class="red">VORNIX</span></h1>
+  <p class="ph__sub">Questions about an evaluation program, payouts or technology waitlist. We respond within 2 hours during market hours.</p>
+</header>
+
+<section class="section">
+  <div class="contact-2col">
+    <div>
+      <p class="body-t rv" style="margin-bottom:24px">Whether it is an evaluation question, a payout inquiry, or you want to join the waitlist for our AI tools or Academy &mdash; reach us on any of the channels below.</p>
+      <div class="channels rv">
+        <div class="ch"><div class="ch__ico">&#9993;&#65039;</div><div><div class="ch__key">Email</div><div class="ch__val">support@vornix.com</div></div></div>
+        <div class="ch"><div class="ch__ico">&#128172;</div><div><div class="ch__key">Live Chat</div><div class="ch__val">Available 24/5 on the platform</div></div></div>
+        <div class="ch"><div class="ch__ico">&#128241;</div><div><div class="ch__key">Telegram</div><div class="ch__val">@VornixSupport</div></div></div>
+        <div class="ch"><div class="ch__ico">&#127918;</div><div><div class="ch__key">Discord</div><div class="ch__val">discord.gg/vornix</div></div></div>
+        <div class="ch"><div class="ch__ico">&#120143;</div><div><div class="ch__key">Twitter / X</div><div class="ch__val">@VornixHQ</div></div></div>
+      </div>
+      <div class="callout callout-gold rv" style="margin-top:20px;margin-left:0"><div class="callout__ttl">&#128236; Response Times</div><p>Evaluation and account questions: <strong>under 2 hours</strong> during market hours. Payout inquiries: <strong>1&ndash;3 business days</strong>.</p></div>
+    </div>
+    <div class="contact-form rv">
+      <div class="form-row">
+        <div class="fg"><label class="fl">First Name</label><input type="text" class="fi" placeholder="Your first name"></div>
+        <div class="fg"><label class="fl">Last Name</label><input type="text" class="fi" placeholder="Your last name"></div>
+      </div>
+      <div class="fg"><label class="fl">Email Address</label><input type="email" class="fi" placeholder="you@email.com"></div>
+      <div class="fg">
+        <label class="fl">Topic</label>
+        <select class="fs">
+          <option value="">Select a topic...</option>
+          <option>1-Step Program</option>
+          <option>2-Step Program</option>
+          <option>3-Step Program</option>
+          <option>Partial Payment Program</option>
+          <option>Funded Account Support</option>
+          <option>Payout Inquiry</option>
+          <option>Academy Waitlist</option>
+          <option>AI Tools / Technology Waitlist</option>
+          <option>Partnership / Affiliate</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="fg"><label class="fl">Message</label><textarea class="ft" placeholder="Tell us what you need..."></textarea></div>
+      <button class="f-submit" id="contact-submit">Send Message &rarr;</button>
+    </div>
+  </div>
+</section>
+
+<div class="section--dark">
+  <section class="section" style="padding-top:var(--s4)">
+    <span class="s-eye">// FAQ</span>
+    <h2 class="s-head rv" style="margin-bottom:36px">COMMON <span class="red">QUESTIONS</span></h2>
+    <div class="faq rv">
+      <div class="faq__item"><div class="faq__q">Which evaluation program should I choose?<span class="faq__ic">+</span></div><div class="faq__a">Speed (manual only): 1-Step. Balance + news trading (manual only): 2-Step. EA/Algo allowed + maximum structure: 3-Step. Cost concern with EA/Algo: Partial Payment at 35% upfront.</div></div>
+      <div class="faq__item"><div class="faq__q">Are EA and algorithmic bots allowed?<span class="faq__ic">+</span></div><div class="faq__a">EA/Algo bots are <strong>not permitted</strong> on the 1-Step or 2-Step programs. They are fully <strong>permitted</strong> on the 3-Step and Partial Payment programs in all phases and the funded account.</div></div>
+      <div class="faq__item"><div class="faq__q">What is the 15% consistency rule?<span class="faq__ic">+</span></div><div class="faq__a">On 3-Step and Partial programs, no single profitable trade may contribute more than 15% of total accumulated profit. If total profit = $1,000, no single trade can have made more than $150. Active in all phases and the funded account.</div></div>
+      <div class="faq__item"><div class="faq__q">What is the news trading rule on 3-Step and Partial?<span class="faq__ic">+</span></div><div class="faq__a">No trades may be open within 5 minutes before or after a high-impact news event. If the trade closes in profit &mdash; the profit is disqualified. If in loss &mdash; the full loss is counted.</div></div>
+      <div class="faq__item"><div class="faq__q">How does the trailing daily loss work?<span class="faq__ic">+</span></div><div class="faq__a">The daily loss limit is calculated from your highest equity point during that trading day. It trails upward as equity grows but never moves downward. It resets at the start of each new trading day.</div></div>
+      <div class="faq__item"><div class="faq__q">How does the Partial Payment program work?<span class="faq__ic">+</span></div><div class="faq__a">Pay 35% of the evaluation fee upfront. Complete all 3 phases. Once funded and your first profit withdrawal is processed, the remaining 65% is automatically deducted. No additional payment ever comes out of pocket.</div></div>
+      <div class="faq__item"><div class="faq__q">When can I withdraw profits from a funded account?<span class="faq__ic">+</span></div><div class="faq__a">Profit withdrawals are available as soon as you generate profit on your funded account. No arbitrary waiting periods. Processed via cryptocurrency, Wise and bank transfer within 1&ndash;3 business days.</div></div>
+      <div class="faq__item"><div class="faq__q">When do AI tools and the Academy launch?<span class="faq__ic">+</span></div><div class="faq__a">The evaluation and funding platform is live now. The Academy and all technology products are in active development. Join the waitlist via the form above to be among the first to access them.</div></div>
+    </div>
+  </section>
+</div>
+
+<footer class="footer">
+  <div class="footer__grid">
+    <div><div class="footer__brand-name">VORN<span>IX</span></div><p class="footer__brand-desc">Purpose-driven prop firm. Built for serious traders worldwide.</p></div>
+    <div class="footer__col"><h4>Evaluations</h4><ul><li><a href="evaluations.html#one">1-Step</a></li><li><a href="evaluations.html#two">2-Step</a></li><li><a href="evaluations.html#three">3-Step</a></li><li><a href="evaluations.html#partial">Partial</a></li></ul></div>
+    <div class="footer__col"><h4>Company</h4><ul><li><a href="academy.html">Academy</a></li><li><a href="technology.html">Technology</a></li><li><a href="rules.html">Rules</a></li><li><a href="how-it-works.html">How It Works</a></li><li><a href="about.html">About</a></li></ul></div>
+    <div class="footer__col"><h4>Legal</h4><ul><li><a href="#">Terms</a></li><li><a href="#">Privacy</a></li><li><a href="#">Risk Warning</a></li></ul></div>
+  </div>
+  <div class="footer__bottom">
+    <span class="footer__copy">&copy; 2025 VORNIX. All rights reserved.</span>
+    <div class="footer__legal"><a href="#">Terms</a><a href="#">Privacy</a></div>
+  </div>
+</footer>
+
+<script>
+window.addEventListener('scroll',()=>document.getElementById('main-nav').classList.toggle('scrolled',scrollY>20),{passive:true});
+let _open=false;
+function navToggle(){_open=!_open;document.getElementById('nav-ham').classList.toggle('is-open',_open);document.getElementById('nav-ham').setAttribute('aria-expanded',_open);document.getElementById('nav-drawer').classList.toggle('is-open',_open);document.body.style.overflow=_open?'hidden':'';}
+window.addEventListener('resize',()=>{if(innerWidth>=1100&&_open)navToggle();},{passive:true});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&_open)navToggle();});
+const _obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');_obs.unobserve(e.target);}}),{threshold:.06,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.rv').forEach(el=>_obs.observe(el));
+document.addEventListener('click',e=>{const q=e.target.closest('.faq__q');if(!q)return;const item=q.parentElement;const was=item.classList.contains('is-open');document.querySelectorAll('.faq__item').forEach(i=>i.classList.remove('is-open'));if(!was)item.classList.add('is-open');});
+// Contact form
+document.getElementById('contact-submit')?.addEventListener('click',function(){
+  const btn=this;const orig=btn.textContent;
+  btn.textContent='✓ Sent — We\'ll reply within 2 hours';
+  btn.style.background='#10B981';btn.style.color='#fff';btn.style.clipPath='none';
+  setTimeout(()=>{btn.textContent=orig;btn.style.background='';btn.style.color='';btn.style.clipPath='';},4000);
+});
+</script>
+<script src="app.js"></script>
+</body>
+</html>
