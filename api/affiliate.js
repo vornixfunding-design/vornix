@@ -6,17 +6,10 @@
 // GET  /api/affiliate?action=all   → admin: all affiliates
 // ================================================================
 
-const { supabase, supabaseAdmin, cors, ok, err } = require('../lib/db');
-
-async function getUser(req) {
-  const token = (req.headers.authorization || '').replace('Bearer ','').trim();
-  if (!token) return null;
-  const { data: { user } } = await supabase.auth.getUser(token);
-  return user;
-}
+const { supabase, supabaseAdmin, cors, ok, err, requireUser } = require('../lib/db');
 
 module.exports = async (req, res) => {
-  cors(res);
+  cors(res, req);
   if (req.method === 'OPTIONS') return res.status(200).end();
 
   const action = req.query.action;
@@ -41,35 +34,28 @@ module.exports = async (req, res) => {
     return ok(res, { tracked: true });
   }
 
-  const user = await getUser(req);
+  const user = await requireUser(req);
   if (!user) return err(res, 'Unauthorized', 401);
 
   // ── GET affiliate dashboard ────────────────────────────────────
   if (req.method === 'GET' && !action) {
     // Get affiliate record
-    const { data: aff } = await supabase
+    const { data: aff } = await supabaseAdmin
       .from('affiliates')
       .select('*')
       .eq('user_id', user.id)
       .single();
 
-    // Get user affiliate code
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('affiliate_code')
-      .eq('id', user.id)
-      .single();
-
     if (!aff) {
       return ok(res, {
         joined: false,
-        affiliate_code: profile?.affiliate_code,
-        affiliate_link: `${process.env.APP_URL}?ref=${profile?.affiliate_code}`,
+        affiliate_code: user.affiliate_code,
+        affiliate_link: `${process.env.APP_URL}?ref=${user.affiliate_code}`,
       });
     }
 
     // Get referral history
-    const { data: referrals } = await supabase
+    const { data: referrals } = await supabaseAdmin
       .from('affiliate_referrals')
       .select('*, challenges(plan, account_size, fee_total)')
       .eq('affiliate_id', aff.id)
@@ -78,8 +64,8 @@ module.exports = async (req, res) => {
 
     return ok(res, {
       joined: true,
-      affiliate_code: profile?.affiliate_code,
-      affiliate_link: `${process.env.APP_URL}?ref=${profile?.affiliate_code}`,
+      affiliate_code: user.affiliate_code,
+      affiliate_link: `${process.env.APP_URL}?ref=${user.affiliate_code}`,
       stats: {
         total_referrals:   aff.total_referrals,
         total_conversions: aff.total_conversions,
@@ -94,13 +80,11 @@ module.exports = async (req, res) => {
 
   // ── POST: join affiliate program ───────────────────────────────
   if (action === 'join' && req.method === 'POST') {
-    const { data: existing } = await supabase
+    const { data: existing } = await supabaseAdmin
       .from('affiliates').select('id').eq('user_id', user.id).single();
     if (existing) return err(res, 'Already in affiliate program');
 
-    const { data: payoutMethod, data: payoutDetails } = req.body || {};
-
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
       .from('affiliates')
       .insert({ user_id: user.id, commission_pct: 10 })
       .select().single();
@@ -111,9 +95,7 @@ module.exports = async (req, res) => {
 
   // ── GET: admin — all affiliates ────────────────────────────────
   if (action === 'all' && req.method === 'GET') {
-    const { data: profile } = await supabaseAdmin
-      .from('profiles').select('is_admin').eq('id', user.id).single();
-    if (!profile?.is_admin) return err(res, 'Admin required', 403);
+    if (!user.is_admin) return err(res, 'Admin required', 403);
 
     const { data, error } = await supabaseAdmin
       .from('affiliates')

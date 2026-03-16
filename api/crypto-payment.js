@@ -17,7 +17,7 @@
 // GET  /api/crypto-payment?action=status     → trader: check status
 // ================================================================
 
-const { supabase, supabaseAdmin, getPrice, cors, ok, err } = require('../lib/db');
+const { supabase, supabaseAdmin, getPrice, cors, ok, err, requireUser, requireAdmin } = require('../lib/db');
 const { sendEmail } = require('../lib/emails');
 
 // ── YOUR WALLET ADDRESSES ─────────────────────────────────────────
@@ -62,28 +62,15 @@ const NETWORKS = {
   },
 };
 
-async function getUser(req) {
-  const token = (req.headers.authorization || '').replace('Bearer ', '').trim();
-  if (!token) return null;
-  const { data: { user } } = await supabase.auth.getUser(token);
-  return user;
-}
-
-async function isAdmin(userId) {
-  const { data } = await supabaseAdmin
-    .from('profiles').select('is_admin').eq('id', userId).single();
-  return data?.is_admin === true;
-}
-
 module.exports = async (req, res) => {
-  cors(res);
+  cors(res, req);
   if (req.method === 'OPTIONS') return res.status(200).end();
 
   const action = req.query.action;
 
   // ── INITIATE: get wallet address + amount to pay ───────────────
   if (action === 'initiate' && req.method === 'POST') {
-    const user = await getUser(req);
+    const user = await requireUser(req);
     if (!user) return err(res, 'Unauthorized', 401);
 
     const { plan, accountSize, network = 'USDT_BEP20' } = req.body || {};
@@ -155,7 +142,7 @@ module.exports = async (req, res) => {
 
   // ── SUBMIT: trader submits TX hash after sending crypto ────────
   if (action === 'submit' && req.method === 'POST') {
-    const user = await getUser(req);
+    const user = await requireUser(req);
     if (!user) return err(res, 'Unauthorized', 401);
 
     const { paymentId, txHash, network = 'USDT_BEP20' } = req.body || {};
@@ -192,16 +179,12 @@ module.exports = async (req, res) => {
       })
       .eq('id', paymentId);
 
-    // Get user profile for notification
-    const { data: profile } = await supabaseAdmin
-      .from('profiles').select('email, full_name').eq('id', user.id).single();
-
-    // Email admin alert
+    // Email admin alert (user is already the profile)
     const adminEmail = process.env.ADMIN_EMAIL;
     if (adminEmail) {
       sendEmail('adminPaymentAlert', adminEmail, {
-        traderName:  profile?.full_name || 'Unknown',
-        traderEmail: profile?.email,
+        traderName:  user.full_name || 'Unknown',
+        traderEmail: user.email,
         amount:      payment.amount,
         reference:   payment.gateway_id,
         txHash,
@@ -212,15 +195,13 @@ module.exports = async (req, res) => {
     }
 
     // Confirmation to trader
-    if (profile) {
-      sendEmail('paymentSubmitted', profile.email, {
-        name:        profile.full_name,
-        amount:      payment.amount,
-        txHash,
-        explorerUrl,
-        reference:   payment.gateway_id,
-      }).catch(e => console.error('Submission email failed:', e));
-    }
+    sendEmail('paymentSubmitted', user.email, {
+      name:        user.full_name,
+      amount:      payment.amount,
+      txHash,
+      explorerUrl,
+      reference:   payment.gateway_id,
+    }).catch(e => console.error('Submission email failed:', e));
 
     return ok(res, {
       message: 'Payment submitted! Admin will verify within 1-4 hours and activate your account.',
@@ -231,9 +212,9 @@ module.exports = async (req, res) => {
 
   // ── PENDING: admin gets all submitted payments waiting review ──
   if (action === 'pending' && req.method === 'GET') {
-    const user = await getUser(req);
+    const user = await requireUser(req);
     if (!user) return err(res, 'Unauthorized', 401);
-    if (!await isAdmin(user.id)) return err(res, 'Admin required', 403);
+    if (!user?.is_admin) return err(res, 'Admin required', 403);
 
     const { data, error } = await supabaseAdmin
       .from('payments')
@@ -248,9 +229,9 @@ module.exports = async (req, res) => {
 
   // ── APPROVE: admin verifies TX and activates challenge ─────────
   if (action === 'approve' && req.method === 'PUT') {
-    const user = await getUser(req);
+    const user = await requireUser(req);
     if (!user) return err(res, 'Unauthorized', 401);
-    if (!await isAdmin(user.id)) return err(res, 'Admin required', 403);
+    if (!user?.is_admin) return err(res, 'Admin required', 403);
 
     const { paymentId } = req.body || {};
     if (!paymentId) return err(res, 'paymentId required');
@@ -316,9 +297,9 @@ module.exports = async (req, res) => {
 
   // ── REJECT: admin rejects invalid/fake payment ─────────────────
   if (action === 'reject' && req.method === 'PUT') {
-    const user = await getUser(req);
+    const user = await requireUser(req);
     if (!user) return err(res, 'Unauthorized', 401);
-    if (!await isAdmin(user.id)) return err(res, 'Admin required', 403);
+    if (!user?.is_admin) return err(res, 'Admin required', 403);
 
     const { paymentId, reason } = req.body || {};
     if (!paymentId) return err(res, 'paymentId required');
@@ -347,13 +328,13 @@ module.exports = async (req, res) => {
 
   // ── STATUS: trader checks their payment status ─────────────────
   if (action === 'status' && req.method === 'GET') {
-    const user = await getUser(req);
+    const user = await requireUser(req);
     if (!user) return err(res, 'Unauthorized', 401);
 
     const { paymentId } = req.query;
     if (!paymentId) return err(res, 'paymentId required');
 
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
       .from('payments')
       .select('gateway_status, gateway_id, amount, currency, metadata, challenge_id, created_at')
       .eq('id', paymentId)

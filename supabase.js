@@ -1,7 +1,7 @@
 /* ================================================================
-   VORNIX — supabase.js  v6  OTP EDITION
+   VORNIX — supabase.js  v7  OTP EDITION
    ── Zero CDN dependency. Pure fetch() calls to /api/ endpoints ──
-   ── Sessions stored in cookies, not localStorage ────────────────
+   ── Sessions via httpOnly cookie (server-set) + vx_session flag ─
    ================================================================ */
 
 const _API = '';  // Empty = same origin (your Vercel domain)
@@ -19,8 +19,10 @@ function _clearCookie(name) {
   document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; SameSite=Strict`;
 }
 
-const TOKEN_KEY = 'vx_token';
-const USER_KEY  = 'vx_user';
+// vx_session: non-httpOnly flag set by server indicating active session
+const SESSION_KEY = 'vx_session';
+// vx_user: JS-readable user info cache (not the session token)
+const USER_KEY    = 'vx_user';
 
 /* ── AUTH ──────────────────────────────────────────────────────── */
 const _Auth = {
@@ -37,7 +39,7 @@ const _Auth = {
     } catch(e) { return { error: 'Connection failed. Check your internet connection.' }; }
   },
 
-  /* Step 2 — Verify OTP and get session token */
+  /* Step 2 — Verify OTP; server sets httpOnly vx_token + vx_session cookies */
   async verifyOTP(email, otp, name, country) {
     try {
       const r = await fetch(`${_API}/api/auth?action=verify-otp`, {
@@ -46,32 +48,32 @@ const _Auth = {
         body: JSON.stringify({ email, otp, name, country }),
       });
       const data = await r.json();
-      if (data.token) {
-        _setCookie(TOKEN_KEY, data.token, 30);
-        if (data.user) _setCookie(USER_KEY, JSON.stringify(data.user), 30);
+      if (data.data?.user) {
+        // Cache user info in a JS-readable cookie for fast local access.
+        // The actual session token is stored httpOnly by the server.
+        _setCookie(USER_KEY, JSON.stringify(data.data.user), 30);
       }
       return data;
     } catch(e) { return { error: 'Connection failed. Check your internet connection.' }; }
   },
 
-  /* Get current session from API */
+  /* Get current session from API (validates httpOnly cookie on server) */
   async getSession() {
-    const token = _getCookie(TOKEN_KEY);
-    if (!token) return { data: { session: null } };
+    if (!_Auth.isLoggedIn()) return { data: { session: null } };
     try {
       const r = await fetch(`${_API}/api/auth?action=get-session`, {
-        headers: { Authorization: 'Bearer ' + token },
+        credentials: 'include',  // send httpOnly cookie
       });
       if (!r.ok) {
-        _clearCookie(TOKEN_KEY); _clearCookie(USER_KEY);
+        _clearCookie(SESSION_KEY); _clearCookie(USER_KEY);
         return { data: { session: null } };
       }
       const data = await r.json();
-      return { data: { session: { user: data.user } } };
+      return { data: { session: { user: data.data?.user } } };
     } catch(e) { return { data: { session: null } }; }
   },
 
-  /* Get user object from cookie (fast, no network) */
+  /* Get user object from cookie cache (fast, no network) */
   getUser() {
     try {
       const raw = _getCookie(USER_KEY);
@@ -79,53 +81,45 @@ const _Auth = {
     } catch { return null; }
   },
 
-  /* Get token for API calls */
-  getToken() {
-    return _getCookie(TOKEN_KEY);
-  },
-
-  /* Is user logged in? (cookie check only — instant) */
+  /* Is user logged in? Checks vx_session flag (set by server) or legacy vx_token cookie */
   isLoggedIn() {
-    return !!_getCookie(TOKEN_KEY);
+    return _getCookie(SESSION_KEY) === '1' || !!_getCookie('vx_token');
   },
 
-  /* Sign out */
+  /* Sign out — server clears httpOnly cookie; client clears JS cookies */
   async signOut() {
-    const token = _getCookie(TOKEN_KEY);
-    _clearCookie(TOKEN_KEY);
+    try {
+      await fetch(`${_API}/api/auth?action=logout`, {
+        method: 'POST',
+        credentials: 'include',
+      });
+    } catch {}
+    _clearCookie(SESSION_KEY);
     _clearCookie(USER_KEY);
-    if (token) {
-      try {
-        await fetch(`${_API}/api/auth?action=logout`, {
-          method: 'POST',
-          headers: { Authorization: 'Bearer ' + token },
-        });
-      } catch {}
-    }
+    _clearCookie('vx_token'); // clear legacy JS token if present
     return { error: null };
   },
 };
 
 /* ── PROFILES ──────────────────────────────────────────────────── */
 const _Profiles = {
-  async get(userId) {
-    const token = _Auth.getToken();
-    if (!token) return { data: null };
+  async get() {
+    if (!_Auth.isLoggedIn()) return { data: null };
     try {
       const r = await fetch(`${_API}/api/auth?action=get-session`, {
-        headers: { Authorization: 'Bearer ' + token },
+        credentials: 'include',
       });
       const data = await r.json();
-      return { data: data.user || null };
+      return { data: data.data?.user || null };
     } catch { return { data: null }; }
   },
   async update(userId, fields) {
-    const token = _Auth.getToken();
-    if (!token) return { error: { message: 'Not authenticated' } };
+    if (!_Auth.isLoggedIn()) return { error: { message: 'Not authenticated' } };
     try {
       const r = await fetch(`${_API}/api/auth?action=update-profile`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify(fields),
       });
       return r.json();
@@ -136,35 +130,34 @@ const _Profiles = {
 /* ── CHALLENGES ────────────────────────────────────────────────── */
 const _Challenges = {
   async getMyAll() {
-    const token = _Auth.getToken();
-    if (!token) return { data: [] };
+    if (!_Auth.isLoggedIn()) return { data: [] };
     try {
-      const r = await fetch(`${_API}/api/challenges?action=get`, {
-        headers: { Authorization: 'Bearer ' + token },
+      const r = await fetch(`${_API}/api/challenges`, {
+        credentials: 'include',
       });
       return r.json();
     } catch { return { data: [] }; }
   },
   async startCryptoPayment(plan, size, network) {
-    const token = _Auth.getToken();
-    if (!token) return { error: 'Not authenticated' };
+    if (!_Auth.isLoggedIn()) return { error: 'Not authenticated' };
     try {
       const r = await fetch(`${_API}/api/crypto-payment?action=initiate`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
-        body: JSON.stringify({ plan, account_size: size, network }),
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ plan, accountSize: size, network }),
       });
       return r.json();
     } catch(e) { return { error: e.message }; }
   },
   async submitPayment(paymentId, txHash, network) {
-    const token = _Auth.getToken();
-    if (!token) return { error: 'Not authenticated' };
+    if (!_Auth.isLoggedIn()) return { error: 'Not authenticated' };
     try {
       const r = await fetch(`${_API}/api/crypto-payment?action=submit`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
-        body: JSON.stringify({ payment_id: paymentId, tx_hash: txHash, network }),
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ paymentId, txHash, network }),
       });
       return r.json();
     } catch(e) { return { error: e.message }; }
@@ -174,23 +167,22 @@ const _Challenges = {
 /* ── PAYOUTS ───────────────────────────────────────────────────── */
 const _Payouts = {
   async getMy() {
-    const token = _Auth.getToken();
-    if (!token) return { data: [] };
+    if (!_Auth.isLoggedIn()) return { data: [] };
     try {
-      const r = await fetch(`${_API}/api/payouts?action=get`, {
-        headers: { Authorization: 'Bearer ' + token },
+      const r = await fetch(`${_API}/api/payouts`, {
+        credentials: 'include',
       });
       return r.json();
     } catch { return { data: [] }; }
   },
   async request(challengeId, amount, method, details) {
-    const token = _Auth.getToken();
-    if (!token) return { error: 'Not authenticated' };
+    if (!_Auth.isLoggedIn()) return { error: 'Not authenticated' };
     try {
-      const r = await fetch(`${_API}/api/payouts?action=request`, {
+      const r = await fetch(`${_API}/api/payouts`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
-        body: JSON.stringify({ challenge_id: challengeId, amount_requested: amount, method, payout_details: details }),
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ challengeId, amount, method, ...details }),
       });
       return r.json();
     } catch(e) { return { error: e.message }; }
@@ -219,23 +211,22 @@ const _Affiliates = {
 /* ── ADMIN ─────────────────────────────────────────────────────── */
 const _Admin = {
   async getPendingPayments() {
-    const token = _Auth.getToken();
-    if (!token) return { data: [] };
+    if (!_Auth.isLoggedIn()) return { data: [] };
     try {
       const r = await fetch(`${_API}/api/crypto-payment?action=pending`, {
-        headers: { Authorization: 'Bearer ' + token },
+        credentials: 'include',
       });
       return r.json();
     } catch { return { data: [] }; }
   },
   async approvePayment(paymentId, challengeData) {
-    const token = _Auth.getToken();
-    if (!token) return { error: 'Not authenticated' };
+    if (!_Auth.isLoggedIn()) return { error: 'Not authenticated' };
     try {
       const r = await fetch(`${_API}/api/crypto-payment?action=approve`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
-        body: JSON.stringify({ payment_id: paymentId, ...challengeData }),
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ paymentId, ...challengeData }),
       });
       return r.json();
     } catch(e) { return { error: e.message }; }
