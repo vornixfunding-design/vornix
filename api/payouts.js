@@ -7,32 +7,19 @@
 // PUT  /api/payouts?action=reject   → admin: reject payout
 // ================================================================
 
-const { supabase, supabaseAdmin, PROFIT_SPLIT, cors, ok, err } = require('../lib/db');
+const { supabase, supabaseAdmin, PROFIT_SPLIT, cors, ok, err, requireUser } = require('../lib/db');
 const { sendEmail } = require('../lib/emails');
 
-async function getUser(req) {
-  const token = (req.headers.authorization || '').replace('Bearer ', '').trim();
-  if (!token) return null;
-  const { data: { user } } = await supabase.auth.getUser(token);
-  return user;
-}
-
-async function isAdmin(userId) {
-  const { data } = await supabaseAdmin
-    .from('profiles').select('is_admin').eq('id', userId).single();
-  return data?.is_admin === true;
-}
-
 module.exports = async (req, res) => {
-  cors(res);
+  cors(res, req);
   if (req.method === 'OPTIONS') return res.status(200).end();
 
-  const user = await getUser(req);
-  if (!user) return err(res, 'Unauthorized', 401);
+  const profile = await requireUser(req);
+  if (!profile) return err(res, 'Unauthorized', 401);
 
   // ── GET — user payout history ──────────────────────────────────
   if (req.method === 'GET') {
-    const admin = await isAdmin(user.id);
+    const admin = profile.is_admin === true;
 
     if (admin && req.query.all === 'true') {
       // Admin: all pending payouts
@@ -47,10 +34,10 @@ module.exports = async (req, res) => {
     }
 
     // User: their own payouts
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
       .from('payouts')
       .select('*, challenges(plan, account_size)')
-      .eq('user_id', user.id)
+      .eq('user_id', profile.id)
       .order('requested_at', { ascending: false });
     if (error) return err(res, error.message);
     return ok(res, data);
@@ -64,11 +51,11 @@ module.exports = async (req, res) => {
     if (amount < 10) return err(res, 'Minimum payout is $10');
 
     // Verify challenge belongs to user and is funded
-    const { data: challenge } = await supabase
+    const { data: challenge } = await supabaseAdmin
       .from('challenges')
       .select('*')
       .eq('id', challengeId)
-      .eq('user_id', user.id)
+      .eq('user_id', profile.id)
       .single();
 
     if (!challenge) return err(res, 'Challenge not found', 404);
@@ -78,11 +65,11 @@ module.exports = async (req, res) => {
     const share    = amount * (split / 100);
     const deduct   = Math.min(challenge.partial_balance || 0, share);
 
-    const { data: payout, error } = await supabase
+    const { data: payout, error } = await supabaseAdmin
       .from('payouts')
       .insert({
         challenge_id:     challengeId,
-        user_id:          user.id,
+        user_id:          profile.id,
         amount_requested: amount,
         profit_split_pct: split,
         trader_share:     share,
@@ -96,24 +83,19 @@ module.exports = async (req, res) => {
 
     if (error) return err(res, error.message);
 
-    // Send confirmation email
-    const { data: profile } = await supabaseAdmin
-      .from('profiles').select('email, full_name').eq('id', user.id).single();
-
-    if (profile) {
-      sendEmail('payoutRequested', profile.email, {
-        name: profile.full_name, amount, method,
-        traderShare: share.toFixed(2),
-        partialDeduct: deduct > 0 ? deduct.toFixed(2) : 0,
-      }).catch(e => console.error('Payout email failed:', e));
-    }
+    // Send confirmation email (profile already loaded)
+    sendEmail('payoutRequested', profile.email, {
+      name: profile.full_name, amount, method,
+      traderShare: share.toFixed(2),
+      partialDeduct: deduct > 0 ? deduct.toFixed(2) : 0,
+    }).catch(e => console.error('Payout email failed:', e));
 
     return ok(res, payout, 201);
   }
 
   // ── PUT — admin actions ────────────────────────────────────────
   if (req.method === 'PUT') {
-    if (!await isAdmin(user.id)) return err(res, 'Admin required', 403);
+    if (!profile.is_admin) return err(res, 'Admin required', 403);
 
     const action   = req.query.action;
     const payoutId = req.body?.payoutId || req.query.payoutId;

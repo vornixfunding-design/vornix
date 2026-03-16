@@ -5,20 +5,13 @@
 // POST /api/challenges          → create (after payment)
 // ================================================================
 
-const { supabase, supabaseAdmin, getPrice, PLAN_PHASES, cors, ok, err } = require('../lib/db');
-
-async function getUser(req) {
-  const token = (req.headers.authorization || '').replace('Bearer ', '').trim();
-  if (!token) return null;
-  const { data: { user } } = await supabase.auth.getUser(token);
-  return user;
-}
+const { supabase, supabaseAdmin, getPrice, PLAN_PHASES, cors, ok, err, requireUser } = require('../lib/db');
 
 module.exports = async (req, res) => {
-  cors(res);
+  cors(res, req);
   if (req.method === 'OPTIONS') return res.status(200).end();
 
-  const user = await getUser(req);
+  const user = await requireUser(req);
   if (!user) return err(res, 'Unauthorized', 401);
 
   // ── GET single or list ────────────────────────────────────────

@@ -4,7 +4,7 @@
 // POST /api/leaderboard?action=refresh                → admin only
 // ================================================================
 
-const { supabase, supabaseAdmin, cors, ok, err } = require('../lib/db');
+const { supabase, supabaseAdmin, cors, ok, err, requireAdmin } = require('../lib/db');
 
 function periodKey(period) {
   const now = new Date();
@@ -27,7 +27,7 @@ function anonymize(n, rank) {
 }
 
 module.exports = async (req, res) => {
-  cors(res);
+  cors(res, req);
   if (req.method === 'OPTIONS') return res.status(200).end();
 
   // ── PUBLIC GET ─────────────────────────────────────────────────
@@ -51,13 +51,8 @@ module.exports = async (req, res) => {
 
   // ── ADMIN REFRESH ──────────────────────────────────────────────
   if (req.method === 'POST' && req.query.action === 'refresh') {
-    const token = (req.headers.authorization || '').replace('Bearer ','').trim();
-    const { data: { user } } = await supabase.auth.getUser(token);
-    if (!user) return err(res, 'Unauthorized', 401);
-
-    const { data: profile } = await supabaseAdmin
-      .from('profiles').select('is_admin').eq('id', user.id).single();
-    if (!profile?.is_admin) return err(res, 'Admin required', 403);
+    const admin = await requireAdmin(req);
+    if (!admin) return err(res, 'Admin required', 403);
 
     const period = req.body?.period || 'monthly';
     const key    = req.body?.key    || periodKey(period);

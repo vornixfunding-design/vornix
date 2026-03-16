@@ -14,22 +14,11 @@
 // POST /api/admin?action=stats-upsert → add daily stats for a challenge
 // ================================================================
 
-const { supabase, supabaseAdmin, cors, ok, err } = require('../lib/db');
+const { supabase, supabaseAdmin, cors, ok, err, requireAdmin } = require('../lib/db');
 const { sendEmail } = require('../lib/emails');
 
-async function requireAdmin(req) {
-  const token = (req.headers.authorization || '').replace('Bearer ','').trim();
-  if (!token) return null;
-  const { data: { user } } = await supabase.auth.getUser(token);
-  if (!user) return null;
-  const { data: profile } = await supabaseAdmin
-    .from('profiles').select('is_admin').eq('id', user.id).single();
-  if (!profile?.is_admin) return null;
-  return user;
-}
-
 module.exports = async (req, res) => {
-  cors(res);
+  cors(res, req);
   if (req.method === 'OPTIONS') return res.status(200).end();
 
   const admin = await requireAdmin(req);

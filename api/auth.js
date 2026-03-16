@@ -1,14 +1,23 @@
 // ================================================================
-// VORNIX — api/auth.js  v3  GMAIL SMTP
+// VORNIX — api/auth.js  v4  GMAIL SMTP + HARDENED OTP
 // Uses nodemailer + Gmail App Password — 100% free, no domain needed
 // Actions: send-otp | verify-otp | get-session | logout | debug
 // ================================================================
 
-const { supabase, cors, ok, err } = require('../lib/db');
-const nodemailer                   = require('nodemailer');
+const crypto      = require('crypto');
+const nodemailer  = require('nodemailer');
+const { supabase, supabaseAdmin, cors, ok, err, getAuthToken } = require('../lib/db');
+
+// ── Constants ──────────────────────────────────────────────────
+const OTP_EXPIRY_MS     = 10 * 60 * 1000;  // 10 minutes
+const RESEND_COOLDOWN_S = 60;               // seconds between sends
+const MAX_ATTEMPTS      = 5;               // max wrong-OTP attempts
+const SESSION_DAYS      = 30;              // session lifetime (days)
+const SESSION_MAX_AGE   = SESSION_DAYS * 24 * 60 * 60; // seconds
+
+const APP = process.env.APP_URL || 'https://vornix-sooty.vercel.app';
 
 // ── Gmail transporter ─────────────────────────────────────────
-// Uses GMAIL_USER and GMAIL_APP_PASSWORD env vars
 function getTransporter() {
   return nodemailer.createTransport({
     service: 'gmail',
@@ -19,10 +28,39 @@ function getTransporter() {
   });
 }
 
-const APP = process.env.APP_URL || 'https://vornix-sooty.vercel.app';
+// ── Crypto helpers ────────────────────────────────────────────
+function hashOTP(otp) {
+  return crypto.createHash('sha256').update(otp).digest('hex');
+}
+
+function generateToken() {
+  return crypto.randomBytes(32).toString('hex'); // 64 hex chars, cryptographically secure
+}
+
+function generateUUID() {
+  return crypto.randomUUID();
+}
+
+// ── Cookie helpers ────────────────────────────────────────────
+function setSessionCookies(res, token) {
+  res.setHeader('Set-Cookie', [
+    `vx_token=${encodeURIComponent(token)}; HttpOnly; Secure; SameSite=Strict; Max-Age=${SESSION_MAX_AGE}; Path=/`,
+    `vx_session=1; Secure; SameSite=Strict; Max-Age=${SESSION_MAX_AGE}; Path=/`,
+  ]);
+}
+
+function clearSessionCookies(res) {
+  res.setHeader('Set-Cookie', [
+    `vx_token=; HttpOnly; Secure; SameSite=Strict; Max-Age=0; Path=/`,
+    `vx_session=; Secure; SameSite=Strict; Max-Age=0; Path=/`,
+  ]);
+}
+
+// ── DB client (admin preferred for server-side ops) ───────────
+const db = () => supabaseAdmin || supabase;
 
 module.exports = async (req, res) => {
-  cors(res);
+  cors(res, req);
   if (req.method === 'OPTIONS') return res.status(200).end();
 
   const action = req.query.action || req.body?.action;
@@ -33,8 +71,8 @@ module.exports = async (req, res) => {
     // ── DEBUG ──────────────────────────────────────────────────
     if (action === 'debug') {
       return ok(res, {
-        GMAIL_USER:         process.env.GMAIL_USER          ? '✓ SET: ' + process.env.GMAIL_USER : '✗ MISSING',
-        GMAIL_APP_PASSWORD: process.env.GMAIL_APP_PASSWORD  ? '✓ SET (length: ' + process.env.GMAIL_APP_PASSWORD.length + ')' : '✗ MISSING',
+        GMAIL_USER:         process.env.GMAIL_USER          ? '✓ SET' : '✗ MISSING',
+        GMAIL_APP_PASSWORD: process.env.GMAIL_APP_PASSWORD  ? `✓ SET (length: ${process.env.GMAIL_APP_PASSWORD.length})` : '✗ MISSING',
         SUPABASE_URL:       process.env.SUPABASE_URL        ? '✓ SET' : '✗ MISSING',
         SUPABASE_KEY:       process.env.SUPABASE_SERVICE_ROLE_KEY ? '✓ SET' : '✗ MISSING',
         APP_URL:            APP,
@@ -52,20 +90,38 @@ module.exports = async (req, res) => {
         return err(res, 'GMAIL_USER and GMAIL_APP_PASSWORD are not set in Vercel environment variables.');
       }
 
-      // 6-digit OTP, expires 10 minutes
-      const otp        = Math.floor(100000 + Math.random() * 900000).toString();
-      const expires_at = new Date(Date.now() + 10 * 60 * 1000).toISOString();
+      // ── Resend cooldown check ──────────────────────────────
+      const { data: existing } = await db()
+        .from('otp_codes')
+        .select('last_sent_at')
+        .eq('email', email)
+        .maybeSingle();
 
-      // Save OTP to DB
-      const { error: dbErr } = await supabase
+      if (existing?.last_sent_at) {
+        const elapsed = Date.now() - new Date(existing.last_sent_at).getTime();
+        if (elapsed < RESEND_COOLDOWN_S * 1000) {
+          const wait = Math.ceil((RESEND_COOLDOWN_S * 1000 - elapsed) / 1000);
+          return err(res, `Please wait ${wait} seconds before requesting a new code.`, 429);
+        }
+      }
+
+      // 6-digit OTP hashed before storage
+      const otp        = Math.floor(100000 + Math.random() * 900000).toString();
+      const otp_hash   = hashOTP(otp);
+      const expires_at = new Date(Date.now() + OTP_EXPIRY_MS).toISOString();
+      const now        = new Date().toISOString();
+
+      const { error: dbErr } = await db()
         .from('otp_codes')
         .upsert({
           email,
-          otp,
-          name:       body.name    || null,
-          country:    body.country || null,
+          otp_hash,
+          name:         body.name    || null,
+          country:      body.country || null,
           expires_at,
-          created_at: new Date().toISOString(),
+          attempts:     0,
+          last_sent_at: now,
+          created_at:   now,
         }, { onConflict: 'email' });
 
       if (dbErr) return err(res, 'DB error: ' + dbErr.message);
@@ -130,25 +186,47 @@ module.exports = async (req, res) => {
       const otp   = (body.otp   || '').trim();
       if (!email || !otp) return err(res, 'Email and code required');
 
-      const { data: otpRow, error: otpErr } = await supabase
+      // Fetch OTP row by email only (we compare hash below)
+      const { data: otpRow, error: otpErr } = await db()
         .from('otp_codes')
         .select('*')
         .eq('email', email)
-        .eq('otp', otp)
-        .single();
+        .maybeSingle();
 
-      if (otpErr || !otpRow) return err(res, 'Incorrect code. Please check and try again.');
+      if (otpErr || !otpRow) return err(res, 'No verification code found. Please request a new one.');
 
+      // Max attempts check
+      if ((otpRow.attempts || 0) >= MAX_ATTEMPTS) {
+        await db().from('otp_codes').delete().eq('email', email);
+        return err(res, 'Too many failed attempts. Please request a new code.', 429);
+      }
+
+      // Expiry check
       if (new Date(otpRow.expires_at) < new Date()) {
-        await supabase.from('otp_codes').delete().eq('email', email);
+        await db().from('otp_codes').delete().eq('email', email);
         return err(res, 'Code expired. Please request a new one.');
       }
 
-      // Delete used OTP
-      await supabase.from('otp_codes').delete().eq('email', email);
+      // Hash comparison (constant-time via crypto.timingSafeEqual)
+      const submitted    = Buffer.from(hashOTP(otp),         'hex');
+      const stored       = Buffer.from(otpRow.otp_hash || '', 'hex');
+      const lengthMatch  = submitted.length === stored.length;
+      const hashMatch    = lengthMatch && crypto.timingSafeEqual(submitted, stored);
+
+      if (!hashMatch) {
+        const newAttempts = (otpRow.attempts || 0) + 1;
+        await db().from('otp_codes').update({ attempts: newAttempts }).eq('email', email);
+        const remaining = MAX_ATTEMPTS - newAttempts;
+        return err(res, remaining > 0
+          ? `Incorrect code. ${remaining} attempt${remaining === 1 ? '' : 's'} remaining.`
+          : 'Too many failed attempts. Please request a new code.');
+      }
+
+      // OTP valid — delete it
+      await db().from('otp_codes').delete().eq('email', email);
 
       // Find or create profile
-      let { data: profile } = await supabase
+      let { data: profile } = await db()
         .from('profiles')
         .select('*')
         .eq('email', email)
@@ -158,7 +236,7 @@ module.exports = async (req, res) => {
       const country = body.country || otpRow.country || null;
 
       if (!profile) {
-        const { data: newProfile, error: createErr } = await supabase
+        const { data: newProfile, error: createErr } = await db()
           .from('profiles')
           .insert({
             id:         generateUUID(),
@@ -187,21 +265,18 @@ module.exports = async (req, res) => {
 
       } else {
         // Update profile if new data provided
-        const updates = {};
+        const updates = { updated_at: new Date().toISOString() };
         if (body.name    && body.name    !== profile.full_name) updates.full_name = body.name;
         if (body.country && body.country !== profile.country)   updates.country   = body.country;
-        if (Object.keys(updates).length) {
-          updates.updated_at = new Date().toISOString();
-          await supabase.from('profiles').update(updates).eq('id', profile.id);
-          Object.assign(profile, updates);
-        }
+        await db().from('profiles').update(updates).eq('id', profile.id);
+        Object.assign(profile, updates);
       }
 
       // Create session token
       const token      = generateToken();
-      const expires_at = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
+      const expires_at = new Date(Date.now() + SESSION_DAYS * 24 * 60 * 60 * 1000).toISOString();
 
-      const { error: sessErr } = await supabase.from('sessions').insert({
+      const { error: sessErr } = await db().from('sessions').insert({
         token,
         user_id:    profile.id,
         email:      profile.email,
@@ -211,13 +286,17 @@ module.exports = async (req, res) => {
 
       if (sessErr) return err(res, 'Session error: ' + sessErr.message);
 
+      // Set httpOnly session cookie
+      setSessionCookies(res, token);
+
       return ok(res, {
-        token,
+        token,  // also returned for Bearer-based clients (e.g. mobile)
         user: {
           id:         profile.id,
           email:      profile.email,
           full_name:  profile.full_name,
           country:    profile.country,
+          is_admin:   profile.is_admin || false,
           created_at: profile.created_at,
         },
         message: 'Authenticated successfully',
@@ -227,10 +306,10 @@ module.exports = async (req, res) => {
 
     // ── GET SESSION ────────────────────────────────────────────
     if (action === 'get-session') {
-      const token = extractToken(req);
+      const token = getAuthToken(req);
       if (!token) return err(res, 'No session token', 401);
 
-      const { data: session, error: sErr } = await supabase
+      const { data: session, error: sErr } = await db()
         .from('sessions')
         .select('*, profile:profiles(*)')
         .eq('token', token)
@@ -239,7 +318,8 @@ module.exports = async (req, res) => {
       if (sErr || !session) return err(res, 'Invalid or expired session', 401);
 
       if (new Date(session.expires_at) < new Date()) {
-        await supabase.from('sessions').delete().eq('token', token);
+        await db().from('sessions').delete().eq('token', token);
+        clearSessionCookies(res);
         return err(res, 'Session expired. Please sign in again.', 401);
       }
 
@@ -249,8 +329,9 @@ module.exports = async (req, res) => {
 
     // ── LOGOUT ─────────────────────────────────────────────────
     if (action === 'logout') {
-      const token = extractToken(req);
-      if (token) await supabase.from('sessions').delete().eq('token', token);
+      const token = getAuthToken(req);
+      if (token) await db().from('sessions').delete().eq('token', token);
+      clearSessionCookies(res);
       return ok(res, { message: 'Signed out' });
     }
 
@@ -261,25 +342,3 @@ module.exports = async (req, res) => {
     return err(res, 'Server error: ' + e.message, 500);
   }
 };
-
-// ── HELPERS ────────────────────────────────────────────────────
-function generateToken() {
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  let t = '';
-  for (let i = 0; i < 64; i++) t += chars[Math.floor(Math.random() * chars.length)];
-  return t;
-}
-
-function generateUUID() {
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-    const r = Math.random() * 16 | 0;
-    const v = c === 'x' ? r : (r & 0x3 | 0x8);
-    return v.toString(16);
-  });
-}
-
-function extractToken(req) {
-  const auth = req.headers.authorization || '';
-  if (auth.startsWith('Bearer ')) return auth.slice(7);
-  return null;
-}
