@@ -90,7 +90,7 @@
   <div class="auth-box">
     <div class="auth-head">
       <div class="auth-brand">VORN<span>IX</span></div>
-      <div class="auth-tag">// Create Trader Account — No Password Needed</div>
+      <div class="auth-tag">// Create Trader Account</div>
     </div>
     <div class="auth-body">
 
@@ -98,6 +98,8 @@
         <div class="s-dot active" id="dot1">1</div>
         <div class="s-line"></div>
         <div class="s-dot" id="dot2">2</div>
+        <div class="s-line"></div>
+        <div class="s-dot" id="dot3">3</div>
       </div>
 
       <!-- STEP 1: Details -->
@@ -159,6 +161,31 @@
         <div class="auth-foot" style="margin-top:16px"><a onclick="back()" style="cursor:pointer;color:var(--t3);font-size:12px">← Change email address</a></div>
       </div>
 
+      <!-- STEP 3: Set Password (shown after account creation) -->
+      <div id="step3" style="display:none">
+        <div class="auth-step-lbl">// Step 3 — Secure Your Account</div>
+        <div class="auth-title">SET PASSWORD</div>
+        <div class="auth-sub">Add a password to your account so you can sign in faster next time. You can skip this step and set it later.</div>
+        <div class="msg msg-err" id="e3"></div>
+        <div class="msg msg-ok"  id="ok3"></div>
+        <div class="f-g">
+          <label class="f-l" for="pw1">Password</label>
+          <div style="position:relative">
+            <input class="f-i" type="password" id="pw1" placeholder="Min 8 chars, letters + numbers" autocomplete="new-password" style="padding-right:42px">
+            <button type="button" onclick="togglePw('pw1',this)" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);cursor:pointer;color:var(--t3);font-size:16px;background:none;border:none;padding:0;line-height:1" aria-label="Show password">👁</button>
+          </div>
+        </div>
+        <div class="f-g">
+          <label class="f-l" for="pw2">Confirm Password</label>
+          <div style="position:relative">
+            <input class="f-i" type="password" id="pw2" placeholder="Repeat your password" autocomplete="new-password" style="padding-right:42px">
+            <button type="button" onclick="togglePw('pw2',this)" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);cursor:pointer;color:var(--t3);font-size:16px;background:none;border:none;padding:0;line-height:1" aria-label="Show password">👁</button>
+          </div>
+        </div>
+        <button class="auth-btn" id="b3" onclick="setPassword()">Set Password & Go to Dashboard →</button>
+        <div class="auth-foot" style="margin-top:12px"><a onclick="skipPassword()" style="cursor:pointer;color:var(--t3);font-size:12px">Skip for now — go to dashboard →</a></div>
+      </div>
+
     </div>
   </div>
 </div>
@@ -198,10 +225,35 @@ async function verify() {
   b.disabled=false; b.innerHTML='Create Account →';
   if(d.error){showMsg(err,d.error);clearOTP();document.getElementById('d0').focus();return;}
   clearInterval(_ti);
-  showMsg(ok,'✓ Account created! Taking you to your dashboard...');
-  b.innerHTML='✓ Success — Redirecting...';
-  setTimeout(()=>location.href='dashboard.html',1200);
+  // Account created — move to step 3 (set password)
+  document.getElementById('step2').style.display='none';
+  document.getElementById('step3').style.display='block';
+  document.getElementById('dot2').className='s-dot done';
+  document.getElementById('dot3').className='s-dot active';
+  setTimeout(()=>document.getElementById('pw1').focus(),50);
 }
+
+async function setPassword() {
+  const pw=document.getElementById('pw1').value;
+  const pw2=document.getElementById('pw2').value;
+  const errEl=document.getElementById('e3'), okEl=document.getElementById('ok3');
+  errEl.classList.remove('show'); okEl.classList.remove('show');
+  if(!pw){showMsg(errEl,'Please enter a password.');return;}
+  if(pw!==pw2){showMsg(errEl,'Passwords do not match.');return;}
+  const b=document.getElementById('b3'); b.disabled=true; b.innerHTML='<span class="spin">Saving</span>';
+  const d=await VornixDB.Auth.setPassword(pw);
+  b.disabled=false; b.innerHTML='Set Password & Go to Dashboard →';
+  if(d.error||!d.success){showMsg(errEl,d.error||'Failed to save password. You can set it later in your account settings.');return;}
+  document.getElementById('dot3').className='s-dot done';
+  b.innerHTML='✓ Password Set — Redirecting...';
+  setTimeout(()=>location.href='dashboard.html',1000);
+}
+
+function skipPassword() {
+  location.href='dashboard.html';
+}
+
+function togglePw(inputId,btn){const i=document.getElementById(inputId);i.type=i.type==='password'?'text':'password';btn.textContent=i.type==='password'?'👁':'🙈';}
 
 async function resend() {
   clearInterval(_ti);

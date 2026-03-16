@@ -57,6 +57,65 @@ const _Auth = {
     } catch(e) { return { error: 'Connection failed. Check your internet connection.' }; }
   },
 
+  /* Password login — email + password (no OTP needed) */
+  async passwordLogin(email, password) {
+    try {
+      const r = await fetch(`${_API}/api/auth?action=password-login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ email, password }),
+      });
+      const data = await r.json();
+      if (data.data?.user) {
+        _setCookie(USER_KEY, JSON.stringify(data.data.user), 30);
+      }
+      return data;
+    } catch(e) { return { error: 'Connection failed. Check your internet connection.' }; }
+  },
+
+  /* Set password for currently authenticated user */
+  async setPassword(password) {
+    try {
+      const r = await fetch(`${_API}/api/auth?action=set-password`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ password }),
+      });
+      return r.json();
+    } catch(e) { return { error: 'Connection failed.' }; }
+  },
+
+  /* Request a password reset OTP for the given email */
+  async forgotPassword(email) {
+    try {
+      const r = await fetch(`${_API}/api/auth?action=forgot-password`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+      return r.json();
+    } catch(e) { return { error: 'Connection failed.' }; }
+  },
+
+  /* Reset password using email + OTP + new password; server sets session cookies */
+  async resetPassword(email, otp, newPassword) {
+    try {
+      const r = await fetch(`${_API}/api/auth?action=reset-password`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ email, otp, newPassword }),
+      });
+      const data = await r.json();
+      if (data.data?.user) {
+        _setCookie(USER_KEY, JSON.stringify(data.data.user), 30);
+      }
+      return data;
+    } catch(e) { return { error: 'Connection failed.' }; }
+  },
+
   /* Get current session from API (validates httpOnly cookie on server) */
   async getSession() {
     if (!_Auth.isLoggedIn()) return { data: { session: null } };
