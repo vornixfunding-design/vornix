@@ -72,7 +72,7 @@ module.exports = async (req, res) => {
     if (action === 'debug') {
       return ok(res, {
         GMAIL_USER:         process.env.GMAIL_USER          ? '✓ SET' : '✗ MISSING',
-        GMAIL_APP_PASSWORD: process.env.GMAIL_APP_PASSWORD  ? `✓ SET (length: ${process.env.GMAIL_APP_PASSWORD.length})` : '✗ MISSING',
+        GMAIL_APP_PASSWORD: process.env.GMAIL_APP_PASSWORD  ? '✓ SET' : '✗ MISSING',
         SUPABASE_URL:       process.env.SUPABASE_URL        ? '✓ SET' : '✗ MISSING',
         SUPABASE_KEY:       process.env.SUPABASE_SERVICE_ROLE_KEY ? '✓ SET' : '✗ MISSING',
         APP_URL:            APP,
@@ -264,12 +264,15 @@ module.exports = async (req, res) => {
         }
 
       } else {
-        // Update profile if new data provided
-        const updates = { updated_at: new Date().toISOString() };
+        // Update profile only when fields actually changed
+        const updates = {};
         if (body.name    && body.name    !== profile.full_name) updates.full_name = body.name;
         if (body.country && body.country !== profile.country)   updates.country   = body.country;
-        await db().from('profiles').update(updates).eq('id', profile.id);
-        Object.assign(profile, updates);
+        if (Object.keys(updates).length > 0) {
+          updates.updated_at = new Date().toISOString();
+          await db().from('profiles').update(updates).eq('id', profile.id);
+          Object.assign(profile, updates);
+        }
       }
 
       // Create session token
@@ -311,7 +314,7 @@ module.exports = async (req, res) => {
 
       const { data: session, error: sErr } = await db()
         .from('sessions')
-        .select('*, profile:profiles(*)')
+        .select('*, profile:profiles(id,email,full_name,country,is_admin,created_at,updated_at)')
         .eq('token', token)
         .single();
 
