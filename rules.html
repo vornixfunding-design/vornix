@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trading Rules — VORNIX</title>
+<meta name="description" content="Every VORNIX rule clearly explained. No hidden conditions. Know exactly what is permitted on every program.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;500;600;700;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<canvas id="bg-canvas"></canvas>
+<div id="bg-veil"></div>
+
+<nav class="nav" id="main-nav">
+  <div class="nav__logo" onclick="location.href='index.html'" role="button" tabindex="0">
+    <svg class="nav__logo-svg" viewBox="0 0 172 38" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="lg-w" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FFF" stop-opacity=".95"/><stop offset="100%" stop-color="#8890AA"/></linearGradient><linearGradient id="lg-r" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#E8001A"/><stop offset="100%" stop-color="#7A0008"/></linearGradient><linearGradient id="lg-g" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#22B972"/><stop offset="100%" stop-color="#0E5E3A"/></linearGradient><filter id="glow-r" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="1" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><g filter="url(#glow-r)"><rect x="1" y="14" width="5" height="13" fill="url(#lg-r)" rx=".3"/><line x1="3.5" y1="8" x2="3.5" y2="14" stroke="#B8000F" stroke-width="1.2" opacity=".7"/><line x1="3.5" y1="27" x2="3.5" y2="32" stroke="#B8000F" stroke-width="1.2" opacity=".5"/><rect x="9" y="18" width="5" height="7" fill="rgba(255,255,255,.08)" rx=".3"/><line x1="11.5" y1="13" x2="11.5" y2="18" stroke="rgba(255,255,255,.1)" stroke-width="1.2"/><line x1="11.5" y1="25" x2="11.5" y2="29" stroke="rgba(255,255,255,.08)" stroke-width="1.2"/><rect x="17" y="11" width="5" height="14" fill="url(#lg-g)" rx=".3"/><line x1="19.5" y1="6" x2="19.5" y2="11" stroke="#22B972" stroke-width="1.2" opacity=".6"/><line x1="19.5" y1="25" x2="19.5" y2="30" stroke="#22B972" stroke-width="1.2" opacity=".5"/></g><polyline points="3.5,26 11.5,22 19.5,14" stroke="#B8000F" stroke-width=".8" opacity=".4" stroke-dasharray="2,2"/><path d="M30 7L38 31L46 7" stroke="url(#lg-w)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/><ellipse cx="56.5" cy="19" rx="7" ry="12" stroke="url(#lg-w)" stroke-width="2.7" fill="none"/><path d="M68 7v24M68 7h9c3 0 5 2.5 5 6s-2 6-5 6H68M76 19l7.5 12" stroke="url(#lg-w)" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M88 31V7L102 31V7" stroke="url(#lg-w)" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round" fill="none"/><line x1="108" y1="7" x2="108" y2="31" stroke="url(#lg-w)" stroke-width="2.7" stroke-linecap="round"/><path d="M114 7l13 24M127 7l-13 24" stroke="url(#lg-r)" stroke-width="2.8" stroke-linecap="round" filter="url(#glow-r)"/><line x1="30" y1="36" x2="127" y2="36" stroke="rgba(184,0,15,.10)" stroke-width=".8"/><line x1="30" y1="36" x2="72" y2="36" stroke="rgba(184,0,15,.65)" stroke-width="1.4"/><text x="133" y="16" font-family="'Barlow Condensed',sans-serif" font-size="6" fill="#6B7A9E" letter-spacing="1.5">PROP</text><text x="133" y="26" font-family="'Barlow Condensed',sans-serif" font-size="6" fill="#6B7A9E" letter-spacing="1.5">FIRM</text></svg>
+  </div>
+  <ul class="nav__links" role="list">
+    <li><a class="nav__link" href="index.html">Home</a></li>
+    <li><a class="nav__link" href="evaluations.html">Evaluations</a></li>
+    <li><a class="nav__link" href="academy.html">Academy</a></li>
+    <li><a class="nav__link" href="technology.html">Technology</a></li>
+    <li><a class="nav__link is-active" href="rules.html">Rules</a></li>
+    <li><a class="nav__link" href="how-it-works.html">How It Works</a></li>
+    <li><a class="nav__link" href="about.html">About</a></li>
+    <li><a class="nav__link" href="contact.html">Contact</a></li>
+  </ul>
+  <div class="nav__right">
+    <a href="login.html" class="nav__login">Login</a>
+    <button class="nav__cta" onclick="location.href='signup.html'">Get Funded</button>
+  </div>
+  <button class="nav__ham" id="nav-ham" onclick="navToggle()" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
+</nav>
+<div class="nav__drawer" id="nav-drawer">
+  <a class="nav__drawer-link" href="index.html">Home</a>
+  <a class="nav__drawer-link" href="evaluations.html">Evaluations</a>
+  <a class="nav__drawer-link" href="academy.html">Academy</a>
+  <a class="nav__drawer-link" href="technology.html">Technology</a>
+  <a class="nav__drawer-link is-active" href="rules.html">Rules</a>
+  <a class="nav__drawer-link" href="how-it-works.html">How It Works</a>
+  <a class="nav__drawer-link" href="about.html">About</a>
+  <a class="nav__drawer-link" href="contact.html">Contact</a>
+  <a class="nav__drawer-link" href="login.html">Login &rarr;</a>
+  <button class="nav__drawer-cta" onclick="location.href='signup.html'">Get Funded &rarr;</button>
+  <p class="nav__drawer-foot">VORNIX &mdash; STRUCTURE TRADING AS A PROFESSION</p>
+</div>
+
+<header class="ph">
+  <span class="ph__eye">// Trading Rules</span>
+  <h1 class="ph__h">VORNIX <span class="red">RULES</span></h1>
+  <p class="ph__sub">Every rule clearly explained. No hidden conditions. Read this before starting any evaluation &mdash; know exactly what is and is not permitted.</p>
+</header>
+
+<section class="section">
+  <span class="s-eye">// Section 01</span>
+  <h2 class="s-head rv" style="margin-bottom:12px">CORE <span class="red">TRADING RULES</span></h2>
+  <p style="font-size:14px;color:var(--t2);margin-bottom:28px;line-height:1.7" class="rv">These rules apply to every account &mdash; evaluation and funded &mdash; unless a specific program exception is noted.</p>
+  <div class="gr-grid rv" style="margin-bottom:56px">
+    <div class="gri"><div class="gri__t">&#128201; Daily Loss Limit &mdash; Trailing</div><p class="gri__d">Calculated from the <strong>highest equity point</strong> of that trading day. If your equity reaches $10,500 on a $10,000 account with 5% daily loss &mdash; your floor becomes $9,975. Trails upward only. Resets at 00:00 server time each day.</p></div>
+    <div class="gri"><div class="gri__t">&#128721; Max Drawdown &mdash; Static</div><p class="gri__d">Calculated from the <strong>initial account balance only</strong>. Never adjusts regardless of profits. On a $10,000 account with 8% max drawdown, your absolute floor is always $9,200.</p></div>
+    <div class="gri"><div class="gri__t">&#128202; Consistency Rule</div><p class="gri__d"><strong>1-Step &amp; 2-Step:</strong> No single trade may contribute more than <strong>40%</strong> of total profit.<br><br><strong>3-Step &amp; Partial:</strong> No single trade may contribute more than <strong>15%</strong> of total profit.</p></div>
+    <div class="gri"><div class="gri__t">&#128197; Minimum Trading Days</div><p class="gri__d"><strong>1-Step:</strong> No minimum days.<br><strong>2-Step &amp; 3-Step:</strong> Minimum 3 trading days per phase.<br><strong>Partial:</strong> Minimum 5 trading days per phase.<br>A trading day = at least one trade opened and closed.</p></div>
+    <div class="gri"><div class="gri__t">&#128336; No Time Limit</div><p class="gri__d">All VORNIX evaluation programs have <strong>no time limit</strong>. Take as long as you need to pass, provided you stay within the drawdown rules. There is no expiry date.</p></div>
+    <div class="gri"><div class="gri__t">&#128200; Tradeable Instruments</div><p class="gri__d">All programs allow: <strong>Forex</strong> (major, minor and exotic pairs), <strong>Indices</strong> (US30, NAS100, SPX500, UK100, GER40), <strong>Commodities</strong> (Gold, Silver, Oil), <strong>Crypto</strong> and <strong>Stocks</strong>.</p></div>
+  </div>
+
+  <div class="section--dark" style="margin:0 calc(-1 * var(--g));padding:0 var(--g)">
+    <div style="padding:48px 0">
+      <span class="s-eye">// Section 02</span>
+      <h2 class="s-head rv" style="margin-bottom:12px">EA &amp; ALGO <span class="red">RULES</span></h2>
+      <p style="font-size:14px;color:var(--t2);margin-bottom:28px;line-height:1.7" class="rv">EA and algorithmic trading rules vary by program. Read carefully before purchasing.</p>
+      <div class="gr-grid rv" style="margin-bottom:40px">
+        <div class="gri"><div class="gri__t">&#10007; 1-Step &mdash; No EA/Algo</div><p class="gri__d">EA and algorithmic bots are <strong>not permitted</strong> on the 1-Step program. Manual trading only. Any trades executed via automated systems will be disqualified.</p></div>
+        <div class="gri"><div class="gri__t">&#10007; 2-Step &mdash; No EA/Algo</div><p class="gri__d">EA and algorithmic bots are <strong>not permitted</strong> on the 2-Step program. Manual trading only. Any trades executed via automated systems will be disqualified.</p></div>
+        <div class="gri"><div class="gri__t">&#10003; 3-Step &mdash; EA/Algo Allowed</div><p class="gri__d">EA and algorithmic trading is <strong>permitted</strong> on the 3-Step program in all phases and the funded account, provided all other rules are respected.</p></div>
+        <div class="gri"><div class="gri__t">&#10003; Partial &mdash; EA/Algo Allowed</div><p class="gri__d">EA and algorithmic trading is <strong>permitted</strong> on the Partial Payment program in all phases and the funded account, provided all other rules are respected.</p></div>
+        <div class="gri"><div class="gri__t">&#10007; Tick Scalping &amp; HFT</div><p class="gri__d">Strategies that hold trades for less than <strong>2 minutes</strong> as a primary method are not permitted on any program. This targets algorithmic exploitation only.</p></div>
+        <div class="gri"><div class="gri__t">&#9888; Latency Arbitrage</div><p class="gri__d">Any strategy exploiting platform latency, price feed delays or broker errors is prohibited across all programs. Such trades will be reversed and the account terminated.</p></div>
+      </div>
+
+      <span class="s-eye">// Section 03</span>
+      <h2 class="s-head rv" style="margin-bottom:12px">PROHIBITED <span class="red">ACTIVITIES</span></h2>
+      <p style="font-size:14px;color:var(--t2);margin-bottom:28px;line-height:1.7" class="rv">These activities result in immediate account termination. There are no warnings.</p>
+      <div class="gr-grid rv">
+        <div class="gri"><div class="gri__t">&#128683; News Trading &mdash; 3-Step &amp; Partial Only</div><p class="gri__d">Trades within <strong>5 minutes before or after</strong> a high-impact news event: profit is <strong>disqualified</strong>. Loss is <strong>fully counted</strong>. News trading is fully allowed on 1-Step and 2-Step.</p></div>
+        <div class="gri"><div class="gri__t">&#128683; Account Sharing</div><p class="gri__d">Only the registered account holder may trade. Account sharing, copy trading from external signals, or third-party access is strictly prohibited and results in immediate termination.</p></div>
+        <div class="gri"><div class="gri__t">&#128683; Opposite Account Hedging</div><p class="gri__d">Hedging between two VORNIX accounts simultaneously is prohibited. Hedging within a single account under a normal trading strategy is permitted.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding:48px 0">
+    <span class="s-eye">// Section 04</span>
+    <h2 class="s-head rv" style="margin-bottom:12px">PAYOUT &amp; <span class="red">WITHDRAWAL RULES</span></h2>
+    <div class="gr-grid rv" style="margin-bottom:28px">
+      <div class="gri"><div class="gri__t">&#128176; Fast Withdrawals</div><p class="gri__d">Profit withdrawals are available as soon as you generate profit on your funded account. No arbitrary waiting periods. Processed via cryptocurrency, Wise and bank transfer within 1&ndash;3 business days.</p></div>
+      <div class="gri"><div class="gri__t">&#128176; Profit Split</div><p class="gri__d"><strong>1-Step:</strong> 95% of all profits.<br><strong>2-Step:</strong> 90% of all profits.<br><strong>3-Step &amp; Partial:</strong> 80% rising to 90% after scaling milestones.</p></div>
+      <div class="gri"><div class="gri__t">&#128176; Payment Methods</div><p class="gri__d">Payouts via: <strong>Cryptocurrency</strong> (USDT, USDC, BTC), <strong>Wise</strong> and <strong>Bank Transfer</strong>. Processing time: 1&ndash;3 business days after approval.</p></div>
+      <div class="gri"><div class="gri__t">&#128176; Partial Payment Deduction</div><p class="gri__d">Remaining 65% of evaluation fee automatically deducted from your <strong>first profit withdrawal only</strong>. All subsequent withdrawals receive the full profit split.</p></div>
+      <div class="gri"><div class="gri__t">&#128176; Minimum Withdrawal</div><p class="gri__d">The minimum withdrawal amount is <strong>$50</strong>. There is no maximum withdrawal limit.</p></div>
+      <div class="gri"><div class="gri__t">&#128176; KYC Verification</div><p class="gri__d">Before your first payout: government-issued photo ID and proof of address. One-time process only. All subsequent payouts process without re-verification.</p></div>
+    </div>
+    <div class="callout rv">
+      <div class="callout__ttl">&#9888; Risk Disclaimer</div>
+      <p>Trading financial instruments involves significant risk of loss and is not suitable for all investors. Past performance is not indicative of future results. VORNIX evaluation accounts use simulated capital for the purpose of skill assessment. Funded accounts trade real capital subject to the profit split arrangement. Always trade responsibly.</p>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer__grid">
+    <div><div class="footer__brand-name">VORN<span>IX</span></div><p class="footer__brand-desc">Transparent rules. No hidden conditions. No surprises.</p></div>
+    <div class="footer__col"><h4>Evaluations</h4><ul><li><a href="evaluations.html#one">1-Step</a></li><li><a href="evaluations.html#two">2-Step</a></li><li><a href="evaluations.html#three">3-Step</a></li><li><a href="evaluations.html#partial">Partial</a></li></ul></div>
+    <div class="footer__col"><h4>Company</h4><ul><li><a href="academy.html">Academy</a></li><li><a href="technology.html">Technology</a></li><li><a href="how-it-works.html">How It Works</a></li><li><a href="about.html">About</a></li></ul></div>
+    <div class="footer__col"><h4>Legal</h4><ul><li><a href="#">Terms &amp; Conditions</a></li><li><a href="#">Privacy Policy</a></li><li><a href="#">Risk Disclaimer</a></li><li><a href="#">Refund Policy</a></li></ul></div>
+  </div>
+  <div class="footer__bottom">
+    <span class="footer__copy">&copy; 2025 VORNIX. All rights reserved. Trading involves significant risk of loss.</span>
+    <div class="footer__legal"><a href="#">Terms</a><a href="#">Privacy</a></div>
+  </div>
+</footer>
+
+<script>
+window.addEventListener('scroll',()=>document.getElementById('main-nav').classList.toggle('scrolled',scrollY>20),{passive:true});
+let _open=false;
+function navToggle(){_open=!_open;document.getElementById('nav-ham').classList.toggle('is-open',_open);document.getElementById('nav-ham').setAttribute('aria-expanded',_open);document.getElementById('nav-drawer').classList.toggle('is-open',_open);document.body.style.overflow=_open?'hidden':'';}
+window.addEventListener('resize',()=>{if(innerWidth>=1100&&_open)navToggle();},{passive:true});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&_open)navToggle();});
+const _obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');_obs.unobserve(e.target);}}),{threshold:.06,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.rv').forEach(el=>_obs.observe(el));
+</script>
+<script src="app.js"></script>
+</body>
+</html>
