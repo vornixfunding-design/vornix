@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Evaluation Programs — VORNIX</title>
+<meta name="description" content="Four evaluation paths to a funded account. Capital up to $100K. Up to 95% profit split.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;500;600;700;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+.eval-tabs-wrap{position:sticky;top:var(--nav);z-index:50;background:rgba(2,4,10,.98);backdrop-filter:blur(32px);border-bottom:1px solid var(--bd2)}
+.eval-tabs{display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;padding:0 var(--g);max-width:100%}
+.eval-tabs::-webkit-scrollbar{height:0}
+.eval-tab{font-family:var(--ff-ui);font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--t3);padding:20px 24px;cursor:pointer;border:none;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .2s;background:none;white-space:nowrap;display:flex;align-items:center;gap:8px;text-decoration:none}
+.eval-tab:hover{color:var(--t2);background:rgba(212,160,23,.03)}
+.eval-tab.is-active{color:var(--white);border-bottom-color:var(--gold-hi)}
+.tab-pill{font-size:9px;padding:3px 10px;font-weight:800;letter-spacing:1px;border-radius:2px}
+.pill-gold{background:var(--gold-lo);color:var(--gold-hi)}
+.pill-blue{background:rgba(96,165,250,.12);color:#93C5FD}
+.pill-red{background:var(--red-lo);color:var(--red-hi)}
+.pill-green{background:var(--grn-lo);color:var(--grn-hi)}
+.eval-section{display:none;position:relative;z-index:1}
+.eval-section.is-active{display:block}
+</style>
+</head>
+<body>
+<canvas id="bg-canvas"></canvas>
+<div id="bg-veil"></div>
+
+<!-- NAV -->
+<nav class="nav" id="main-nav">
+  <div class="nav__logo" onclick="location.href='index.html'" role="button" tabindex="0">
+    <svg class="nav__logo-svg" viewBox="0 0 172 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs><linearGradient id="lg-w" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FFF" stop-opacity=".95"/><stop offset="100%" stop-color="#8890AA"/></linearGradient><linearGradient id="lg-r" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#E8001A"/><stop offset="100%" stop-color="#7A0008"/></linearGradient><linearGradient id="lg-g" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#22B972"/><stop offset="100%" stop-color="#0E5E3A"/></linearGradient><filter id="glow-r" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="1" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+      <g filter="url(#glow-r)"><rect x="1" y="14" width="5" height="13" fill="url(#lg-r)" rx=".3"/><line x1="3.5" y1="8" x2="3.5" y2="14" stroke="#B8000F" stroke-width="1.2" opacity=".7"/><line x1="3.5" y1="27" x2="3.5" y2="32" stroke="#B8000F" stroke-width="1.2" opacity=".5"/><rect x="9" y="18" width="5" height="7" fill="rgba(255,255,255,.08)" rx=".3"/><line x1="11.5" y1="13" x2="11.5" y2="18" stroke="rgba(255,255,255,.1)" stroke-width="1.2"/><line x1="11.5" y1="25" x2="11.5" y2="29" stroke="rgba(255,255,255,.08)" stroke-width="1.2"/><rect x="17" y="11" width="5" height="14" fill="url(#lg-g)" rx=".3"/><line x1="19.5" y1="6" x2="19.5" y2="11" stroke="#22B972" stroke-width="1.2" opacity=".6"/><line x1="19.5" y1="25" x2="19.5" y2="30" stroke="#22B972" stroke-width="1.2" opacity=".5"/></g>
+      <polyline points="3.5,26 11.5,22 19.5,14" stroke="#B8000F" stroke-width=".8" opacity=".4" stroke-dasharray="2,2"/>
+      <path d="M30 7L38 31L46 7" stroke="url(#lg-w)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <ellipse cx="56.5" cy="19" rx="7" ry="12" stroke="url(#lg-w)" stroke-width="2.7" fill="none"/>
+      <path d="M68 7v24M68 7h9c3 0 5 2.5 5 6s-2 6-5 6H68M76 19l7.5 12" stroke="url(#lg-w)" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <path d="M88 31V7L102 31V7" stroke="url(#lg-w)" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <line x1="108" y1="7" x2="108" y2="31" stroke="url(#lg-w)" stroke-width="2.7" stroke-linecap="round"/>
+      <path d="M114 7l13 24M127 7l-13 24" stroke="url(#lg-r)" stroke-width="2.8" stroke-linecap="round" filter="url(#glow-r)"/>
+      <line x1="30" y1="36" x2="127" y2="36" stroke="rgba(184,0,15,.10)" stroke-width=".8"/>
+      <line x1="30" y1="36" x2="72" y2="36" stroke="rgba(184,0,15,.65)" stroke-width="1.4"/>
+      <text x="133" y="16" font-family="'Barlow Condensed',sans-serif" font-size="6" fill="#6B7A9E" letter-spacing="1.5">PROP</text>
+      <text x="133" y="26" font-family="'Barlow Condensed',sans-serif" font-size="6" fill="#6B7A9E" letter-spacing="1.5">FIRM</text>
+    </svg>
+  </div>
+  <ul class="nav__links" role="list">
+    <li><a class="nav__link" href="index.html">Home</a></li>
+    <li><a class="nav__link is-active" href="evaluations.html">Evaluations</a></li>
+    <li><a class="nav__link" href="academy.html">Academy</a></li>
+    <li><a class="nav__link" href="technology.html">Technology</a></li>
+    <li><a class="nav__link" href="rules.html">Rules</a></li>
+    <li><a class="nav__link" href="how-it-works.html">How It Works</a></li>
+    <li><a class="nav__link" href="about.html">About</a></li>
+    <li><a class="nav__link" href="contact.html">Contact</a></li>
+  </ul>
+  <div class="nav__right">
+    <a href="login.html" class="nav__login">Login</a>
+    <button class="nav__cta" onclick="location.href='signup.html'">Get Funded</button>
+  </div>
+  <button class="nav__ham" id="nav-ham" onclick="navToggle()" aria-label="Toggle menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="nav__drawer" id="nav-drawer">
+  <a class="nav__drawer-link" href="index.html">Home</a>
+  <a class="nav__drawer-link is-active" href="evaluations.html">Evaluations</a>
+  <a class="nav__drawer-link" href="academy.html">Academy</a>
+  <a class="nav__drawer-link" href="technology.html">Technology</a>
+  <a class="nav__drawer-link" href="rules.html">Rules</a>
+  <a class="nav__drawer-link" href="how-it-works.html">How It Works</a>
+  <a class="nav__drawer-link" href="about.html">About</a>
+  <a class="nav__drawer-link" href="contact.html">Contact</a>
+  <a class="nav__drawer-link" href="login.html">Login &rarr;</a>
+  <button class="nav__drawer-cta" onclick="location.href='signup.html'">Get Funded &rarr;</button>
+  <p class="nav__drawer-foot">VORNIX &mdash; STRUCTURE TRADING AS A PROFESSION</p>
+</div>
+
+<!-- PAGE HEADER -->
+<header class="ph">
+  <span class="ph__eye">// Evaluation Programs</span>
+  <h1 class="ph__h">CHOOSE YOUR <span class="red">PROGRAM</span></h1>
+  <p class="ph__sub">Four paths to a funded account. All programs include Forex, Indices, Commodities, Crypto and Stocks.</p>
+</header>
+
+<!-- TABS -->
+<div class="eval-tabs-wrap">
+  <div class="eval-tabs" role="tablist">
+    <a class="eval-tab is-active" id="tab-one"     href="#one"     onclick="switchTab('one')"     role="tab">&#9889; 1-Step <span class="tab-pill pill-gold">95%</span></a>
+    <a class="eval-tab"           id="tab-two"     href="#two"     onclick="switchTab('two')"     role="tab">&#127919; 2-Step <span class="tab-pill pill-blue">90%</span></a>
+    <a class="eval-tab"           id="tab-three"   href="#three"   onclick="switchTab('three')"   role="tab">&#127942; 3-Step <span class="tab-pill pill-red">80&ndash;90%</span></a>
+    <a class="eval-tab"           id="tab-partial" href="#partial" onclick="switchTab('partial')" role="tab">&#128179; Partial <span class="tab-pill pill-green">35% Up</span></a>
+  </div>
+</div>
+
+<!-- 1-STEP -->
+<div class="eval-section is-active" id="panel-one">
+  <div class="plan-ov">
+    <div class="rv">
+      <div class="plan-name">&#9889; 1-STEP PROGRAM</div>
+      <div class="plan-sub">Single Phase &mdash; 95% Profit Split</div>
+      <p class="body-t">Hit <strong>10% profit</strong> in a single phase. No time limit. No minimum trading days. News trading allowed. Fastest path to a funded account.</p>
+      <p class="body-t"><strong>Important:</strong> EA/Algo bots are <strong>not permitted</strong> on this program. Manual trading only.</p>
+      <p class="body-t">Consistency rule: <strong>no single trade may exceed 40% of total profit</strong>.</p>
+      <div class="flags">
+        <span class="flag flag-ok">&#10003; News Trading</span>
+        <span class="flag flag-no">&#10007; No EA / Algo Bots</span>
+        <span class="flag flag-gold">&#9733; No Min. Days</span>
+        <span class="flag flag-ok">&#10003; No Time Limit</span>
+      </div>
+    </div>
+    <div class="rv">
+      <div class="rules">
+        <div class="rc"><div class="rc__icon">&#127919;</div><div class="rc__val rc__val--g">10%</div><div class="rc__lbl">Profit Target</div></div>
+        <div class="rc"><div class="rc__icon">&#128201;</div><div class="rc__val rc__val--r">3%</div><div class="rc__lbl">Daily Loss</div><div class="rc__note">Trailing from day high</div></div>
+        <div class="rc"><div class="rc__icon">&#128721;</div><div class="rc__val rc__val--r">8%</div><div class="rc__lbl">Max Drawdown</div><div class="rc__note">Static from initial</div></div>
+        <div class="rc"><div class="rc__icon">&#128176;</div><div class="rc__val rc__val--g">95%</div><div class="rc__lbl">Profit Split</div></div>
+        <div class="rc"><div class="rc__icon">&#128202;</div><div class="rc__val">40%</div><div class="rc__lbl">Consistency Cap</div><div class="rc__note">Max per single trade</div></div>
+        <div class="rc"><div class="rc__icon">&#128197;</div><div class="rc__val rc__val--au">NONE</div><div class="rc__lbl">Min Trading Days</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="tbl-wrap rv">
+    <table class="tbl">
+      <thead><tr><th>Phase</th><th>Target</th><th>Daily Loss</th><th>Max DD</th><th>Min Days</th><th>News Trading</th><th>EA/Algo</th></tr></thead>
+      <tbody>
+        <tr><td class="tc-ph">EVAL</td><td class="tc-grn">10%</td><td class="tc-red">3% Trailing</td><td class="tc-red">8% Static</td><td class="tc-gold">None</td><td class="tc-grn">Allowed</td><td class="tc-red">Not Allowed</td></tr>
+        <tr><td class="tc-ph">FUNDED</td><td>&mdash;</td><td class="tc-red">3% Trailing</td><td class="tc-red">8% Static</td><td>&mdash;</td><td class="tc-grn">Allowed</td><td class="tc-red">Not Allowed</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="tbl-wrap rv">
+    <span class="label-mono" style="margin:32px 0 14px;display:block">// 1-Step &mdash; Account Sizes &amp; Pricing</span>
+    <table class="tbl">
+      <thead><tr><th>Account Size</th><th>Evaluation Fee</th><th>Profit Split</th><th>Daily Loss</th><th>Max Drawdown</th><th></th></tr></thead>
+      <tbody>
+        <tr><td class="tc-acc">$5,000</td><td class="tc-fee">$49</td><td class="tc-spl">95%</td><td>3% Trailing</td><td>8% Static</td><td><button class="tbl-btn" onclick="location.href='signup.html'">Begin &rarr;</button></td></tr>
+        <tr><td class="tc-acc">$10,000</td><td class="tc-fee">$89</td><td class="tc-spl">95%</td><td>3% Trailing</td><td>8% Static</td><td><button class="tbl-btn" onclick="location.href='signup.html'">Begin &rarr;</button></td></tr>
+        <tr><td class="tc-acc">$25,000</td><td class="tc-fee">$189</td><td class="tc-spl">95%</td><td>3% Trailing</td><td>8% Static</td><td><button class="tbl-btn" onclick="location.href='signup.html'">Begin &rarr;</button></td></tr>
+        <tr><td class="tc-acc">$50,000</td><td class="tc-fee">$289</td><td class="tc-spl">95%</td><td>3% Trailing</td><td>8% Static</td><td><button class="tbl-btn" onclick="location.href='signup.html'">Begin &rarr;</button></td></tr>
+        <tr><td class="tc-acc">$100,000</td><td class="tc-fee">$489</td><td class="tc-spl">95%</td><td>3% Trailing</td><td>8% Static</td><td><button class="tbl-btn" onclick="location.href='signup.html'">Begin &rarr;</button></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div style="height:60px"></div>
+</div>
+
+<!-- 2-STEP -->
+<div class="eval-section" id="panel-two">
+  <div class="plan-ov">
+    <div class="rv">
+      <div class="plan-name">&#127919; 2-STEP PROGRAM</div>
+      <div class="plan-sub">Two Phases &mdash; 90% Profit Split</div>
+      <p class="body-t">Two evaluation phases verifying <strong>consistent, repeatable performance</strong>. News trading allowed. Accounts from <strong>$1K to $100K</strong>.</p>
+      <p class="body-t"><strong>Important:</strong> EA/Algo bots are <strong>not permitted</strong> on this program. Manual trading only. Minimum 3 trading days per phase.</p>
+      <p class="body-t">Consistency rule: <strong>no single trade may exceed 40% of total profit</strong>.</p>
+      <div class="flags">
+        <span class="flag flag-ok">&#10003; News Trading</span>
+        <span class="flag flag-no">&#10007; No EA / Algo Bots</span>
+        <span class="flag flag-nt">3 Min. Days / Phase</span>
+      </div>
+    </div>
+    <div class="rv">
+      <div class="rules">
+        <div class="rc"><div class="rc__icon">&#127919;</div><div class="rc__val rc__val--g">10+5%</div><div class="rc__lbl">Phase 1 + Phase 2</div></div>
+        <div class="rc"><div class="rc__icon">&#128201;</div><div class="rc__val rc__val--r">5%</div><div class="rc__lbl">Daily Loss</div><div class="rc__note">Trailing from day high</div></div>
+        <div class="rc"><div class="rc__icon">&#128721;</div><div class="rc__val rc__val--r">10%</div><div class="rc__lbl">Max Drawdown</div><div class="rc__note">Static from initial</div></div>
+        <div class="rc"><div class="rc__icon">&#128176;</div><div class="rc__val rc__val--g">90%</div><div class="rc__lbl">Profit Split</div></div>
+        <div class="rc"><div class="rc__icon">&#128202;</div><div class="rc__val">40%</div><div class="rc__lbl">Consistency Cap</div><div class="rc__note">Max per single trade</div></div>
+        <div class="rc"><div class="rc__icon">&#128197;</div><div class="rc__val">3 Days</div><div class="rc__lbl">Min Trading Days</div><div class="rc__note">Per phase</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="tbl-wrap rv">
+    <table class="tbl">
+      <thead><tr><th>Phase</th><th>Target</th><th>Daily Loss</th><th>Max DD</th><th>Min Days</th><th>News</th><th>EA/Algo</th></tr></thead>
+      <tbody>
+        <tr><td class="tc-ph">PHASE 1</td><td class="tc-grn">10%</td><td class="tc-red">5% Trailing</td><td class="tc-red">10% Static</td><td>3 Days</td><td class="tc-grn">Allowed</td><td class="tc-red">Not Allowed</td></tr>
+        <tr><td class="tc-ph">PHASE 2</td><td class="tc-grn">5%</td><td class="tc-red">5% Trailing</td><td class="tc-red">10% Static</td><td>3 Days</td><td class="tc-grn">Allowed</td><td class="tc-red">Not Allowed</td></tr>
+        <tr><td class="tc-ph">FUNDED</td><td>&mdash;</td><td class="tc-red">5% Trailing</td><td class="tc-red">10% Static</td><td>&mdash;</td><td class="tc-grn">Allowed</td><td class="tc-red">Not Allowed</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="tbl-wrap rv">
+    <span class="label-mono" style="margin:32px 0 14px;display:block">// 2-Step &mdash; Account Sizes &amp; Pricing</span>
+    <table class="tbl">
+      <thead><tr><th>Account Size</th><th>Evaluation Fee</th><th>Profit Split</th><th>Daily Loss</th><th>Max Drawdown</th><th></th></tr></thead>
+      <tbody>
+        <tr><td class="tc-acc">$1,000</td><td class="tc-fee">$15</td><td class="tc-spl">90%</td><td>5% Trailing</td><td>10% Static</td><td><button class="tbl-btn" onclick="location.href='signup.html'">Begin &rarr;</button></td></tr>
+        <tr><td class="tc-acc">$2,500</td><td class="tc-fee">$29</td><td class="tc-spl">90%</td><td>5% Trailing</td><td>10% Static</td><td><button class="tbl-btn" onclick="location.href='signup.html'">Begin &rarr;</button></td></tr>
+        <tr><td class="tc-acc">$5,000</td><td class="tc-fee">$49</td><td class="tc-spl">90%</td><td>5% Trailing</td><td>10% Static</td><td><button class="tbl-btn" onclick="location.href='signup.html'">Begin &rarr;</button></td></tr>
+        <tr><td class="tc-acc">$10,000</td><td class="tc-fee">$79</td><td class="tc-spl">90%</td><td>5% Trailing</td><td>10% Static</td><td><button class="tbl-btn" onclick="location.href='signup.html'">Begin &rarr;</button></td></tr>
+        <tr><td class="tc-acc">$25,000</td><td class="tc-fee">$169</td><td class="tc-spl">90%</td><td>5% Trailing</td><td>10% Static</td><td><button class="tbl-btn" onclick="location.href='signup.html'">Begin &rarr;</button></td></tr>
+        <tr><td class="tc-acc">$50,000</td><td class="tc-fee">$259</td><td class="tc-spl">90%</td><td>5% Trailing</td><td>10% Static</td><td><button class="tbl-btn" onclick="location.href='signup.html'">Begin &rarr;</button></td></tr>
+        <tr><td class="tc-acc">$100,000</td><td class="tc-fee">$429</td><td class="tc-spl">90%</td><td>5% Trailing</td><td>10% Static</td><td><button class="tbl-btn" onclick="location.href='signup.html'">Begin &rarr;</button></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div style="height:60px"></div>
+</div>
+
+<!-- 3-STEP -->
+<div class="eval-section" id="panel-three">
+  <div class="plan-ov">
+    <div class="rv">
+      <div class="plan-name">&#127942; 3-STEP PROGRAM</div>
+      <div class="plan-sub">Three Phases &mdash; 80% to 90% Split</div>
+      <p class="body-t">Three evaluation phases. Strict <strong>15% consistency rule</strong>. No news trading. EA/Algo permitted. The most disciplined evaluation available.</p>
+      <p class="body-t">The 15% consistency rule and no-news restriction apply in <strong>all phases and the funded account</strong>.</p>
+      <div class="flags">
+        <span class="flag flag-no">&#10007; No News Trading</span>
+        <span class="flag flag-ok">&#10003; EA / Algo Allowed</span>
+        <span class="flag flag-nt">3 Min. Days / Phase</span>
+        <span class="flag flag-no">15% Consistency Cap</span>
+      </div>
+    </div>
+    <div class="rv">
+      <div class="rules">
+        <div class="rc"><div class="rc__icon">&#127919;</div><div class="rc__val rc__val--g">8+5+4%</div><div class="rc__lbl">Phases 1, 2 and 3</div></div>
+        <div class="rc"><div class="rc__icon">&#128201;</div><div class="rc__val rc__val--r">6%</div><div class="rc__lbl">Daily Loss</div><div class="rc__note">Trailing from day high</div></div>
+        <div class="rc"><div class="rc__icon">&#128721;</div><div class="rc__val rc__val--r">12%</div><div class="rc__lbl">Max Drawdown</div><div class="rc__note">Static from initial</div></div>
+        <div class="rc"><div class="rc__icon">&#128176;</div><div class="rc__val rc__val--g">80&ndash;90%</div><div class="rc__lbl">Profit Split</div></div>
+        <div class="rc"><div class="rc__icon">&#128202;</div><div class="rc__val rc__val--r">15%</div><div class="rc__lbl">Consistency Cap</div><div class="rc__note">Max per single trade</div></div>
+        <div class="rc"><div class="rc__icon">&#128197;</div><div class="rc__val">3 Days</div><div class="rc__lbl">Min Trading Days</div><div class="rc__note">Per phase</div></div>
+      </div>
+    </div>
+  </div>
+  <div style="padding:0 var(--g)">
+    <div class="callout rv"><div class="callout__ttl">&#9888; News Trading Rule</div><p>Any trade within <strong>5 minutes before or after a high-impact news event</strong>: if in profit &mdash; profit is <strong>disqualified</strong>. If in loss &mdash; loss is <strong>fully counted</strong>.</p></div>
+    <div class="callout callout-gold rv" style="margin-top:10px"><div class="callout__ttl">&#128202; 15% Consistency Rule</div><p>No single profitable trade may exceed <strong>15% of total accumulated profit</strong>. E.g. total profit $1,000 &rarr; no single trade may have contributed more than $150.</p></div>
+  </div>
+  <div class="tbl-wrap rv" style="margin-top:24px">
+    <table class="tbl">
+      <thead><tr><th>Phase</th><th>Target</th><th>Daily Loss</th><th>Max DD</th><th>Min Days</th><th>News</th><th>EA/Algo</th></tr></thead>
+      <tbody>
+        <tr><td class="tc-ph">PHASE 1</td><td class="tc-grn">8%</td><td class="tc-red">6% Trailing</td><td class="tc-red">12% Static</td><td>3 Days</td><td class="tc-red">Not Allowed</td><td class="tc-grn">Allowed</td></tr>
+        <tr><td class="tc-ph">PHASE 2</td><td class="tc-grn">5%</td><td class="tc-red">6% Trailing</td><td class="tc-red">12% Static</td><td>3 Days</td><td class="tc-red">Not Allowed</td><td class="tc-grn">Allowed</td></tr>
+        <tr><td class="tc-ph">PHASE 3</td><td class="tc-grn">4%</td><td class="tc-red">6% Trailing</td><td class="tc-red">12% Static</td><td>3 Days</td><td class="tc-red">Not Allowed</td><td class="tc-grn">Allowed</td></tr>
+        <tr><td class="tc-ph">FUNDED</td><td>&mdash;</td><td class="tc-red">6% Trailing</td><td class="tc-red">12% Static</td><td>&mdash;</td><td class="tc-red">Not Allowed</td><td class="tc-grn">Allowed</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="tbl-wrap rv">
+    <span class="label-mono" style="margin:32px 0 14px;display:block">// 3-Step &mdash; Account Sizes &amp; Pricing</span>
+    <table class="tbl">
+      <thead><tr><th>Account Size</th><th>Evaluation Fee</th><th>Profit Split</th><th>Daily Loss</th><th>Max Drawdown</th><th></th></tr></thead>
+      <tbody>
+        <tr><td class="tc-acc">$1,000</td><td class="tc-fee">$12</td><td class="tc-spl">80&rarr;90%</td><td>6% Trailing</td><td>12% Static</td><td><button class="tbl-btn" onclick="location.href='signup.html'">Begin &rarr;</button></td></tr>
+        <tr><td class="tc-acc">$2,500</td><td class="tc-fee">$24</td><td class="tc-spl">80&rarr;90%</td><td>6% Trailing</td><td>12% Static</td><td><button class="tbl-btn" onclick="location.href='signup.html'">Begin &rarr;</button></td></tr>
+        <tr><td class="tc-acc">$5,000</td><td class="tc-fee">$39</td><td class="tc-spl">80&rarr;90%</td><td>6% Trailing</td><td>12% Static</td><td><button class="tbl-btn" onclick="location.href='signup.html'">Begin &rarr;</button></td></tr>
+        <tr><td class="tc-acc">$10,000</td><td class="tc-fee">$69</td><td class="tc-spl">80&rarr;90%</td><td>6% Trailing</td><td>12% Static</td><td><button class="tbl-btn" onclick="location.href='signup.html'">Begin &rarr;</button></td></tr>
+        <tr><td class="tc-acc">$25,000</td><td class="tc-fee">$139</td><td class="tc-spl">80&rarr;90%</td><td>6% Trailing</td><td>12% Static</td><td><button class="tbl-btn" onclick="location.href='signup.html'">Begin &rarr;</button></td></tr>
+        <tr><td class="tc-acc">$50,000</td><td class="tc-fee">$229</td><td class="tc-spl">80&rarr;90%</td><td>6% Trailing</td><td>12% Static</td><td><button class="tbl-btn" onclick="location.href='signup.html'">Begin &rarr;</button></td></tr>
+        <tr><td class="tc-acc">$100,000</td><td class="tc-fee">$389</td><td class="tc-spl">80&rarr;90%</td><td>6% Trailing</td><td>12% Static</td><td><button class="tbl-btn" onclick="location.href='signup.html'">Begin &rarr;</button></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div style="height:60px"></div>
+</div>
+
+<!-- PARTIAL -->
+<div class="eval-section" id="panel-partial">
+  <div class="plan-ov">
+    <div class="rv">
+      <div class="plan-name">&#128179; PARTIAL PAYMENT</div>
+      <div class="plan-sub">Three Phases &mdash; Pay Only 35% Upfront</div>
+      <p class="body-t">Pay <strong>only 35% of the evaluation fee upfront</strong>. The remaining 65% is deducted from your first profit withdrawal. Lower barrier &mdash; stricter evaluation.</p>
+      <p class="body-t">The 15% consistency rule and no-news restriction apply throughout all phases and the funded account.</p>
+      <div class="flags">
+        <span class="flag flag-gold">&#9733; 35% Upfront Only</span>
+        <span class="flag flag-no">&#10007; No News Trading</span>
+        <span class="flag flag-nt">5 Min. Days / Phase</span>
+        <span class="flag flag-no">15% Consistency Cap</span>
+      </div>
+    </div>
+    <div class="rv">
+      <div class="rules">
+        <div class="rc"><div class="rc__icon">&#127919;</div><div class="rc__val rc__val--g">10+6+5%</div><div class="rc__lbl">Phases 1, 2 and 3</div></div>
+        <div class="rc"><div class="rc__icon">&#128201;</div><div class="rc__val rc__val--r">5%</div><div class="rc__lbl">Daily Loss</div><div class="rc__note">Trailing &mdash; stricter</div></div>
+        <div class="rc"><div class="rc__icon">&#128721;</div><div class="rc__val rc__val--r">10%</div><div class="rc__lbl">Max Drawdown</div><div class="rc__note">Static &mdash; stricter</div></div>
+        <div class="rc"><div class="rc__icon">&#128176;</div><div class="rc__val rc__val--g">80&ndash;90%</div><div class="rc__lbl">Profit Split</div></div>
+        <div class="rc"><div class="rc__icon">&#128202;</div><div class="rc__val rc__val--r">15%</div><div class="rc__lbl">Consistency Cap</div><div class="rc__note">Max per single trade</div></div>
+        <div class="rc"><div class="rc__icon">&#128197;</div><div class="rc__val">5 Days</div><div class="rc__lbl">Min Trading Days</div><div class="rc__note">Per phase &mdash; stricter</div></div>
+      </div>
+    </div>
+  </div>
+  <div style="padding:0 var(--g)">
+    <div class="callout callout-gold rv"><div class="callout__ttl">&#128179; How Partial Payment Works</div><p>Pay <strong>35% upfront</strong>. Complete all three evaluation phases. Once funded and your first profit withdrawal is processed, the remaining <strong>65% is automatically deducted</strong> from that withdrawal. No additional out-of-pocket payment ever.</p></div>
+  </div>
+  <div class="tbl-wrap rv" style="margin-top:24px">
+    <span class="label-mono" style="margin:0 0 14px;display:block">// Partial Payment &mdash; 35% Upfront Pricing</span>
+    <table class="tbl">
+      <thead><tr><th>Account Size</th><th>Upfront (35%)</th><th>From Profits (65%)</th><th>Total Fee</th><th>Split</th><th></th></tr></thead>
+      <tbody>
+        <tr><td class="tc-acc">$1,000</td><td class="tc-up">$7</td><td class="tc-dim">$13</td><td class="tc-dim">$20</td><td class="tc-spl">80&rarr;90%</td><td><button class="tbl-btn" onclick="location.href='signup.html'">Begin &rarr;</button></td></tr>
+        <tr><td class="tc-acc">$2,500</td><td class="tc-up">$12</td><td class="tc-dim">$23</td><td class="tc-dim">$35</td><td class="tc-spl">80&rarr;90%</td><td><button class="tbl-btn" onclick="location.href='signup.html'">Begin &rarr;</button></td></tr>
+        <tr><td class="tc-acc">$5,000</td><td class="tc-up">$19</td><td class="tc-dim">$36</td><td class="tc-dim">$55</td><td class="tc-spl">80&rarr;90%</td><td><button class="tbl-btn" onclick="location.href='signup.html'">Begin &rarr;</button></td></tr>
+        <tr><td class="tc-acc">$10,000</td><td class="tc-up">$33</td><td class="tc-dim">$62</td><td class="tc-dim">$95</td><td class="tc-spl">80&rarr;90%</td><td><button class="tbl-btn" onclick="location.href='signup.html'">Begin &rarr;</button></td></tr>
+        <tr><td class="tc-acc">$25,000</td><td class="tc-up">$68</td><td class="tc-dim">$127</td><td class="tc-dim">$195</td><td class="tc-spl">80&rarr;90%</td><td><button class="tbl-btn" onclick="location.href='signup.html'">Begin &rarr;</button></td></tr>
+        <tr><td class="tc-acc">$50,000</td><td class="tc-up">$105</td><td class="tc-dim">$194</td><td class="tc-dim">$299</td><td class="tc-spl">80&rarr;90%</td><td><button class="tbl-btn" onclick="location.href='signup.html'">Begin &rarr;</button></td></tr>
+        <tr><td class="tc-acc">$100,000</td><td class="tc-up">$171</td><td class="tc-dim">$318</td><td class="tc-dim">$489</td><td class="tc-spl">80&rarr;90%</td><td><button class="tbl-btn" onclick="location.href='signup.html'">Begin &rarr;</button></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div style="height:60px"></div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer__grid">
+    <div><div class="footer__brand-name">VORN<span>IX</span></div><p class="footer__brand-desc">Four evaluation programs. Capital up to $100K. Up to 95% profit split.</p></div>
+    <div class="footer__col"><h4>Programs</h4><ul><li><a href="#one" onclick="switchTab('one')">1-Step</a></li><li><a href="#two" onclick="switchTab('two')">2-Step</a></li><li><a href="#three" onclick="switchTab('three')">3-Step</a></li><li><a href="#partial" onclick="switchTab('partial')">Partial</a></li></ul></div>
+    <div class="footer__col"><h4>Platform</h4><ul><li><a href="how-it-works.html">How It Works</a></li><li><a href="rules.html">Rules</a></li><li><a href="technology.html">Technology</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+    <div class="footer__col"><h4>Legal</h4><ul><li><a href="#">Terms</a></li><li><a href="#">Privacy</a></li><li><a href="#">Risk Warning</a></li><li><a href="#">Refund Policy</a></li></ul></div>
+  </div>
+  <div class="footer__bottom">
+    <span class="footer__copy">&copy; 2025 VORNIX. All rights reserved.</span>
+    <div class="footer__legal"><a href="#">Terms</a><a href="#">Privacy</a><a href="#">Risk</a></div>
+  </div>
+</footer>
+
+<script>
+window.addEventListener('scroll',()=>document.getElementById('main-nav').classList.toggle('scrolled',scrollY>20),{passive:true});
+let _open=false;
+function navToggle(){_open=!_open;document.getElementById('nav-ham').classList.toggle('is-open',_open);document.getElementById('nav-ham').setAttribute('aria-expanded',_open);document.getElementById('nav-drawer').classList.toggle('is-open',_open);document.body.style.overflow=_open?'hidden':'';}
+window.addEventListener('resize',()=>{if(innerWidth>=1100&&_open)navToggle();},{passive:true});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&_open)navToggle();});
+const _obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');_obs.unobserve(e.target);}}),{threshold:.06,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.rv').forEach(el=>_obs.observe(el));
+
+function switchTab(id){
+  document.querySelectorAll('.eval-tab').forEach(t=>t.classList.remove('is-active'));
+  document.querySelectorAll('.eval-section').forEach(p=>p.classList.remove('is-active'));
+  document.getElementById('tab-'+id)?.classList.add('is-active');
+  document.getElementById('panel-'+id)?.classList.add('is-active');
+  // trigger reveal on newly shown panel
+  document.querySelectorAll('#panel-'+id+' .rv').forEach(el=>{el.classList.add('in');});
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+// Handle hash on load
+function initFromHash(){const h=location.hash.replace('#','');if(['one','two','three','partial'].includes(h))switchTab(h);}
+window.addEventListener('DOMContentLoaded',initFromHash);
+</script>
+<script src="app.js"></script>
+</body>
+</html>
