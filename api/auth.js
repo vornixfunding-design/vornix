@@ -398,8 +398,8 @@ module.exports = async (req, res) => {
         return err(res, 'Invalid email or password.', 401);
       }
 
-      // Success — clean up old attempt records for this email (non-blocking)
-      db().from('login_attempts').delete().eq('email', email).catch(() => {});
+      // Success — clean up old attempt records for this email (best-effort)
+      await db().from('login_attempts').delete().eq('email', email);
 
       // Create session
       const token      = generateToken();
@@ -630,8 +630,8 @@ module.exports = async (req, res) => {
 
       if (upErr) return err(res, 'Failed to update password: ' + upErr.message);
 
-      // Clear any rate-limit records
-      db().from('login_attempts').delete().eq('email', email).catch(() => {});
+      // Clear any rate-limit records (best-effort)
+      await db().from('login_attempts').delete().eq('email', email);
 
       // Create session so user is logged in immediately after reset
       const token      = generateToken();
