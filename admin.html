@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard — VORNIX</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;900&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+/* ── Admin layout ─────────────────────────────────── */
+.adm-wrap{min-height:100vh;padding:72px var(--g) 60px}
+.adm-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;flex-wrap:wrap;gap:12px}
+.adm-title{font-family:var(--ff-d);font-size:28px;letter-spacing:3px;color:var(--white)}
+.adm-title span{color:var(--red)}
+.adm-tag{font-family:var(--ff-m);font-size:10px;color:var(--t3);letter-spacing:2px;margin-top:2px}
+.adm-period{display:flex;gap:6px;flex-wrap:wrap}
+.period-btn{font-family:var(--ff-ui);font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:7px 14px;border:1px solid var(--bd2);background:var(--bg-2);color:var(--t3);cursor:pointer;transition:all .2s}
+.period-btn:hover{border-color:var(--red);color:var(--t1)}
+.period-btn.active{background:var(--red);border-color:var(--red);color:#fff}
+
+/* ── Metric cards ─────────────────────────────────── */
+.metric-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;margin-bottom:32px}
+.metric-card{background:var(--bg-card);border:1px solid var(--bd2);padding:18px 20px;position:relative;overflow:hidden}
+.metric-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--red),transparent)}
+.metric-card.green::before{background:linear-gradient(90deg,transparent,var(--grn),transparent)}
+.metric-card.gold::before{background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.metric-lbl{font-family:var(--ff-ui);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--t3);margin-bottom:8px}
+.metric-val{font-family:var(--ff-d);font-size:28px;letter-spacing:1px;color:var(--white);line-height:1}
+.metric-sub{font-family:var(--ff-m);font-size:10px;color:var(--t3);margin-top:4px}
+
+/* ── Section headings ─────────────────────────────── */
+.section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px}
+.section-title{font-family:var(--ff-d);font-size:18px;letter-spacing:2px;color:var(--white)}
+.section-count{font-family:var(--ff-m);font-size:10px;color:var(--t3);letter-spacing:1px}
+
+/* ── Filters bar ──────────────────────────────────── */
+.filters-bar{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.filter-input{background:var(--bg-2);border:1px solid var(--bd2);color:var(--t1);font-family:var(--ff-b);font-size:13px;padding:9px 12px;outline:none;transition:border-color .2s;min-width:160px}
+.filter-input:focus{border-color:var(--red-bd)}
+.filter-input::placeholder{color:var(--t3)}
+.filter-select{background:var(--bg-2);border:1px solid var(--bd2);color:var(--t1);font-family:var(--ff-b);font-size:13px;padding:9px 12px;outline:none;cursor:pointer;-webkit-appearance:none;appearance:none}
+.filter-btn{font-family:var(--ff-ui);font-size:11px;letter-spacing:2px;text-transform:uppercase;padding:9px 20px;border:1px solid var(--red);background:transparent;color:var(--red);cursor:pointer;transition:all .2s}
+.filter-btn:hover{background:var(--red);color:#fff}
+
+/* ── Payments table ───────────────────────────────── */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--bd2)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead{background:var(--bg-card2)}
+th{font-family:var(--ff-ui);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--t3);padding:12px 14px;text-align:left;white-space:nowrap;border-bottom:1px solid var(--bd2)}
+td{padding:12px 14px;border-bottom:1px solid var(--bd);color:var(--t1);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(255,255,255,.02)}
+.badge{display:inline-block;font-family:var(--ff-m);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;padding:3px 8px;border-radius:2px}
+.badge-paid{background:var(--grn-lo);color:var(--grn);border:1px solid var(--grn-bd)}
+.badge-pending{background:rgba(200,160,0,.12);color:#d4a800;border:1px solid rgba(200,160,0,.3)}
+.badge-confirming{background:rgba(80,120,255,.12);color:#6080ff;border:1px solid rgba(80,120,255,.3)}
+.badge-initiated{background:var(--bg-2);color:var(--t3);border:1px solid var(--bd2)}
+.badge-failed,.badge-expired{background:var(--red-lo);color:#ff9090;border:1px solid var(--red-bd)}
+.mono{font-family:var(--ff-m);font-size:12px;color:var(--t2)}
+.tx-link{color:var(--red);font-family:var(--ff-m);font-size:11px;text-decoration:none}
+.tx-link:hover{text-decoration:underline}
+
+/* ── Pagination ───────────────────────────────────── */
+.pagination{display:flex;align-items:center;justify-content:flex-end;gap:8px;margin-top:14px;flex-wrap:wrap}
+.pg-btn{font-family:var(--ff-ui);font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:7px 16px;border:1px solid var(--bd2);background:transparent;color:var(--t3);cursor:pointer;transition:all .2s}
+.pg-btn:hover:not(:disabled){border-color:var(--red);color:var(--t1)}
+.pg-btn:disabled{opacity:.3;cursor:not-allowed}
+.pg-info{font-family:var(--ff-m);font-size:11px;color:var(--t3)}
+
+/* ── Loading / error states ───────────────────────── */
+.state-msg{padding:24px;text-align:center;font-family:var(--ff-m);font-size:12px;color:var(--t3);letter-spacing:1px}
+.state-msg.err{color:#ff9090}
+.access-denied{max-width:480px;margin:120px auto 0;text-align:center;padding:var(--g)}
+.access-denied .icon{font-size:48px;margin-bottom:16px}
+.access-denied h2{font-family:var(--ff-d);font-size:32px;letter-spacing:3px;color:var(--white);margin-bottom:8px}
+.access-denied p{font-size:14px;color:var(--t2);margin-bottom:24px;line-height:1.6}
+.btn-back{display:inline-block;font-family:var(--ff-ui);font-size:11px;letter-spacing:3px;text-transform:uppercase;padding:12px 28px;background:var(--red);color:#fff;border:none;cursor:pointer;text-decoration:none;clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%)}
+
+@keyframes ld{0%,100%{opacity:1}50%{opacity:.3}}
+.spin::after{content:'...';display:inline-block;animation:ld 1s infinite}
+@media(max-width:600px){.adm-header{flex-direction:column;align-items:flex-start}.metric-grid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+
+<nav class="nav" role="navigation">
+  <div class="nav__logo" onclick="location.href='index.html'" role="button" tabindex="0">
+    <svg class="nav__logo-svg" viewBox="0 0 172 38" fill="none">
+      <defs>
+        <linearGradient id="lw" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FFF" stop-opacity=".95"/><stop offset="100%" stop-color="#8890AA"/></linearGradient>
+        <linearGradient id="lr" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#E8001A"/><stop offset="100%" stop-color="#7A0008"/></linearGradient>
+        <linearGradient id="lgr" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#22B972"/><stop offset="100%" stop-color="#0E5E3A"/></linearGradient>
+        <filter id="gr"><feGaussianBlur stdDeviation="1" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      </defs>
+      <g filter="url(#gr)"><rect x="1" y="14" width="5" height="13" fill="url(#lr)" rx=".3"/><line x1="3.5" y1="8" x2="3.5" y2="14" stroke="#B8000F" stroke-width="1.2" opacity=".7"/><rect x="9" y="18" width="5" height="7" fill="rgba(255,255,255,.08)" rx=".3"/><rect x="17" y="11" width="5" height="14" fill="url(#lgr)" rx=".3"/></g>
+      <path d="M30 7L38 31L46 7" stroke="url(#lw)" stroke-width="2.8" stroke-linecap="round" fill="none"/>
+      <ellipse cx="56.5" cy="19" rx="7" ry="12" stroke="url(#lw)" stroke-width="2.7" fill="none"/>
+      <path d="M68 7v24M68 7h9c3 0 5 2.5 5 6s-2 6-5 6H68M76 19l7.5 12" stroke="url(#lw)" stroke-width="2.7" stroke-linecap="round" fill="none"/>
+      <path d="M88 31V7L102 31V7" stroke="url(#lw)" stroke-width="2.7" stroke-linecap="round" fill="none"/>
+      <line x1="108" y1="7" x2="108" y2="31" stroke="url(#lw)" stroke-width="2.7" stroke-linecap="round"/>
+      <path d="M114 7l13 24M127 7l-13 24" stroke="url(#lr)" stroke-width="2.8" stroke-linecap="round" filter="url(#gr)"/>
+      <line x1="30" y1="36" x2="72" y2="36" stroke="rgba(184,0,15,.7)" stroke-width="1.4"/>
+    </svg>
+  </div>
+  <div class="nav__right" id="nav-right">
+    <span id="nav-user" style="font-family:var(--ff-m);font-size:11px;letter-spacing:2px;color:var(--t3)"></span>
+    <button class="nav__cta" onclick="doSignOut()">Sign Out</button>
+  </div>
+</nav>
+
+<!-- Access denied screen (hidden by default) -->
+<div class="access-denied" id="accessDenied" style="display:none">
+  <div class="icon">🔒</div>
+  <h2>ACCESS DENIED</h2>
+  <p>This area is restricted to administrators only. If you believe this is an error, please contact support.</p>
+  <a href="dashboard.html" class="btn-back">Back to Dashboard</a>
+</div>
+
+<!-- Main admin content (hidden until auth verified) -->
+<div class="adm-wrap" id="adminContent" style="display:none">
+
+  <div class="adm-header">
+    <div>
+      <div class="adm-title">ADMIN <span>PANEL</span></div>
+      <div class="adm-tag">// VORNIX Firm Management</div>
+    </div>
+    <div class="adm-period">
+      <button class="period-btn active" onclick="setPeriod('day',this)">Today</button>
+      <button class="period-btn" onclick="setPeriod('week',this)">Week</button>
+      <button class="period-btn" onclick="setPeriod('month',this)">Month</button>
+      <button class="period-btn" onclick="setPeriod('all',this)">All Time</button>
+    </div>
+  </div>
+
+  <!-- Overview metric cards -->
+  <div class="metric-grid" id="metricGrid">
+    <div class="state-msg"><span class="spin">Loading metrics</span></div>
+  </div>
+
+  <!-- Payments section -->
+  <div class="section-head">
+    <div>
+      <div class="section-title">PAYMENTS</div>
+      <div class="section-count" id="paymentsCount"></div>
+    </div>
+  </div>
+
+  <div class="filters-bar">
+    <input class="filter-input" type="text" id="fSearch" placeholder="Search email or name…" oninput="debouncedLoad()">
+    <select class="filter-select" id="fStatus" onchange="loadPayments(1)">
+      <option value="">All Statuses</option>
+      <option value="initiated">Initiated</option>
+      <option value="pending">Pending</option>
+      <option value="confirming">Confirming</option>
+      <option value="paid">Paid</option>
+      <option value="failed">Failed</option>
+      <option value="expired">Expired</option>
+    </select>
+    <input class="filter-input" type="date" id="fFrom" onchange="loadPayments(1)" style="min-width:auto">
+    <input class="filter-input" type="date" id="fTo"   onchange="loadPayments(1)" style="min-width:auto">
+    <button class="filter-btn" onclick="clearFilters()">Clear</button>
+  </div>
+
+  <div class="tbl-wrap">
+    <table id="paymentsTable">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>User</th>
+          <th>Challenge</th>
+          <th>Amount</th>
+          <th>Network</th>
+          <th>Status</th>
+          <th>Tx</th>
+        </tr>
+      </thead>
+      <tbody id="paymentsBody">
+        <tr><td colspan="7" class="state-msg"><span class="spin">Loading payments</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pagination" id="pagination"></div>
+
+</div>
+
+<script src="supabase.js"></script>
+<script>
+'use strict';
+
+/* Auth guard — instant check before any network call */
+if (!VornixDB.Auth.isLoggedIn()) { location.href = 'login.html'; }
+
+let _period = 'day';
+let _page   = 1;
+let _total  = 0;
+const LIMIT = 50;
+let _debounceTimer = null;
+
+/* ── Boot ────────────────────────────────────────── */
+window.addEventListener('load', async () => {
+  /* Show user name immediately from cookie */
+  const cached = VornixDB.Auth.getUser();
+  if (cached?.full_name) {
+    document.getElementById('nav-user').textContent =
+      (cached.full_name.split(' ')[0] || cached.email || '').toUpperCase();
+  }
+
+  /* Validate session + admin flag server-side */
+  let session = null;
+  try {
+    const { data } = await VornixDB.Auth.getSession();
+    session = data?.session?.user;
+  } catch (_) {}
+
+  if (!session) { location.href = 'login.html'; return; }
+
+  if (!session.is_admin) {
+    document.getElementById('accessDenied').style.display = 'block';
+    return;
+  }
+
+  document.getElementById('nav-user').textContent =
+    (session.full_name?.split(' ')[0] || session.email || '').toUpperCase();
+  document.getElementById('adminContent').style.display = 'block';
+
+  await Promise.all([ loadOverview(), loadPayments(1) ]);
+});
+
+/* ── Sign out ─────────────────────────────────────── */
+async function doSignOut() {
+  await VornixDB.Auth.signOut();
+  location.href = 'login.html';
+}
+
+/* ── Period selector ─────────────────────────────── */
+function setPeriod(period, btn) {
+  _period = period;
+  document.querySelectorAll('.period-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  loadOverview();
+}
+
+/* ── Overview metrics ────────────────────────────── */
+async function loadOverview() {
+  const grid = document.getElementById('metricGrid');
+  grid.innerHTML = '<div class="state-msg"><span class="spin">Loading metrics</span></div>';
+
+  let data;
+  try {
+    const r = await fetch(`/api/admin?action=overview&period=${encodeURIComponent(_period)}`, { credentials: 'include' });
+    const json = await r.json();
+    if (!r.ok || json.error) throw new Error(json.error || 'Failed');
+    data = json.data || json;
+  } catch (e) {
+    grid.innerHTML = `<div class="state-msg err">Failed to load metrics: ${e.message}</div>`;
+    return;
+  }
+
+  const fmt  = n => typeof n === 'number' ? n.toLocaleString() : '—';
+  const fmtU = n => typeof n === 'number' ? '$' + n.toFixed(2) : '—';
+
+  grid.innerHTML = `
+    <div class="metric-card green">
+      <div class="metric-lbl">Revenue (USDT)</div>
+      <div class="metric-val">${fmtU(data.periodRevenue ?? data.revenue)}</div>
+      <div class="metric-sub">All time: ${fmtU(data.revenue)}</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-lbl">Sales (Payments)</div>
+      <div class="metric-val">${fmt(data.periodSales ?? data.totalSales)}</div>
+      <div class="metric-sub">All time: ${fmt(data.totalSales)}</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-lbl">New Users</div>
+      <div class="metric-val">${fmt(data.newUsers)}</div>
+      <div class="metric-sub">Total traders: ${fmt(data.totalTraders)}</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-lbl">Active Challenges</div>
+      <div class="metric-val">${fmt(data.activeChallenges)}</div>
+      <div class="metric-sub">All statuses combined</div>
+    </div>
+    <div class="metric-card green">
+      <div class="metric-lbl">Funded Accounts</div>
+      <div class="metric-val">${fmt(data.fundedChallenges)}</div>
+      <div class="metric-sub">Successfully funded</div>
+    </div>
+    <div class="metric-card gold">
+      <div class="metric-lbl">Payouts Requested</div>
+      <div class="metric-val">${fmt(data.payoutsRequestedCount)}</div>
+      <div class="metric-sub">${fmtU(data.payoutsRequestedAmount)} pending</div>
+    </div>
+    <div class="metric-card green">
+      <div class="metric-lbl">Payouts Paid</div>
+      <div class="metric-val">${fmt(data.payoutsPaidCount)}</div>
+      <div class="metric-sub">${fmtU(data.payoutsPaidAmount)} disbursed</div>
+    </div>
+  `;
+}
+
+/* ── Payments table ───────────────────────────────── */
+async function loadPayments(page) {
+  _page = page || _page;
+  const tbody = document.getElementById('paymentsBody');
+  tbody.innerHTML = '<tr><td colspan="7" class="state-msg"><span class="spin">Loading</span></td></tr>';
+
+  const status = document.getElementById('fStatus').value;
+  const search = document.getElementById('fSearch').value.trim();
+  const from   = document.getElementById('fFrom').value;
+  const to     = document.getElementById('fTo').value;
+
+  const params = new URLSearchParams({
+    action: 'payments',
+    page:   _page,
+    limit:  LIMIT,
+  });
+  if (status) params.set('status', status);
+  if (search) params.set('search', search);
+  if (from)   params.set('from', from + 'T00:00:00Z');
+  if (to)     params.set('to',   to   + 'T23:59:59Z');
+
+  let payments = [], total = 0;
+  try {
+    const r = await fetch(`/api/admin?${params}`, { credentials: 'include' });
+    const json = await r.json();
+    if (!r.ok || json.error) throw new Error(json.error || 'Failed');
+    const d = json.data || json;
+    payments = d.payments || [];
+    total    = d.total    || 0;
+  } catch (e) {
+    tbody.innerHTML = `<tr><td colspan="7" class="state-msg err">Error: ${e.message}</td></tr>`;
+    return;
+  }
+
+  _total = total;
+  document.getElementById('paymentsCount').textContent = `${total.toLocaleString()} record${total !== 1 ? 's' : ''}`;
+
+  if (!payments.length) {
+    tbody.innerHTML = '<tr><td colspan="7" class="state-msg">No payments found.</td></tr>';
+    renderPagination();
+    return;
+  }
+
+  tbody.innerHTML = payments.map(p => {
+    const profile = p.challenges?.profiles;
+    const email   = profile?.email     || '—';
+    const name    = profile?.full_name || '—';
+    const plan    = p.challenges?.plan ? planLabel(p.challenges.plan) : '—';
+    const size    = p.challenges?.account_size ? '$' + Number(p.challenges.account_size).toLocaleString() : '—';
+    const date    = p.created_at ? new Date(p.created_at).toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' }) : '—';
+    const amount  = typeof p.amount === 'number' ? '$' + p.amount.toFixed(2) : '—';
+    const network = p.network || p.currency || '—';
+    const status      = p.gateway_status || 'unknown';
+    const safeStatus  = /^[a-z_]+$/.test(status) ? status : 'unknown';
+    const tx      = p.tx_hash && /^[0-9a-fA-F]{64}$/.test(p.tx_hash)
+      ? `<a class="tx-link" href="https://bscscan.com/tx/${p.tx_hash}" target="_blank" rel="noopener">${p.tx_hash.slice(0,8)}…</a>`
+      : '<span class="mono" style="color:var(--t3)">—</span>';
+
+    return `<tr>
+      <td class="mono">${date}</td>
+      <td>
+        <div style="font-size:13px;color:var(--t1)">${escHtml(name)}</div>
+        <div class="mono" style="color:var(--t3);font-size:11px">${escHtml(email)}</div>
+      </td>
+      <td>
+        <div style="font-size:13px">${plan}</div>
+        <div class="mono" style="font-size:11px;color:var(--t3)">${size}</div>
+      </td>
+      <td class="mono">${amount}</td>
+      <td class="mono">${escHtml(network)}</td>
+      <td><span class="badge badge-${safeStatus}">${escHtml(status)}</span></td>
+      <td>${tx}</td>
+    </tr>`;
+  }).join('');
+
+  renderPagination();
+}
+
+function planLabel(p) {
+  return { one_step:'1-Step', two_step:'2-Step', three_step:'3-Step', partial:'Partial' }[p] || p;
+}
+
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+/* ── Pagination ───────────────────────────────────── */
+function renderPagination() {
+  const totalPages = Math.max(1, Math.ceil(_total / LIMIT));
+  const el = document.getElementById('pagination');
+  if (totalPages <= 1) { el.innerHTML = ''; return; }
+
+  el.innerHTML = `
+    <button class="pg-btn" onclick="loadPayments(${_page - 1})" ${_page <= 1 ? 'disabled' : ''}>← Prev</button>
+    <span class="pg-info">Page ${_page} of ${totalPages}</span>
+    <button class="pg-btn" onclick="loadPayments(${_page + 1})" ${_page >= totalPages ? 'disabled' : ''}>Next →</button>
+  `;
+}
+
+/* ── Filter helpers ───────────────────────────────── */
+function clearFilters() {
+  document.getElementById('fSearch').value = '';
+  document.getElementById('fStatus').value = '';
+  document.getElementById('fFrom').value   = '';
+  document.getElementById('fTo').value     = '';
+  loadPayments(1);
+}
+
+function debouncedLoad() {
+  clearTimeout(_debounceTimer);
+  _debounceTimer = setTimeout(() => loadPayments(1), 400);
+}
+</script>
+</body>
+</html>
