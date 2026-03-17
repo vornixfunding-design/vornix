@@ -226,9 +226,24 @@
             <div class="f-l" style="margin-bottom:6px">How it works</div>
             <ol id="s3-inst" style="font-size:13px;color:var(--t2);padding-left:18px;line-height:2.1;list-style:decimal"></ol>
           </div>
-          <div style="background:var(--bg-2);border:1px solid var(--bd);border-radius:4px;padding:14px 18px;margin-bottom:18px;display:flex;align-items:center;gap:12px" id="pay-status-box">
-            <div id="pay-status-icon" style="font-size:20px">⏳</div>
-            <div><div style="font-size:12px;font-family:var(--ff-ui);letter-spacing:1.5px;text-transform:uppercase;color:var(--t3)">Payment Status</div><div id="pay-status-msg" style="font-size:14px;color:var(--t2);margin-top:2px">Waiting for your deposit…</div></div>
+          <!-- Payment status box -->
+          <div id="pay-status-box" style="background:var(--bg-2);border:1px solid var(--bd);padding:16px 18px;margin-bottom:16px">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
+              <div id="pay-status-icon" style="font-size:22px">⏳</div>
+              <div><div style="font-size:10px;font-family:var(--ff-ui);letter-spacing:1.5px;text-transform:uppercase;color:var(--t3)">Payment Status</div><div id="pay-status-msg" style="font-size:14px;color:var(--t2);margin-top:2px">Waiting for your deposit…</div></div>
+            </div>
+            <div id="pay-confs-wrap" style="display:none;margin-top:8px">
+              <div style="display:flex;justify-content:space-between;font-size:10px;font-family:var(--ff-m);color:var(--t3);margin-bottom:5px"><span>Confirmations</span><span id="pay-confs-label">0 / 5</span></div>
+              <div style="background:var(--bg-3);height:4px;overflow:hidden"><div id="pay-confs-bar" style="background:var(--gold);height:100%;width:0%;transition:width .4s"></div></div>
+            </div>
+            <div id="pay-tx-wrap" style="display:none;margin-top:10px;font-size:11px;font-family:var(--ff-m)"><span style="color:var(--t3)">TX: </span><a id="pay-tx-link" href="#" target="_blank" rel="noopener noreferrer" style="color:var(--t2);word-break:break-all"></a></div>
+            <div id="pay-expiry" style="display:none;font-size:10px;font-family:var(--ff-m);color:var(--t3);margin-top:8px"></div>
+          </div>
+          <!-- Common mistakes hint -->
+          <div style="background:var(--red-lo);border:1px solid var(--red-bd);padding:12px 16px;margin-bottom:18px;font-size:12px;color:#ff9090;line-height:1.7">
+            <strong style="display:block;margin-bottom:4px;font-family:var(--ff-ui);letter-spacing:1px;font-size:10px">⚠ COMMON MISTAKES</strong>
+            Only send <strong>USDT on BNB Smart Chain (BEP20)</strong> — NOT TRC20, NOT ERC20, NOT BNB native.<br>
+            Sending the wrong token or wrong network will result in a lost transaction.
           </div>
           <div class="msg msg-ok" id="tx-ok"></div>
           <button class="btn-sm" style="padding:14px 18px" onclick="resetBuy()">Start Over</button>
@@ -379,11 +394,80 @@ function selectPlan(p){_plan=p;document.querySelectorAll('.buy-plan').forEach(e=
 function updatePrice(){const s=Number(document.getElementById('buy-size').value);if(!s||!_plan)return;const p=PRICES[_plan]?.[s];const box=document.getElementById('price-box');box.style.display='block';document.getElementById('price-val').textContent=p?'$'+p+' USDT':'Contact us';const n=document.getElementById('price-note');if(_plan==='partial'&&p){n.textContent='Pay $'+Math.round(p*.35)+' now. Remaining $'+Math.round(p*.65)+' from first withdrawal.';n.style.display='block';}else n.style.display='none';}
 function selectNet(n,b){_net=n;document.querySelectorAll('.net-btn').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');}
 async function initiatePurchase(){const s=Number(document.getElementById('buy-size').value);const errEl=document.getElementById('buy-err');errEl.classList.remove('show');if(!_plan){showMsg(errEl,'Please select a plan.');return;}if(!s){showMsg(errEl,'Please select a size.');return;}const b=document.querySelector('#p-buy .btn-sm.p');b.disabled=true;b.innerHTML='<span class="spin">Processing</span>';try{const d=await VornixDB.Challenges.startCryptoPayment(_plan,s);b.disabled=false;b.innerHTML='Proceed to Payment →';if(!d?.payment_id){showMsg(errEl,d?.error||'Failed. Try again.');return;}_paymentId=d.payment_id;const cur=d.currency||'USDT';document.getElementById('s3-amt').textContent=d.amount+' '+cur;document.getElementById('s3-ref').textContent='BSC (BEP20) · Ref: '+d.reference;document.getElementById('s3-wallet').textContent=d.deposit_address;const ol=document.getElementById('s3-inst');ol.innerHTML=[`Send exactly <strong>${d.amount} USDT</strong> to the address above`,`Use <strong>BNB Smart Chain (BEP20)</strong> network ONLY — do NOT use TRC20 or ERC20`,`Do not send any other token — USDT BEP20 only`,'Your challenge activates automatically once confirmed on-chain (usually 1–3 minutes)'].map(i=>`<li>${i}</li>`).join('');document.getElementById('buy-s2').style.display='none';document.getElementById('buy-s3').style.display='block';startStatusPolling();}catch(e){b.disabled=false;b.innerHTML='Proceed to Payment →';showMsg(errEl,'Connection error.');}}
-let _verifyTimer=null;
-function startStatusPolling(){if(_verifyTimer)clearTimeout(_verifyTimer);let attempts=0;const max=120;const iconEl=document.getElementById('pay-status-icon');const msgEl=document.getElementById('pay-status-msg');async function poll(){if(!_paymentId||attempts>=max)return;attempts++;try{const d=await VornixDB.Challenges.getPaymentStatus(_paymentId);const data=d?.data||d;const st=data?.status;if(st==='paid'){if(iconEl)iconEl.textContent='\u2705';if(msgEl)msgEl.textContent='Payment confirmed on-chain!';const okEl=document.getElementById('tx-ok');if(okEl){okEl.textContent='\u2713 Challenge is now active. Check your email for credentials.';okEl.classList.add('show');}await loadChallenges();setTimeout(()=>showPanel('challenges'),3000);return;}if(st==='confirming'){if(iconEl)iconEl.textContent='\ud83d\udd04';if(msgEl)msgEl.textContent='Deposit detected \u2014 confirming on-chain\u2026';}else{if(iconEl)iconEl.textContent='\u23f3';if(msgEl)msgEl.textContent='Waiting for your USDT deposit\u2026';}}catch(e){console.error('Status poll error:',e);}if(_paymentId)_verifyTimer=setTimeout(poll,10000);}setTimeout(poll,8000);}
+let _verifyTimer=null, _pollAttempts=0;
+const POLL_MAX=180; /* 30 min at 10s base interval */
+function startStatusPolling(){
+  if(_verifyTimer)clearTimeout(_verifyTimer);
+  _pollAttempts=0;
+  const iconEl=document.getElementById('pay-status-icon');
+  const msgEl=document.getElementById('pay-status-msg');
+  const confsWrap=document.getElementById('pay-confs-wrap');
+  const confsBar=document.getElementById('pay-confs-bar');
+  const confsLbl=document.getElementById('pay-confs-label');
+  const txWrap=document.getElementById('pay-tx-wrap');
+  const txLink=document.getElementById('pay-tx-link');
+  const expiryEl=document.getElementById('pay-expiry');
+  async function poll(){
+    if(!_paymentId||_pollAttempts>=POLL_MAX){
+      if(_pollAttempts>=POLL_MAX){if(iconEl)iconEl.textContent='⌛';if(msgEl)msgEl.textContent='Payment window expired. If you sent funds, contact support.';if(expiryEl){expiryEl.textContent='Polling stopped after 30 minutes.';expiryEl.style.display='block';}}
+      return;
+    }
+    _pollAttempts++;
+    const interval=_pollAttempts>60?20000:10000;
+    try{
+      const d=await VornixDB.Challenges.getPaymentStatus(_paymentId);
+      const data=d?.data||d;
+      const st=data?.status;
+      const confs=data?.confirmations??null;
+      const required=data?.required_confirmations??5;
+      const txHash=data?.tx_hash||null;
+      const explUrl=data?.explorer_url||(txHash?'https://bscscan.com/tx/'+txHash:null);
+      if(st==='paid'){
+        if(iconEl)iconEl.textContent='✅';
+        if(msgEl)msgEl.textContent='Payment confirmed on-chain!';
+        if(confsWrap)confsWrap.style.display='block';
+        if(confsBar){confsBar.style.background='var(--grn)';confsBar.style.width='100%';}
+        if(confsLbl)confsLbl.textContent=required+' / '+required;
+        const okEl=document.getElementById('tx-ok');
+        if(okEl){okEl.textContent='✓ Challenge is now active. Check your email for credentials.';okEl.classList.add('show');}
+        await loadChallenges();setTimeout(()=>showTab('challenges'),3000);return;
+      }
+      if(st==='confirming'){
+        if(iconEl)iconEl.textContent='🔄';
+        if(msgEl)msgEl.textContent=data.status_message||'Deposit detected — confirming on-chain…';
+        if(confsWrap)confsWrap.style.display='block';
+        if(confs!=null&&confsBar&&confsLbl){const pct=Math.min(100,Math.round((confs/required)*100));confsBar.style.width=pct+'%';confsLbl.textContent=confs+' / '+required;}
+      }else{
+        if(iconEl)iconEl.textContent='⏳';
+        if(msgEl)msgEl.textContent='Waiting for your USDT deposit…';
+        if(confsWrap)confsWrap.style.display='none';
+      }
+      if(txHash&&txWrap&&txLink){txWrap.style.display='block';txLink.textContent=txHash;txLink.href=explUrl||'#';}
+      const rem=POLL_MAX-_pollAttempts;const minsLeft=Math.ceil((rem*(interval/1000))/60);
+      if(expiryEl&&st==='pending'){expiryEl.textContent='Auto-checking for ~'+minsLeft+' more minute'+(minsLeft!==1?'s':'');expiryEl.style.display='block';}
+    }catch(e){console.error('Status poll error:',e);}
+    if(_paymentId)_verifyTimer=setTimeout(poll,interval);
+  }
+  setTimeout(poll,8000);
+}
 function copyWallet(){navigator.clipboard.writeText(document.getElementById('s3-wallet').textContent).then(()=>{const h=document.getElementById('copy-hint');h.textContent='✓ Copied!';setTimeout(()=>{h.textContent='Click to copy address';},2000);});}
 function copyMT(l,p,s){navigator.clipboard.writeText(`MT5 Login: ${l}\nPassword: ${p}\nServer: ${s}`).then(()=>alert('MT5 credentials copied!'));}
-function resetBuy(){_plan=null;_paymentId=null;if(_verifyTimer){clearTimeout(_verifyTimer);_verifyTimer=null;}document.querySelectorAll('.buy-plan').forEach(e=>e.classList.remove('sel'));const iconEl=document.getElementById('pay-status-icon');const msgEl=document.getElementById('pay-status-msg');if(iconEl)iconEl.textContent='\u23f3';if(msgEl)msgEl.textContent='Waiting for your deposit\u2026';document.getElementById('buy-s2').style.display='none';document.getElementById('buy-s3').style.display='none';['buy-err','tx-ok'].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.remove('show');});}
+function resetBuy(){
+  _plan=null;_paymentId=null;_pollAttempts=0;
+  if(_verifyTimer){clearTimeout(_verifyTimer);_verifyTimer=null;}
+  document.querySelectorAll('.buy-plan').forEach(e=>e.classList.remove('sel'));
+  const iconEl=document.getElementById('pay-status-icon');
+  const msgEl=document.getElementById('pay-status-msg');
+  const confsWrap=document.getElementById('pay-confs-wrap');
+  const confsBar=document.getElementById('pay-confs-bar');
+  const txWrap=document.getElementById('pay-tx-wrap');
+  const expiryEl=document.getElementById('pay-expiry');
+  if(iconEl)iconEl.textContent='⏳';if(msgEl)msgEl.textContent='Waiting for your deposit…';
+  if(confsWrap)confsWrap.style.display='none';if(confsBar){confsBar.style.width='0%';confsBar.style.background='var(--gold)';}
+  if(txWrap)txWrap.style.display='none';if(expiryEl)expiryEl.style.display='none';
+  document.getElementById('buy-s2').style.display='none';document.getElementById('buy-s3').style.display='none';
+  ['buy-err','tx-ok'].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.remove('show');});
+}
 function togglePayMethod(){const m=document.getElementById('pay-method').value;document.getElementById('pay-wallet-w').style.display=m==='bank'?'none':'block';document.getElementById('pay-bank-w').style.display=m==='bank'?'block':'none';}
 async function requestPayout(){const cid=document.getElementById('pay-ch').value;const amt=Number(document.getElementById('pay-amt').value);const mth=document.getElementById('pay-method').value;const wallet=document.getElementById('pay-wallet').value.trim();const bank=document.getElementById('pay-bank').value.trim();const err=document.getElementById('pay-err');const ok=document.getElementById('pay-ok');err.classList.remove('show');ok.classList.remove('show');if(!cid){showMsg(err,'Please select a funded challenge.');return;}if(!amt||amt<50){showMsg(err,'Minimum payout is $50.');return;}if(mth!=='bank'&&!wallet){showMsg(err,'Please enter your wallet address.');return;}try{const d=await VornixDB.Payouts.request(cid,amt,mth,mth==='bank'?bank:wallet);if(d?.error){showMsg(err,d.error);return;}showMsg(ok,'✓ Payout requested! You\'ll hear back within 1–3 business days.');await loadPayouts();}catch(e){showMsg(err,'Connection error.');}}
 async function saveProfile(){const n=document.getElementById('prof-name-in').value.trim();const c=document.getElementById('prof-cty-in').value;const err=document.getElementById('prof-err');const ok=document.getElementById('prof-ok');err.classList.remove('show');ok.classList.remove('show');if(!n){showMsg(err,'Please enter your name.');return;}try{const d=await VornixDB.Profiles.update(_user?.id,{full_name:n,country:c});if(d?.error){showMsg(err,d.error.message||d.error);return;}showMsg(ok,'✓ Profile updated!');}catch(e){showMsg(err,'Connection error.');}}

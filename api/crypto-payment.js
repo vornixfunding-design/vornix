@@ -4,36 +4,19 @@
 // Unique deposit address per invoice derived from HD wallet.
 // No TX hash required from the user.
 //
-// HOW IT WORKS:
-//   1. Trader picks plan → server derives a unique BSC deposit address
-//   2. Trader sends USDT (BEP20) to that address
-//   3. Cron auto-detects the deposit on-chain and activates challenge
-//   4. Trader polls action=status to watch pending → paid
-//
 // POST /api/crypto-payment?action=initiate      → get unique deposit address + amount
 // GET  /api/crypto-payment?action=status        → trader: check payment status
 // POST /api/crypto-payment?action=verify        → on-demand address scan (polling helper)
 // GET  /api/crypto-payment?action=pending       → admin: all pending payments
 // PUT  /api/crypto-payment?action=approve       → admin: approve + activate
 // PUT  /api/crypto-payment?action=reject        → admin: reject + notify
-// GET  /api/crypto-payment?action=cron-verify   → cron: batch scan pending (CRON_SECRET)
 // ================================================================
 
-const { ethers }                                                    = require('ethers');
-const { supabaseAdmin, getPrice, cors, ok, err, requireUser }       = require('../lib/db');
-const { sendEmail }                                                  = require('../lib/emails');
-
-// ── BSC / USDT CONSTANTS ─────────────────────────────────────────
-
-// BSC USDT (Tether) contract
-const USDT_CONTRACT_BSC = '0x55d398326f99059fF775485246999027B3197955';
-
-// Minimum confirmations before accepting (from env or default 5)
-function getConfirmations() {
-  return parseInt(process.env.PAYMENTS_CONFIRMATIONS_BSC, 10) || 5;
-}
-
-const CRON_BATCH_SIZE = 20;
+const { supabaseAdmin, getPrice, cors, ok, err, requireUser } = require('../lib/db');
+const { sendEmail }                                            = require('../lib/emails');
+const { deriveDepositAddress, atomicNextDerivationIndex }      = require('../lib/payments/hdWallet');
+const { checkDepositByAddress }                                = require('../lib/payments/bscscan');
+const { activatePayment, markConfirming }                      = require('../lib/payments/autoUsdtBsc');
 
 const PLAN_NAMES = {
   one_step:   '1-Step',
@@ -41,203 +24,6 @@ const PLAN_NAMES = {
   three_step: '3-Step',
   partial:    'Partial Payment',
 };
-
-// ── HD WALLET DERIVATION ─────────────────────────────────────────
-
-/**
- * Derive a BSC/EVM deposit address from the server-side mnemonic + index.
- */
-function deriveDepositAddress(index) {
-  const phrase   = process.env.PAYMENTS_MNEMONIC;
-  const basePath = process.env.PAYMENTS_DERIVATION_PATH || "m/44'/60'/0'/0";
-
-  if (!phrase) throw new Error('PAYMENTS_MNEMONIC is not set');
-
-  const mnemonic = ethers.Mnemonic.fromPhrase(phrase);
-  const wallet   = ethers.HDNodeWallet.fromMnemonic(mnemonic, `${basePath}/${index}`);
-  return wallet.address; // Checksummed 0x address
-}
-
-/**
- * Determine the next derivation index by querying the max existing index in payments.
- */
-async function nextDerivationIndex() {
-  const { data: rows } = await supabaseAdmin
-    .from('payments')
-    .select('metadata')
-    .eq('gateway', 'crypto')
-    .not('metadata->derivation_index', 'is', null)
-    .order('created_at', { ascending: false })
-    .limit(1);
-
-  if (rows?.length) {
-    const idx = rows[0]?.metadata?.derivation_index;
-    return typeof idx === 'number' ? idx + 1 : 0;
-  }
-  return 0;
-}
-
-// ── BSCSCAN API HELPERS ────────────────────────────────────────
-
-async function bscApiCall(params) {
-  const apiKey = process.env.BSCSCAN_API_KEY || '';
-  const qs     = new URLSearchParams({ ...params, apikey: apiKey }).toString();
-  const res    = await fetch(`https://api.bscscan.com/api?${qs}`);
-  return res.json();
-}
-
-/**
- * Query BscScan tokentx for USDT transfers to a deposit address.
- * Returns the first matching confirmed transfer, or a pending/not-found result.
- */
-async function checkDepositByAddress(depositAddress, expectedAmountUSD) {
-  const required  = getConfirmations();
-  const lowerAddr = depositAddress.toLowerCase();
-
-  const blockData = await bscApiCall({
-    module: 'proxy',
-    action: 'eth_blockNumber',
-  });
-  const currentBlock = parseInt(blockData.result, 16);
-  if (!currentBlock) return { found: false, reason: 'Unable to fetch current block from BscScan' };
-
-  const txData = await bscApiCall({
-    module:          'account',
-    action:          'tokentx',
-    contractaddress: USDT_CONTRACT_BSC,
-    address:         depositAddress,
-    page:            '1',
-    offset:          '50',
-    sort:            'desc',
-  });
-
-  if (txData?.status === '0' && txData?.message === 'No transactions found') {
-    return { found: false, reason: 'No transactions found yet' };
-  }
-
-  if (!Array.isArray(txData?.result)) {
-    return { found: false, reason: 'BscScan API error: ' + (txData?.message || 'unknown') };
-  }
-
-  let bestPending = null;
-
-  for (const tx of txData.result) {
-    if ((tx.to || '').toLowerCase() !== lowerAddr) continue;
-
-    const decimals = parseInt(tx.tokenDecimal, 10) || 6;
-    const amount   = Number(BigInt(tx.value)) / Math.pow(10, decimals);
-
-    if (Math.abs(amount - expectedAmountUSD) > 0.02) continue;
-
-    const txBlock = parseInt(tx.blockNumber, 10);
-    const confs   = currentBlock - txBlock;
-
-    if (confs < required) {
-      if (!bestPending) bestPending = { txHash: tx.hash, confs, amount };
-      continue;
-    }
-
-    return {
-      found:         true,
-      txHash:        tx.hash,
-      from:          tx.from,
-      to:            tx.to,
-      amount,
-      symbol:        'USDT',
-      blockNumber:   txBlock,
-      confirmations: confs,
-      explorerUrl:   'https://bscscan.com/tx/' + tx.hash,
-    };
-  }
-
-  if (bestPending) {
-    return {
-      found:         false,
-      reason:        `Deposit detected — waiting for confirmations: ${bestPending.confs}/${required}`,
-      confirmations: bestPending.confs,
-      required,
-      txHash:        bestPending.txHash,
-      pending:       true,
-    };
-  }
-
-  return { found: false, reason: 'No matching USDT deposit found yet' };
-}
-
-// ── SHARED ACTIVATION LOGIC ──────────────────────────────────────
-
-/**
- * Mark payment paid, create challenge, link them. Idempotent.
- */
-async function activatePayment(paymentId, payment, depositDetails) {
-  if (payment.challenge_id) {
-    return { success: true, challenge: { id: payment.challenge_id }, alreadyActivated: true };
-  }
-
-  const meta  = payment.metadata || {};
-  const plan  = meta.plan;
-  const size  = meta.account_size;
-  const total = meta.fee_total;
-
-  const newMeta = {
-    ...meta,
-    ...(depositDetails && {
-      tx_hash:       depositDetails.txHash,
-      block_number:  depositDetails.blockNumber,
-      from_address:  depositDetails.from,
-      token_symbol:  depositDetails.symbol,
-      confirmed_at:  new Date().toISOString(),
-      explorer_url:  depositDetails.explorerUrl,
-      confirmations: depositDetails.confirmations,
-    }),
-  };
-
-  await supabaseAdmin
-    .from('payments')
-    .update({ gateway_status: 'paid', metadata: newMeta })
-    .eq('id', paymentId);
-
-  const { data: challenge, error } = await supabaseAdmin
-    .from('challenges')
-    .insert({
-      user_id:         payment.user_id,
-      plan,
-      account_size:    size,
-      fee_total:       total,
-      fee_paid:        payment.amount,
-      is_partial_pay:  payment.is_partial,
-      partial_balance: payment.is_partial ? total * 0.65 : 0,
-      original_size:   Number(size),
-      current_size:    Number(size),
-      status:          'active',
-      start_date:      new Date().toISOString().split('T')[0],
-    })
-    .select().single();
-
-  if (error) return { success: false, error: error.message };
-
-  await supabaseAdmin
-    .from('payments')
-    .update({ challenge_id: challenge.id })
-    .eq('id', paymentId);
-
-  const profile = payment.profiles;
-  if (profile) {
-    sendEmail('challengePurchased', profile.email, {
-      name:        profile.full_name,
-      plan:        PLAN_NAMES[plan] || plan,
-      accountSize: size,
-      fee:         payment.amount,
-      mtLogin:     null,
-      mtPassword:  null,
-      mtServer:    null,
-    }).catch(e => console.error('Activation email failed:', e));
-  }
-
-  return { success: true, challenge };
-}
-
-// ── ROUTE HANDLER ─────────────────────────────────────────────────
 
 module.exports = async (req, res) => {
   cors(res, req);
@@ -268,10 +54,10 @@ module.exports = async (req, res) => {
 
     let depositAddress, derivationIndex;
     try {
-      derivationIndex = await nextDerivationIndex();
+      derivationIndex = await atomicNextDerivationIndex();
       depositAddress  = deriveDepositAddress(derivationIndex);
     } catch (e) {
-      console.error('Address derivation failed:', e);
+      console.error('[crypto-payment] Address derivation failed:', e);
       return err(res, 'Failed to generate deposit address. Please contact support.');
     }
 
@@ -295,7 +81,8 @@ module.exports = async (req, res) => {
           derivation_index: derivationIndex,
         },
       })
-      .select().single();
+      .select()
+      .single();
 
     if (error) return err(res, error.message);
 
@@ -356,18 +143,24 @@ module.exports = async (req, res) => {
 
     let result;
     try {
-      result = await checkDepositByAddress(depositAddress, payment.amount);
+      result = await checkDepositByAddress(depositAddress, payment.amount, payment.created_at);
     } catch (e) {
-      console.error('Address scan error:', e);
+      console.error('[crypto-payment] Address scan error:', e);
       return err(res, 'Scan failed: ' + e.message);
     }
 
     if (!result.found) {
+      if (result.pending) {
+        await markConfirming(paymentId, payment, result);
+      }
       return ok(res, {
         status:        result.pending ? 'confirming' : 'pending',
         verified:      false,
         reason:        result.reason,
-        confirmations: result.confirmations,
+        confirmations: result.confirmations || null,
+        required:      result.required      || null,
+        tx_hash:       result.txHash        || null,
+        explorer_url:  result.txHash ? 'https://bscscan.com/tx/' + result.txHash : null,
         pending:       result.pending || false,
       });
     }
@@ -395,34 +188,55 @@ module.exports = async (req, res) => {
 
     const { data, error: fetchErr } = await supabaseAdmin
       .from('payments')
-      .select('gateway_status, gateway_id, amount, currency, metadata, challenge_id, created_at')
+      .select([
+        'gateway_status', 'gateway_id', 'amount', 'currency', 'metadata',
+        'challenge_id', 'created_at',
+        'detected_tx_hash', 'detected_at', 'confirmed_at', 'explorer_url', 'confirmations',
+      ].join(', '))
       .eq('id', paymentId)
       .eq('user_id', user.id)
       .single();
 
     if (fetchErr) return err(res, 'Payment not found', 404);
 
-    const meta          = data.metadata || {};
-    const isConfirming  = data.gateway_status === 'pending' && !!meta.detected_tx_hash;
-    const displayStatus = isConfirming ? 'confirming' : data.gateway_status;
+    const meta = data.metadata || {};
+
+    // Normalize status: if gateway_status is 'pending' but we have a detected tx,
+    // display it as 'confirming' (handles rows created before the explicit status was added)
+    let displayStatus = data.gateway_status;
+    if (displayStatus === 'pending' && (data.detected_tx_hash || meta.detected_tx_hash)) {
+      displayStatus = 'confirming';
+    }
+
+    const txHash      = data.detected_tx_hash || meta.detected_tx_hash || null;
+    const explorerUrl = data.explorer_url      || (txHash ? `https://bscscan.com/tx/${txHash}` : null);
+    const confs       = data.confirmations     ?? meta.confirmations    ?? null;
+    const required    = parseInt(process.env.PAYMENTS_CONFIRMATIONS_BSC, 10) || 5;
 
     const statusMsg = {
       pending:    'Waiting for your USDT deposit on BSC (BEP20)',
-      confirming: 'Deposit detected — waiting for confirmations',
-      paid:       'Payment confirmed! Challenge is now active.',
+      confirming: confs != null
+        ? `Deposit detected — waiting for confirmations (${confs}/${required})`
+        : 'Deposit detected — waiting for confirmations',
+      paid:       'Payment confirmed! Your challenge is now active.',
       failed:     'Payment rejected. Please contact support.',
     };
 
     return ok(res, {
-      status:          displayStatus,
-      gateway_status:  data.gateway_status,
-      amount:          data.amount,
-      currency:        data.currency,
-      deposit_address: meta.deposit_address,
-      challenge_id:    data.challenge_id,
-      created_at:      data.created_at,
-      confirmations:   meta.confirmations,
-      status_message:  statusMsg[displayStatus] || displayStatus,
+      status:                 displayStatus,
+      gateway_status:         data.gateway_status,
+      amount:                 data.amount,
+      currency:               data.currency,
+      deposit_address:        meta.deposit_address,
+      challenge_id:           data.challenge_id,
+      created_at:             data.created_at,
+      confirmations:          confs,
+      required_confirmations: required,
+      tx_hash:                txHash,
+      explorer_url:           explorerUrl,
+      detected_at:            data.detected_at  || null,
+      confirmed_at:           data.confirmed_at || null,
+      status_message:         statusMsg[displayStatus] || displayStatus,
     });
   }
 
@@ -436,7 +250,7 @@ module.exports = async (req, res) => {
       .from('payments')
       .select('*, profiles(email, full_name, country)')
       .eq('gateway', 'crypto')
-      .in('gateway_status', ['pending', 'submitted'])
+      .in('gateway_status', ['pending', 'confirming', 'submitted'])
       .order('created_at', { ascending: false });
 
     if (error) return err(res, error.message);
@@ -455,7 +269,8 @@ module.exports = async (req, res) => {
     const { data: payment } = await supabaseAdmin
       .from('payments')
       .select('*, profiles(email, full_name)')
-      .eq('id', paymentId).single();
+      .eq('id', paymentId)
+      .single();
 
     if (!payment) return err(res, 'Payment not found', 404);
 
@@ -482,104 +297,34 @@ module.exports = async (req, res) => {
     const { data: payment } = await supabaseAdmin
       .from('payments')
       .select('*, profiles(email, full_name)')
-      .eq('id', paymentId).single();
+      .eq('id', paymentId)
+      .single();
 
     if (!payment) return err(res, 'Payment not found', 404);
 
     await supabaseAdmin
       .from('payments')
-      .update({ gateway_status: 'failed', metadata: { ...payment.metadata, reject_reason: reason } })
+      .update({
+        gateway_status: 'failed',
+        metadata: { ...payment.metadata, reject_reason: reason },
+      })
       .eq('id', paymentId);
 
     if (payment.profiles) {
       sendEmail('payoutRejected', payment.profiles.email, {
         name:   payment.profiles.full_name,
         reason: reason || 'Transaction could not be verified. Please contact support.',
-      }).catch(e => console.error('Reject email failed:', e));
+      }).catch(e => console.error('[crypto-payment] Reject email failed:', e));
     }
 
     return ok(res, { message: 'Payment rejected' });
   }
 
-  // ── CRON-VERIFY: batch scan all pending payments ─────────────────
-  if (action === 'cron-verify' && req.method === 'GET') {
-    const cronSecret = process.env.CRON_SECRET || '';
-    const authHeader = req.headers.authorization || '';
-    if (!cronSecret || authHeader !== `Bearer ${cronSecret}`) {
-      return err(res, 'Unauthorized', 401);
-    }
-
-    const { data: payments, error: fetchErr } = await supabaseAdmin
-      .from('payments')
-      .select('*, profiles(email, full_name)')
-      .eq('gateway', 'crypto')
-      .eq('gateway_status', 'pending')
-      .order('created_at', { ascending: true })
-      .limit(CRON_BATCH_SIZE);
-
-    if (fetchErr) return err(res, fetchErr.message);
-    if (!payments?.length) return ok(res, { processed: 0, message: 'No pending payments' });
-
-    const results = [];
-    for (const payment of payments) {
-      const depositAddress = payment.metadata?.deposit_address;
-
-      if (!depositAddress) {
-        results.push({ id: payment.id, status: 'skipped', reason: 'No deposit_address in metadata' });
-        continue;
-      }
-
-      if (payment.challenge_id) {
-        await supabaseAdmin
-          .from('payments')
-          .update({ gateway_status: 'paid' })
-          .eq('id', payment.id);
-        results.push({ id: payment.id, status: 'fixed' });
-        continue;
-      }
-
-      try {
-        const result = await checkDepositByAddress(depositAddress, payment.amount);
-
-        if (result.found) {
-          const activation = await activatePayment(payment.id, payment, result);
-          results.push({
-            id:     payment.id,
-            status: activation.success ? 'paid' : 'error',
-            error:  activation.error,
-          });
-        } else if (result.pending) {
-          // Store detected tx so status shows "confirming"
-          await supabaseAdmin
-            .from('payments')
-            .update({
-              metadata: {
-                ...payment.metadata,
-                detected_tx_hash: result.txHash,
-                confirmations:    result.confirmations,
-              },
-            })
-            .eq('id', payment.id);
-          results.push({
-            id:            payment.id,
-            status:        'confirming',
-            reason:        result.reason,
-            confirmations: result.confirmations,
-          });
-        } else {
-          results.push({ id: payment.id, status: 'pending', reason: result.reason });
-        }
-      } catch (e) {
-        results.push({ id: payment.id, status: 'error', error: e.message });
-      }
-    }
-
-    return ok(res, { processed: payments.length, results });
-  }
-
   return err(res, 'Unknown action', 400);
 };
 
-// Export shared helpers for cron handler
+// Re-export lib helpers so existing code that imports from this file
+// (e.g. older cron-verify.js versions) continues to work.
 module.exports.activatePayment       = activatePayment;
 module.exports.checkDepositByAddress = checkDepositByAddress;
+module.exports.markConfirming        = markConfirming;

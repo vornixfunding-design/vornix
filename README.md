@@ -44,6 +44,7 @@ Set these in **Vercel → Project → Settings → Environment Variables**:
 | `PAYMENTS_DERIVATION_PATH` | BIP32 base derivation path. Default: `m/44'/60'/0'/0` (standard EVM) |
 | `PAYMENTS_CHAIN` | Chain to use. Set to `bsc` |
 | `PAYMENTS_CONFIRMATIONS_BSC` | Minimum BSC confirmations before accepting a payment. Default: `5` (~15 seconds) |
+| `PAYMENTS_AMOUNT_TOLERANCE_USD` | Optional — how much the received amount may differ from the invoice (e.g. for gas rounding). Default: `0.02` |
 
 ### Blockchain Explorer API Keys
 
@@ -78,15 +79,19 @@ Generate a suitable value: `openssl rand -hex 32`
 ### How AUTO detection works
 1. User selects plan → account size → clicks "Proceed to Payment"
 2. `POST /api/crypto-payment?action=initiate`:
-   - Derives a **unique BSC deposit address** from `PAYMENTS_MNEMONIC` (index = max existing index + 1)
+   - Atomically claims the next HD wallet index via the `claim_derivation_index()` DB function (concurrency-safe)
+   - Derives a **unique BSC deposit address** from `PAYMENTS_MNEMONIC`
    - Stores `deposit_address` + `derivation_index` in `payments.metadata`
    - Returns `deposit_address`, `amount`, `currency=USDT`, `network=BSC (BEP20)`
 3. User sends **USDT (BEP20)** to their unique deposit address — no TX hash required
-4. Frontend polls `GET /api/crypto-payment?action=status&paymentId=…` every 10 seconds
-5. Background cron (`/api/cron-verify`, every 1 minute) scans pending payments:
+4. Frontend polls `GET /api/crypto-payment?action=status&paymentId=…` every 10 seconds (with backoff after 10 min; stops after 30 min)
+5. Background cron (`/api/cron-verify`, every 1 minute) scans **both `pending` and `confirming`** payments:
    - Queries BscScan `tokentx` for USDT transfers to each `deposit_address`
-   - Checks amount (±0.02 USDT tolerance) and confirmations ≥ threshold
-   - If matched and confirmed: marks payment `paid`, creates challenge, sends activation email
+   - Only considers transfers **after** `payment.created_at` (time-bounded)
+   - Verifies the token contract is the official **BSC USDT contract**
+   - Prefers **exact amount match**; falls back to ±`PAYMENTS_AMOUNT_TOLERANCE_USD` (default 0.02)
+   - If deposit detected but under-confirmed: marks `confirming`, stores `detected_tx_hash`
+   - If confirmed: marks `paid`, creates challenge, sends activation email
 6. Status progresses: `pending` → `confirming` (deposit seen, not yet confirmed) → `paid`
 
 ### Idempotency
@@ -140,11 +145,31 @@ All authenticated endpoints require `credentials: 'include'` on the client side 
 
 ## Database Schema
 
-Run the migration in **Supabase Dashboard → SQL Editor**:
+Run the migrations **in order** in **Supabase Dashboard → SQL Editor**:
 
 ```
 supabase/migrations/2026-03-16_auth_hardening.sql
+supabase/migrations/2026-03-16_password_auth.sql
+supabase/migrations/2026-03-17_payment_improvements.sql   ← NEW
 ```
+
+### After applying `2026-03-17_payment_improvements.sql`
+
+If you had payments created **before** this migration, you must sync the derivation-index counter to avoid re-using already-allocated indices:
+
+```sql
+-- Run in Supabase SQL Editor AFTER applying the migration:
+UPDATE counters
+SET    value = (
+  SELECT COALESCE(MAX((metadata->>'derivation_index')::BIGINT), -1) + 1
+  FROM   payments
+  WHERE  gateway = 'crypto'
+    AND  metadata->>'derivation_index' IS NOT NULL
+)
+WHERE  key = 'next_derivation_index';
+```
+
+If this is a fresh deployment with no prior payments, the default counter value of `0` is correct — no action needed.
 
 ### Key tables
 
@@ -178,6 +203,47 @@ vercel dev
 ```
 
 The dev server runs at `http://localhost:3000`.
+
+---
+
+## End-to-End Payment Test
+
+Use this procedure to verify the AUTO payment flow after deployment.
+
+### Prerequisites
+- All env vars set in Vercel (see above)
+- `2026-03-17_payment_improvements.sql` migration applied in Supabase
+- Latest deployment live on Vercel
+
+### Steps
+
+1. **Initiate a payment** — log in and purchase any plan. Note the unique deposit address shown.
+
+2. **Send USDT (BEP20) on BSC** — from any wallet or exchange, send **exactly** the invoice amount in USDT to the deposit address. Use **BSC (BEP20) network only**.
+
+3. **Watch the status box** — the dashboard polls every 10 seconds:
+   - ⏳ `Waiting for your deposit` → no transaction seen yet
+   - 🔄 `Confirming (x/5)` → deposit detected, accumulating confirmations
+   - ✅ `Payment confirmed!` → challenge created automatically
+
+4. **Manually trigger the cron** (optional, for immediate testing):
+   ```
+   GET https://YOUR_DOMAIN/api/cron-verify?secret=YOUR_CRON_SECRET
+   ```
+   Expected response: `{ "success": true, "data": { "processed": 1, "results": [...] } }`
+
+5. **Verify in Supabase** — check the `payments` row:
+   - `gateway_status` should be `paid`
+   - `detected_tx_hash`, `confirmed_at`, `explorer_url` should be populated
+   - A new row should exist in `challenges` linked via `challenge_id`
+
+### Common issues
+| Symptom | Cause | Fix |
+|---------|-------|-----|
+| Status stuck at `pending` | Wrong network (TRC20/ERC20) | Resend on BSC only |
+| Status stuck at `confirming` | Not enough confirmations yet | Wait 15–30 seconds |
+| `401` from `/api/cron-verify` | Wrong `CRON_SECRET` or not set | Check env var in Vercel |
+| Address derivation error | `PAYMENTS_MNEMONIC` not set | Add the env var in Vercel |
 
 ---
 
