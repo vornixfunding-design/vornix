@@ -221,6 +221,18 @@ const _Challenges = {
       return r.json();
     } catch(e) { return { error: e.message }; }
   },
+  async verifyPayment(paymentId) {
+    if (!_Auth.isLoggedIn()) return { error: 'Not authenticated' };
+    try {
+      const r = await fetch(`${_API}/api/crypto-payment?action=verify`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ paymentId }),
+      });
+      return r.json();
+    } catch(e) { return { error: e.message }; }
+  },
 };
 
 /* ── PAYOUTS ───────────────────────────────────────────────────── */
