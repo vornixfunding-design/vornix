@@ -13,7 +13,7 @@ A serverless prop firm web application built on **Vercel** (static + serverless 
 | Database | Supabase (PostgreSQL) |
 | Auth | Custom OTP via Gmail SMTP + httpOnly cookie sessions |
 | Email | Gmail SMTP via Nodemailer |
-| Payments | Manual crypto payment verification (USDT/BNB) |
+| Payments | Automatic on-chain crypto verification (BEP20 / ERC20 / BNB) |
 
 ---
 
@@ -21,18 +21,76 @@ A serverless prop firm web application built on **Vercel** (static + serverless 
 
 Set these in **Vercel → Project → Settings → Environment Variables**:
 
+### Core
+
 | Variable | Description |
 |----------|-------------|
 | `SUPABASE_URL` | Your Supabase project URL (e.g. `https://xxxx.supabase.co`) |
 | `SUPABASE_ANON_KEY` | Supabase anon/public key |
 | `SUPABASE_SERVICE_ROLE_KEY` | Supabase service role key (server-side only, bypasses RLS) |
 | `GMAIL_USER` | Your Gmail address (e.g. `you@gmail.com`) |
-| `GMAIL_APP_PASSWORD` | 16-character [Google App Password](https://myaccount.google.com/apppasswords) (not your Gmail password) |
+| `GMAIL_APP_PASSWORD` | 16-character [Google App Password](https://myaccount.google.com/apppasswords) |
 | `APP_URL` | Your production URL (e.g. `https://vornix-sooty.vercel.app`) |
 | `EMAIL_FROM` | Sender name/email shown in emails (e.g. `VORNIX <noreply@vornix.com>`) |
 | `ADMIN_EMAIL` | Admin notification email address |
-| `WALLET_USDT_BEP20` | Your USDT BEP20 wallet address (Binance Smart Chain) |
-| `WALLET_USDT_TRC20` | Your USDT TRC20 wallet address (TRON) |
+
+### Wallet Addresses
+
+| Variable | Description |
+|----------|-------------|
+| `WALLET_USDT_BEP20` | USDT wallet address on BNB Smart Chain (BEP20) |
+| `WALLET_USDT_ERC20` | USDT wallet address on Ethereum (ERC20) |
+| `WALLET_BNB_BEP20` | BNB wallet address on BNB Smart Chain |
+
+All three can share the same EVM address (e.g. `0x90dfac7a3dfd03b578221be706abd1c4f2337229`).
+
+### Blockchain Explorer API Keys (for auto-verification)
+
+| Variable | Description | How to get |
+|----------|-------------|------------|
+| `BSCSCAN_API_KEY` | BscScan API key — for BEP20 / BNB verification | [bscscan.com/register](https://bscscan.com/register) → API Keys |
+| `ETHERSCAN_API_KEY` | Etherscan API key — for ERC20 verification | [etherscan.io/register](https://etherscan.io/register) → API Keys |
+
+Both offer a **free tier** (5 calls/sec, unlimited per day) — no paid plan needed.
+
+### Background Job Secret
+
+| Variable | Description |
+|----------|-------------|
+| `CRON_SECRET` | Random secret used to authenticate cron requests — set to any long random string |
+
+Generate a suitable value: `openssl rand -hex 32`
+
+---
+
+## Crypto Payment Flow
+
+### Supported Networks
+| Network | Symbol | Confirmation threshold |
+|---------|--------|----------------------|
+| BNB Smart Chain (BEP20) | USDT | 5 blocks (~15 sec) |
+| Ethereum (ERC20) | USDT | 12 blocks (~3 min) |
+| BNB Smart Chain | BNB | 5 blocks (~15 sec) |
+
+> TRC20 / TRON is **not supported**.
+
+### How auto-verification works
+1. User selects plan → account size → payment network
+2. `POST /api/crypto-payment?action=initiate` — creates pending payment row, returns wallet address and exact amount
+   - For BNB: fetches live BNB/USD price from CoinGecko and returns the expected BNB amount
+3. User sends crypto and submits TX hash via `action=submit`
+4. Frontend immediately starts polling `action=verify` every 10 seconds (up to 4 minutes)
+5. `action=verify`:
+   - Calls BscScan or Etherscan `eth_getTransactionReceipt` to get the receipt
+   - For USDT: finds ERC-20 `Transfer` log matching the USDT contract and our wallet address; checks amount (6 decimals)
+   - For BNB: verifies native transfer to our wallet; checks BNB amount with 5% tolerance
+   - Checks confirmation count against the threshold (5 for BSC, 12 for ETH)
+   - If valid: marks payment `paid`, creates challenge row, sends activation email
+6. Background cron (`/api/cron-verify`, runs every 5 min) re-checks any payments not yet verified
+
+### Idempotency
+- Verify is safe to call multiple times — if `challenge_id` is already set, it returns success immediately
+- Admin `approve` action is also idempotent
 
 ---
 
@@ -135,3 +193,4 @@ Push to the `main` branch — Vercel auto-deploys. No build step needed (static 
 - The `SUPABASE_SERVICE_ROLE_KEY` is only used server-side and never exposed to the browser
 - CORS is restricted to known origins — wildcard `*` is not used for authenticated routes
 - `debug` endpoint (`/api/auth?action=debug`) only shows presence of env vars, never values
+- Cron endpoint (`/api/cron-verify`) is protected by `CRON_SECRET` — Vercel injects this automatically for cron jobs
