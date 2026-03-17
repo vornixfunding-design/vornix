@@ -35,6 +35,9 @@ function getConfirmations() {
 
 const CRON_BATCH_SIZE = 20;
 
+// Maximum tolerated USDT amount difference (handles rounding/fee dust)
+const AMOUNT_TOLERANCE_USD = 0.02;
+
 const PLAN_NAMES = {
   one_step:   '1-Step',
   two_step:   '2-Step',
@@ -51,7 +54,10 @@ function deriveDepositAddress(index) {
   const phrase   = process.env.PAYMENTS_MNEMONIC;
   const basePath = process.env.PAYMENTS_DERIVATION_PATH || "m/44'/60'/0'/0";
 
-  if (!phrase) throw new Error('PAYMENTS_MNEMONIC is not set');
+  if (!phrase) {
+    console.error('[crypto-payment] PAYMENTS_MNEMONIC is not configured');
+    throw new Error('Payment system not configured');
+  }
 
   const mnemonic = ethers.Mnemonic.fromPhrase(phrase);
   const wallet   = ethers.HDNodeWallet.fromMnemonic(mnemonic, `${basePath}/${index}`);
@@ -99,7 +105,7 @@ async function checkDepositByAddress(depositAddress, expectedAmountUSD) {
     action: 'eth_blockNumber',
   });
   const currentBlock = parseInt(blockData.result, 16);
-  if (!currentBlock) return { found: false, reason: 'Unable to fetch current block from BscScan' };
+  if (!currentBlock) return { found: false, reason: 'Blockchain API temporarily unavailable. Please try again in a few moments.' };
 
   const txData = await bscApiCall({
     module:          'account',
@@ -125,9 +131,9 @@ async function checkDepositByAddress(depositAddress, expectedAmountUSD) {
     if ((tx.to || '').toLowerCase() !== lowerAddr) continue;
 
     const decimals = parseInt(tx.tokenDecimal, 10) || 6;
-    const amount   = Number(BigInt(tx.value)) / Math.pow(10, decimals);
+    const amount   = Number(ethers.formatUnits(tx.value, decimals));
 
-    if (Math.abs(amount - expectedAmountUSD) > 0.02) continue;
+    if (Math.abs(amount - expectedAmountUSD) > AMOUNT_TOLERANCE_USD) continue;
 
     const txBlock = parseInt(tx.blockNumber, 10);
     const confs   = currentBlock - txBlock;
