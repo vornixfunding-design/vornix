@@ -211,8 +211,8 @@ async function sendCode() {
   if(d.error){
     // Guide existing users to login
     if(d.status===409||/already registered/i.test(d.error)){
-      showMsg(err,d.error+' <a href="login.html" style="color:var(--red)">Sign in →</a>');
-      err.innerHTML=d.error+' <a href="login.html" style="color:var(--red)">Sign in →</a>';
+      const safeMsg=escHtml(d.error);
+      err.innerHTML=safeMsg+' <a href="login.html" style="color:var(--red)">Sign in →</a>';
       err.classList.add('show');
     } else {
       showMsg(err,d.error);
@@ -276,6 +276,7 @@ function initOTP() {
 function getOTP(){return Array.from(document.querySelectorAll('.otp-d')).map(d=>d.value).join('');}
 function clearOTP(){document.querySelectorAll('.otp-d').forEach(d=>{d.value='';d.classList.remove('filled');});}
 function startTimer(s){clearInterval(_ti);const el=document.getElementById('tmr');let r=s;function t(){const m=Math.floor(r/60),sc=r%60;el.innerHTML=`Code expires in <span>${m}:${sc.toString().padStart(2,'0')}</span>`;if(r<=0){clearInterval(_ti);el.innerHTML='<span style="color:var(--red)">Code expired — request a new one.</span>';}r--;}t();_ti=setInterval(t,1000);}
+function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
 function showMsg(el,msg){el.textContent=msg;el.classList.add('show');}
 </script>
 </body>
