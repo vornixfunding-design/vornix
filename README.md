@@ -13,7 +13,7 @@ A serverless prop firm web application built on **Vercel** (static + serverless 
 | Database | Supabase (PostgreSQL) |
 | Auth | Custom OTP via Gmail SMTP + httpOnly cookie sessions |
 | Email | Gmail SMTP via Nodemailer |
-| Payments | Automatic on-chain crypto verification (BEP20 / ERC20 / BNB) |
+| Payments | AUTO on-chain crypto verification — BSC (BEP20) USDT · Unique address per invoice |
 
 ---
 
@@ -34,24 +34,27 @@ Set these in **Vercel → Project → Settings → Environment Variables**:
 | `EMAIL_FROM` | Sender name/email shown in emails (e.g. `VORNIX <noreply@vornix.com>`) |
 | `ADMIN_EMAIL` | Admin notification email address |
 
-### Wallet Addresses
+### AUTO Payment Mode (HD Wallet — BSC USDT)
+
+> ⚠️ **Security warning:** `PAYMENTS_MNEMONIC` is a sensitive secret. Use a dedicated wallet only for receiving payments. Keep balances low and sweep funds regularly to cold storage. Never commit this value to source code.
 
 | Variable | Description |
 |----------|-------------|
-| `WALLET_USDT_BEP20` | USDT wallet address on BNB Smart Chain (BEP20) |
-| `WALLET_USDT_ERC20` | USDT wallet address on Ethereum (ERC20) |
-| `WALLET_BNB_BEP20` | BNB wallet address on BNB Smart Chain |
+| `PAYMENTS_MNEMONIC` | 12-word seed phrase for the HD wallet used to derive unique deposit addresses (e.g. `word1 word2 … word12`) |
+| `PAYMENTS_DERIVATION_PATH` | BIP32 base derivation path. Default: `m/44'/60'/0'/0` (standard EVM) |
+| `PAYMENTS_CHAIN` | Chain to use. Set to `bsc` |
+| `PAYMENTS_CONFIRMATIONS_BSC` | Minimum BSC confirmations before accepting a payment. Default: `5` (~15 seconds) |
 
-All three can share the same EVM address (e.g. `0x90dfac7a3dfd03b578221be706abd1c4f2337229`).
-
-### Blockchain Explorer API Keys (for auto-verification)
+### Blockchain Explorer API Keys
 
 | Variable | Description | How to get |
 |----------|-------------|------------|
-| `BSCSCAN_API_KEY` | BscScan API key — for BEP20 / BNB verification | [bscscan.com/register](https://bscscan.com/register) → API Keys |
-| `ETHERSCAN_API_KEY` | Etherscan API key — for ERC20 verification | [etherscan.io/register](https://etherscan.io/register) → API Keys |
+| `BSCSCAN_API_KEY` | BscScan API key — used to query USDT token transfers on BSC | [bscscan.com/register](https://bscscan.com/register) → API Keys |
+| `ETHERSCAN_API_KEY` | Optional — same value as `BSCSCAN_API_KEY` is fine | [etherscan.io/register](https://etherscan.io/register) → API Keys |
 
-Both offer a **free tier** (5 calls/sec, unlimited per day) — no paid plan needed.
+Both offer a **free tier** (5 calls/sec) — no paid plan needed.
+
+> **Legacy variables** (`WALLET_USDT_BEP20`, `WALLET_USDT_ERC20`, `WALLET_BNB_BEP20`, `WALLET_USDT_TRC20`) are no longer used and can be removed.
 
 ### Background Job Secret
 
@@ -63,33 +66,31 @@ Generate a suitable value: `openssl rand -hex 32`
 
 ---
 
-## Crypto Payment Flow
+## Crypto Payment Flow (AUTO mode)
 
-### Supported Networks
-| Network | Symbol | Confirmation threshold |
-|---------|--------|----------------------|
-| BNB Smart Chain (BEP20) | USDT | 5 blocks (~15 sec) |
-| Ethereum (ERC20) | USDT | 12 blocks (~3 min) |
-| BNB Smart Chain | BNB | 5 blocks (~15 sec) |
+### Supported Network
+| Network | Token | Confirmation threshold |
+|---------|-------|----------------------|
+| BNB Smart Chain (BEP20) | USDT | `PAYMENTS_CONFIRMATIONS_BSC` blocks (default 5, ~15 sec) |
 
-> TRC20 / TRON is **not supported**.
+> TRC20 / TRON is **not supported**. ERC20 / ETH / BNB native are **not supported** in AUTO mode.
 
-### How auto-verification works
-1. User selects plan → account size → payment network
-2. `POST /api/crypto-payment?action=initiate` — creates pending payment row, returns wallet address and exact amount
-   - For BNB: fetches live BNB/USD price from CoinGecko and returns the expected BNB amount
-3. User sends crypto and submits TX hash via `action=submit`
-4. Frontend immediately starts polling `action=verify` every 10 seconds (up to 4 minutes)
-5. `action=verify`:
-   - Calls BscScan or Etherscan `eth_getTransactionReceipt` to get the receipt
-   - For USDT: finds ERC-20 `Transfer` log matching the USDT contract and our wallet address; checks amount (6 decimals)
-   - For BNB: verifies native transfer to our wallet; checks BNB amount with 5% tolerance
-   - Checks confirmation count against the threshold (5 for BSC, 12 for ETH)
-   - If valid: marks payment `paid`, creates challenge row, sends activation email
-6. Background cron (`/api/cron-verify`, runs every 5 min) re-checks any payments not yet verified
+### How AUTO detection works
+1. User selects plan → account size → clicks "Proceed to Payment"
+2. `POST /api/crypto-payment?action=initiate`:
+   - Derives a **unique BSC deposit address** from `PAYMENTS_MNEMONIC` (index = max existing index + 1)
+   - Stores `deposit_address` + `derivation_index` in `payments.metadata`
+   - Returns `deposit_address`, `amount`, `currency=USDT`, `network=BSC (BEP20)`
+3. User sends **USDT (BEP20)** to their unique deposit address — no TX hash required
+4. Frontend polls `GET /api/crypto-payment?action=status&paymentId=…` every 10 seconds
+5. Background cron (`/api/cron-verify`, every 1 minute) scans pending payments:
+   - Queries BscScan `tokentx` for USDT transfers to each `deposit_address`
+   - Checks amount (±0.02 USDT tolerance) and confirmations ≥ threshold
+   - If matched and confirmed: marks payment `paid`, creates challenge, sends activation email
+6. Status progresses: `pending` → `confirming` (deposit seen, not yet confirmed) → `paid`
 
 ### Idempotency
-- Verify is safe to call multiple times — if `challenge_id` is already set, it returns success immediately
+- Activation is safe to run multiple times — if `challenge_id` is already set, returns it immediately
 - Admin `approve` action is also idempotent
 
 ---
