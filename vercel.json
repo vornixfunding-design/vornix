@@ -3,7 +3,7 @@
   "crons": [
     {
       "path": "/api/cron-verify",
-      "schedule": "*/5 * * * *"
+      "schedule": "* * * * *"
     }
   ]
 }

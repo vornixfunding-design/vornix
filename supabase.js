@@ -197,38 +197,23 @@ const _Challenges = {
       return r.json();
     } catch { return { data: [] }; }
   },
-  async startCryptoPayment(plan, size, network) {
+  async startCryptoPayment(plan, size) {
     if (!_Auth.isLoggedIn()) return { error: 'Not authenticated' };
     try {
       const r = await fetch(`${_API}/api/crypto-payment?action=initiate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({ plan, accountSize: size, network }),
+        body: JSON.stringify({ plan, accountSize: size }),
       });
       return r.json();
     } catch(e) { return { error: e.message }; }
   },
-  async submitPayment(paymentId, txHash, network) {
+  async getPaymentStatus(paymentId) {
     if (!_Auth.isLoggedIn()) return { error: 'Not authenticated' };
     try {
-      const r = await fetch(`${_API}/api/crypto-payment?action=submit`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const r = await fetch(`${_API}/api/crypto-payment?action=status&paymentId=${encodeURIComponent(paymentId)}`, {
         credentials: 'include',
-        body: JSON.stringify({ paymentId, txHash, network }),
-      });
-      return r.json();
-    } catch(e) { return { error: e.message }; }
-  },
-  async verifyPayment(paymentId) {
-    if (!_Auth.isLoggedIn()) return { error: 'Not authenticated' };
-    try {
-      const r = await fetch(`${_API}/api/crypto-payment?action=verify`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({ paymentId }),
       });
       return r.json();
     } catch(e) { return { error: e.message }; }
