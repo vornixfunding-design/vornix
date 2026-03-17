@@ -33,8 +33,6 @@
 .auth-btn{width:100%;background:var(--red);color:#fff;border:none;font-family:var(--ff-ui);font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;padding:15px;cursor:pointer;transition:background .2s;clip-path:polygon(10px 0%,100% 0%,calc(100% - 10px) 100%,0% 100%)}
 .auth-btn:hover:not(:disabled){background:var(--red-hi)}
 .auth-btn:disabled{opacity:.5;cursor:not-allowed}
-.auth-sep{display:flex;align-items:center;gap:10px;margin:16px 0;font-size:11px;color:var(--t3)}
-.auth-sep::before,.auth-sep::after{content:'';flex:1;height:1px;background:var(--bd)}
 .auth-foot{font-size:13px;color:var(--t2);text-align:center}
 .auth-foot a{color:var(--red)}
 .otp-wrap{display:flex;gap:8px;justify-content:center;margin-bottom:8px}
@@ -123,50 +121,11 @@
           <a href="#" onclick="showForgot();return false;" style="font-size:12px;color:var(--t3)">Forgot password?</a>
         </div>
         <button class="auth-btn" id="bPw" onclick="pwLogin()">Sign In →</button>
-        <div class="auth-sep">or</div>
-        <div class="auth-foot"><a onclick="showOtp();return false;" style="cursor:pointer">Use email code instead →</a></div>
-        <div class="auth-foot" style="margin-top:10px">No account? <a href="signup.html">Register free →</a></div>
+        <div class="auth-foot" style="margin-top:16px">No account? <a href="signup.html">Register free →</a></div>
         <div class="auth-foot" style="margin-top:10px"><a href="index.html" style="color:var(--t3);font-size:12px">← Back to website</a></div>
       </div>
 
-      <!-- ── MODE 2: OTP Step 1 — Enter Email ─────────────────── -->
-      <div id="stepOtp1" style="display:none">
-        <div class="auth-step-lbl">// Sign In with Email Code</div>
-        <div class="auth-title">EMAIL CODE</div>
-        <div class="auth-sub">Enter your email and we'll send you a 6-digit login code.</div>
-        <div class="msg msg-err" id="eOtp1"></div>
-        <div class="f-g">
-          <label class="f-l" for="otpEmail">Email Address</label>
-          <input class="f-i" type="email" id="otpEmail" placeholder="trader@email.com" autocomplete="email">
-        </div>
-        <button class="auth-btn" id="bOtp1" onclick="sendCode()">Send Login Code →</button>
-        <div class="auth-sep">or</div>
-        <div class="auth-foot"><a onclick="showPw();return false;" style="cursor:pointer">← Use password instead</a></div>
-        <div class="auth-foot" style="margin-top:10px">No account? <a href="signup.html">Register free →</a></div>
-      </div>
-
-      <!-- ── MODE 2: OTP Step 2 — Enter Code ──────────────────── -->
-      <div id="stepOtp2" style="display:none">
-        <div class="auth-step-lbl">// Enter Your Code</div>
-        <div class="auth-title">CHECK EMAIL</div>
-        <div class="auth-sub" id="subOtp2">We sent a 6-digit code to your email address.</div>
-        <div class="msg msg-err" id="eOtp2"></div>
-        <div class="msg msg-ok"  id="okOtp2"></div>
-        <div class="otp-wrap">
-          <input class="otp-d" type="text" inputmode="numeric" maxlength="1" id="d0" autocomplete="off">
-          <input class="otp-d" type="text" inputmode="numeric" maxlength="1" id="d1" autocomplete="off">
-          <input class="otp-d" type="text" inputmode="numeric" maxlength="1" id="d2" autocomplete="off">
-          <input class="otp-d" type="text" inputmode="numeric" maxlength="1" id="d3" autocomplete="off">
-          <input class="otp-d" type="text" inputmode="numeric" maxlength="1" id="d4" autocomplete="off">
-          <input class="otp-d" type="text" inputmode="numeric" maxlength="1" id="d5" autocomplete="off">
-        </div>
-        <div class="timer" id="tmrOtp"></div>
-        <div class="otp-hint">Didn't receive it? Check spam folder. <a onclick="resend()">Resend code →</a></div>
-        <button class="auth-btn" id="bOtp2" onclick="verify()">Sign In →</button>
-        <div class="auth-foot" style="margin-top:16px"><a onclick="backOtp()" style="cursor:pointer;color:var(--t3);font-size:12px">← Different email</a></div>
-      </div>
-
-      <!-- ── MODE 3: Forgot Password — Enter Email ────────────── -->
+      <!-- ── MODE 2: Forgot Password — Enter Email ────────────── -->
       <div id="stepFp1" style="display:none">
         <div class="auth-step-lbl">// Reset Password</div>
         <div class="auth-title">FORGOT PASSWORD</div>
@@ -224,12 +183,11 @@
 'use strict';
 if (VornixDB.Auth.isLoggedIn()) location.href = 'dashboard.html';
 
-let _em='', _fpEm='', _ti=null, _tiFp=null;
+let _fpEm='', _tiFp=null;
 
 /* ── Navigation helpers ─────────────────────────────────── */
-function hideAll(){['stepPw','stepOtp1','stepOtp2','stepFp1','stepFp2'].forEach(id=>document.getElementById(id).style.display='none');}
+function hideAll(){['stepPw','stepFp1','stepFp2'].forEach(id=>document.getElementById(id).style.display='none');}
 function showPw()    {hideAll();document.getElementById('stepPw').style.display='block';}
-function showOtp()   {hideAll();document.getElementById('stepOtp1').style.display='block';setTimeout(()=>document.getElementById('otpEmail').focus(),50);}
 function showForgot(){hideAll();document.getElementById('stepFp1').style.display='block';setTimeout(()=>document.getElementById('fpEmail').focus(),50);}
 
 /* ── Password show/hide ─────────────────────────────────── */
@@ -251,50 +209,6 @@ async function pwLogin(){
   b.innerHTML='✓ Signed In — Redirecting...';
   setTimeout(()=>location.href='dashboard.html',800);
 }
-
-/* ── OTP Login ──────────────────────────────────────────── */
-document.getElementById('otpEmail').addEventListener('keydown',e=>{if(e.key==='Enter')sendCode();});
-
-async function sendCode(){
-  const em=document.getElementById('otpEmail').value.trim();
-  const errEl=document.getElementById('eOtp1'); errEl.classList.remove('show');
-  if(!em||!em.includes('@')){showMsg(errEl,'Please enter a valid email address.');return;}
-  const b=document.getElementById('bOtp1'); b.disabled=true; b.innerHTML='<span class="spin">Sending code</span>';
-  const d=await VornixDB.Auth.sendOTP(em);
-  b.disabled=false; b.innerHTML='Send Login Code →';
-  if(d.error){showMsg(errEl,d.error);return;}
-  _em=em;
-  hideAll();
-  document.getElementById('stepOtp2').style.display='block';
-  document.getElementById('subOtp2').textContent='We sent a 6-digit code to '+em+'. Enter it below.';
-  initOTP('d',verifyOtpStep); startTimer(600,'tmrOtp',v=>_ti=v); document.getElementById('d0').focus();
-}
-
-async function verify(){
-  const otp=getOTP('d'), errEl=document.getElementById('eOtp2'), okEl=document.getElementById('okOtp2');
-  errEl.classList.remove('show'); okEl.classList.remove('show');
-  if(otp.length!==6){showMsg(errEl,'Please enter all 6 digits of your code.');return;}
-  const b=document.getElementById('bOtp2'); b.disabled=true; b.innerHTML='<span class="spin">Signing in</span>';
-  const d=await VornixDB.Auth.verifyOTP(_em,otp);
-  b.disabled=false; b.innerHTML='Sign In →';
-  if(d.error){showMsg(errEl,d.error);clearOTP('d');document.getElementById('d0').focus();return;}
-  clearInterval(_ti);
-  b.innerHTML='✓ Signed In — Redirecting...';
-  setTimeout(()=>location.href='dashboard.html',800);
-}
-function verifyOtpStep(){verify();}
-
-async function resend(){
-  clearInterval(_ti); document.getElementById('eOtp2').classList.remove('show');
-  const d=await VornixDB.Auth.sendOTP(_em);
-  if(d.error){showMsg(document.getElementById('eOtp2'),d.error);return;}
-  clearOTP('d'); document.getElementById('d0').focus();
-  startTimer(600,'tmrOtp',v=>_ti=v);
-  const ok=document.getElementById('okOtp2'); ok.textContent='New code sent to '+_em; ok.classList.add('show');
-  setTimeout(()=>ok.classList.remove('show'),4000);
-}
-
-function backOtp(){clearInterval(_ti);hideAll();document.getElementById('stepOtp1').style.display='block';}
 
 /* ── Forgot Password ────────────────────────────────────── */
 async function sendReset(){

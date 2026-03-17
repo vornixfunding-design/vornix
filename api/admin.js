@@ -277,6 +277,99 @@ module.exports = async (req, res) => {
       return ok(res, data);
     }
 
+    // ── OVERVIEW METRICS ────────────────────────────────────────
+    if (action === 'overview' && req.method === 'GET') {
+      const period = req.query.period || 'all'; // day | week | month | all
+      let since = null;
+      if (period === 'day')   since = new Date(Date.now() -      86400000).toISOString();
+      else if (period === 'week')  since = new Date(Date.now() -  7*86400000).toISOString();
+      else if (period === 'month') since = new Date(Date.now() - 30*86400000).toISOString();
+
+      const [traders, allChallenges, payouts, payments, newUsersRes] = await Promise.all([
+        supabaseAdmin.from('profiles').select('id', { count:'exact', head:true }).eq('is_admin', false),
+        supabaseAdmin.from('challenges').select('status, created_at'),
+        supabaseAdmin.from('payouts').select('status, trader_share, created_at'),
+        supabaseAdmin.from('payments').select('amount, created_at').eq('gateway_status', 'paid'),
+        since
+          ? supabaseAdmin.from('profiles').select('id', { count:'exact', head:true }).eq('is_admin', false).gte('created_at', since)
+          : Promise.resolve({ count: null }),
+      ]);
+
+      const byStatus = {};
+      allChallenges.data?.forEach(c => { byStatus[c.status] = (byStatus[c.status]||0)+1; });
+
+      const paidPayments = since
+        ? (payments.data || []).filter(p => p.created_at >= since)
+        : (payments.data || []);
+
+      const totalRevenue          = payments.data?.reduce((s,p) => s + (p.amount||0), 0) || 0;
+      const periodRevenue         = paidPayments.reduce((s,p) => s + (p.amount||0), 0);
+      const payoutsRequested      = payouts.data?.filter(p=>p.status==='pending') || [];
+      const payoutsPaid           = payouts.data?.filter(p=>p.status==='paid') || [];
+
+      return ok(res, {
+        period,
+        totalSales:              payments.data?.length || 0,
+        periodSales:             paidPayments.length,
+        revenue:                 totalRevenue,
+        periodRevenue,
+        newUsers:                since ? (newUsersRes.count || 0) : (traders.count || 0),
+        totalTraders:            traders.count || 0,
+        activeChallenges:        byStatus.active || 0,
+        fundedChallenges:        byStatus.funded || 0,
+        payoutsRequestedCount:   payoutsRequested.length,
+        payoutsRequestedAmount:  payoutsRequested.reduce((s,p)=>s+(p.trader_share||0),0),
+        payoutsPaidCount:        payoutsPaid.length,
+        payoutsPaidAmount:       payoutsPaid.reduce((s,p)=>s+(p.trader_share||0),0),
+        byStatus,
+      });
+    }
+
+    // ── PAYMENTS LIST ────────────────────────────────────────────
+    if (action === 'payments' && req.method === 'GET') {
+      const page   = Math.max(Number(req.query.page)||1, 1);
+      const limit  = Math.min(Number(req.query.limit)||50, 100);
+      const offset = (page-1)*limit;
+      const status = req.query.status || null;
+      const dateFrom = req.query.from  || null;
+      const dateTo   = req.query.to    || null;
+      const search   = (req.query.search || '').trim();
+
+      let userIdFilter = null;
+      if (search) {
+        // Resolve matching profile IDs at the DB level before paginating
+        const { data: matchProfiles } = await supabaseAdmin
+          .from('profiles')
+          .select('id')
+          .or(`email.ilike.%${search}%,full_name.ilike.%${search}%`);
+        userIdFilter = (matchProfiles || []).map(p => p.id);
+        if (!userIdFilter.length) {
+          return ok(res, { payments: [], total: 0, page, limit });
+        }
+      }
+
+      let q = supabaseAdmin
+        .from('payments')
+        .select(`
+          id, created_at, gateway_status, amount, currency, network,
+          deposit_address, tx_hash, user_id,
+          challenges ( id, plan, account_size, status,
+            profiles ( id, email, full_name ) )
+        `, { count: 'exact' })
+        .range(offset, offset+limit-1)
+        .order('created_at', { ascending: false });
+
+      if (status)       q = q.eq('gateway_status', status);
+      if (dateFrom)     q = q.gte('created_at', dateFrom);
+      if (dateTo)       q = q.lte('created_at', dateTo);
+      if (userIdFilter) q = q.in('user_id', userIdFilter);
+
+      const { data, error, count } = await q;
+      if (error) return err(res, error.message);
+
+      return ok(res, { payments: data || [], total: count || 0, page, limit });
+    }
+
     return err(res, `Unknown admin action: ${action}`, 404);
 
   } catch(e) {
