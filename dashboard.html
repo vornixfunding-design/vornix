@@ -220,12 +220,40 @@
         </div>
         <div id="buy-s3" style="display:none">
           <div style="height:1px;background:var(--bd);margin:22px 0"></div>
-          <div style="margin-bottom:18px"><div class="f-l" style="margin-bottom:8px">Send exactly this amount:</div><div style="font-family:var(--ff-d);font-size:42px;color:var(--red);line-height:1" id="s3-amt">—</div><div style="font-size:11px;color:var(--t3);font-family:var(--ff-m);margin-top:5px" id="s3-ref"></div></div>
-          <div class="f-g"><label class="f-l">Your unique deposit address (click to copy):</label><div class="wallet-box" id="s3-wallet" onclick="copyWallet()">—</div><div class="wallet-hint" id="copy-hint">Click to copy address</div></div>
+
+          <!-- Network warning — prominent -->
+          <div style="background:var(--red-lo);border:1px solid var(--red-bd);padding:13px 16px;margin-bottom:20px;font-size:12px;color:#ff9090;line-height:1.7">
+            <strong style="display:block;margin-bottom:3px;font-family:var(--ff-ui);letter-spacing:1.5px;font-size:10px;text-transform:uppercase">⚠ IMPORTANT — READ BEFORE SENDING</strong>
+            Only send <strong>USDT (BEP20)</strong> on <strong>BNB Smart Chain</strong>. Do NOT use TRC20, ERC20 or BNB native — wrong network = lost funds.
+          </div>
+
+          <!-- Amount row with copy button -->
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:18px">
+            <div>
+              <div class="f-l" style="margin-bottom:6px">Send exactly this amount:</div>
+              <div style="font-family:var(--ff-d);font-size:44px;color:var(--red);line-height:1" id="s3-amt">—</div>
+              <div style="font-size:11px;color:var(--t3);font-family:var(--ff-m);margin-top:4px" id="s3-ref"></div>
+            </div>
+            <button class="btn-sm" id="copy-amt-btn" onclick="copyAmount()" style="padding:10px 18px;flex-shrink:0">Copy Amount</button>
+          </div>
+
+          <!-- QR code + address -->
+          <div style="background:var(--bg-2);border:1px solid var(--bd);padding:18px;margin-bottom:16px;text-align:center">
+            <div class="f-l" style="margin-bottom:10px;text-align:left">Deposit Address (BEP20):</div>
+            <!-- QR code -->
+            <div style="display:inline-block;background:#fff;padding:10px;margin-bottom:14px;line-height:0" id="qr-wrap" aria-label="QR code for deposit address"></div>
+            <!-- Address + copy -->
+            <div style="word-break:break-all;font-family:var(--ff-m);font-size:12px;color:var(--t1);padding:10px 12px;background:var(--bg-3);border:1px solid var(--bd);text-align:left;margin-bottom:10px;line-height:1.6" id="s3-wallet">—</div>
+            <button class="btn-sm p" id="copy-addr-btn" onclick="copyWallet()" style="padding:10px 22px;width:100%">Copy Address</button>
+            <div style="font-size:11px;color:var(--grn);font-family:var(--ff-m);margin-top:8px;min-height:16px" id="copy-hint"></div>
+          </div>
+
+          <!-- How it works -->
           <div style="background:var(--bg-2);border:1px solid var(--bd);padding:14px 18px;margin-bottom:16px">
             <div class="f-l" style="margin-bottom:6px">How it works</div>
             <ol id="s3-inst" style="font-size:13px;color:var(--t2);padding-left:18px;line-height:2.1;list-style:decimal"></ol>
           </div>
+
           <!-- Payment status box -->
           <div id="pay-status-box" style="background:var(--bg-2);border:1px solid var(--bd);padding:16px 18px;margin-bottom:16px">
             <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
@@ -239,12 +267,7 @@
             <div id="pay-tx-wrap" style="display:none;margin-top:10px;font-size:11px;font-family:var(--ff-m)"><span style="color:var(--t3)">TX: </span><a id="pay-tx-link" href="#" target="_blank" rel="noopener noreferrer" style="color:var(--t2);word-break:break-all"></a></div>
             <div id="pay-expiry" style="display:none;font-size:10px;font-family:var(--ff-m);color:var(--t3);margin-top:8px"></div>
           </div>
-          <!-- Common mistakes hint -->
-          <div style="background:var(--red-lo);border:1px solid var(--red-bd);padding:12px 16px;margin-bottom:18px;font-size:12px;color:#ff9090;line-height:1.7">
-            <strong style="display:block;margin-bottom:4px;font-family:var(--ff-ui);letter-spacing:1px;font-size:10px">⚠ COMMON MISTAKES</strong>
-            Only send <strong>USDT on BNB Smart Chain (BEP20)</strong> — NOT TRC20, NOT ERC20, NOT BNB native.<br>
-            Sending the wrong token or wrong network will result in a lost transaction.
-          </div>
+
           <div class="msg msg-ok" id="tx-ok"></div>
           <button class="btn-sm" style="padding:14px 18px" onclick="resetBuy()">Start Over</button>
         </div>
@@ -285,7 +308,8 @@
   </div>
 </div>
 
-<!-- ZERO CDN — just our supabase.js -->
+<!-- ZERO CDN — just our supabase.js + QR code generator -->
+<script src="lib/qr.js"></script>
 <script src="supabase.js"></script>
 <script>
 'use strict';
@@ -393,7 +417,7 @@ function showTab(t){document.querySelectorAll('.db-tab').forEach(e=>e.classList.
 function selectPlan(p){_plan=p;document.querySelectorAll('.buy-plan').forEach(e=>e.classList.remove('sel'));document.getElementById('pl-'+p)?.classList.add('sel');const sel=document.getElementById('buy-size');sel.innerHTML='<option value="">Select size...</option>'+SIZES[p].map(s=>`<option value="${s}">$${s.toLocaleString()}</option>`).join('');document.getElementById('buy-s2').style.display='block';document.getElementById('price-box').style.display='none';}
 function updatePrice(){const s=Number(document.getElementById('buy-size').value);if(!s||!_plan)return;const p=PRICES[_plan]?.[s];const box=document.getElementById('price-box');box.style.display='block';document.getElementById('price-val').textContent=p?'$'+p+' USDT':'Contact us';const n=document.getElementById('price-note');if(_plan==='partial'&&p){n.textContent='Pay $'+Math.round(p*.35)+' now. Remaining $'+Math.round(p*.65)+' from first withdrawal.';n.style.display='block';}else n.style.display='none';}
 function selectNet(n,b){_net=n;document.querySelectorAll('.net-btn').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');}
-async function initiatePurchase(){const s=Number(document.getElementById('buy-size').value);const errEl=document.getElementById('buy-err');errEl.classList.remove('show');if(!_plan){showMsg(errEl,'Please select a plan.');return;}if(!s){showMsg(errEl,'Please select a size.');return;}const b=document.querySelector('#p-buy .btn-sm.p');b.disabled=true;b.innerHTML='<span class="spin">Processing</span>';try{const resp=await VornixDB.Challenges.startCryptoPayment(_plan,s);const d=resp?.data||resp;b.disabled=false;b.innerHTML='Proceed to Payment →';if(!d?.payment_id){showMsg(errEl,resp?.error||d?.error||'Failed. Try again.');return;}_paymentId=d.payment_id;const cur=d.currency||'USDT';document.getElementById('s3-amt').textContent=d.amount+' '+cur;document.getElementById('s3-ref').textContent='BSC (BEP20) · Ref: '+d.reference;document.getElementById('s3-wallet').textContent=d.deposit_address;const ol=document.getElementById('s3-inst');ol.innerHTML=[`Send exactly <strong>${d.amount} USDT</strong> to the address above`,`Use <strong>BNB Smart Chain (BEP20)</strong> network ONLY — do NOT use TRC20 or ERC20`,`Do not send any other token — USDT BEP20 only`,'Your challenge activates automatically once confirmed on-chain (usually 1–3 minutes)'].map(i=>`<li>${i}</li>`).join('');document.getElementById('buy-s2').style.display='none';document.getElementById('buy-s3').style.display='block';startStatusPolling();}catch(e){b.disabled=false;b.innerHTML='Proceed to Payment →';showMsg(errEl,'Connection error.');}}
+async function initiatePurchase(){const s=Number(document.getElementById('buy-size').value);const errEl=document.getElementById('buy-err');errEl.classList.remove('show');if(!_plan){showMsg(errEl,'Please select a plan.');return;}if(!s){showMsg(errEl,'Please select a size.');return;}const b=document.querySelector('#p-buy .btn-sm.p');b.disabled=true;b.innerHTML='<span class="spin">Processing</span>';try{const resp=await VornixDB.Challenges.startCryptoPayment(_plan,s);const d=resp?.data||resp;b.disabled=false;b.innerHTML='Proceed to Payment →';if(!d?.payment_id){showMsg(errEl,resp?.error||d?.error||'Failed. Try again.');return;}_paymentId=d.payment_id;const cur=d.currency||'USDT';document.getElementById('s3-amt').textContent=d.amount+' '+cur;document.getElementById('s3-ref').textContent='BSC (BEP20) · Ref: '+d.reference;document.getElementById('s3-wallet').textContent=d.deposit_address;const qr=generateQR(d.deposit_address);const qrWrap=document.getElementById('qr-wrap');if(qrWrap){qrWrap.innerHTML=qr;const svg=qrWrap.querySelector('svg');if(svg){svg.style.width='180px';svg.style.height='180px';}}const ol=document.getElementById('s3-inst');ol.innerHTML=[`Send exactly <strong>${d.amount} USDT</strong> to the address above`,`Use <strong>BNB Smart Chain (BEP20)</strong> network ONLY — do NOT use TRC20 or ERC20`,`Do not send any other token — USDT BEP20 only`,'Your challenge activates automatically once confirmed on-chain (usually 1–3 minutes)'].map(i=>`<li>${i}</li>`).join('');document.getElementById('buy-s2').style.display='none';document.getElementById('buy-s3').style.display='block';startStatusPolling();}catch(e){b.disabled=false;b.innerHTML='Proceed to Payment →';showMsg(errEl,'Connection error.');}}
 let _verifyTimer=null, _pollAttempts=0;
 const POLL_MAX=180; /* 30 min at 10s base interval */
 function startStatusPolling(){
@@ -450,7 +474,34 @@ function startStatusPolling(){
   }
   setTimeout(poll,8000);
 }
-function copyWallet(){navigator.clipboard.writeText(document.getElementById('s3-wallet').textContent).then(()=>{const h=document.getElementById('copy-hint');h.textContent='✓ Copied!';setTimeout(()=>{h.textContent='Click to copy address';},2000);});}
+function generateQR(address) {
+  try {
+    var qr = qrcode(0, 'M');
+    qr.addData(address);
+    qr.make();
+    return qr.createSvgTag({scalable:true,margin:0});
+  } catch(e) { return ''; }
+}
+function copyWallet(){
+  const addr=document.getElementById('s3-wallet').textContent;
+  if(!addr||addr==='—')return;
+  navigator.clipboard.writeText(addr).then(()=>{
+    const h=document.getElementById('copy-hint');
+    const b=document.getElementById('copy-addr-btn');
+    h.textContent='✓ Address copied!';
+    if(b){b.textContent='✓ Copied!';setTimeout(()=>{b.textContent='Copy Address';h.textContent='';},2000);}
+    else setTimeout(()=>{h.textContent='';},2000);
+  });
+}
+function copyAmount(){
+  const txt=document.getElementById('s3-amt').textContent;
+  if(!txt||txt==='—')return;
+  const num=txt.split(' ')[0];
+  navigator.clipboard.writeText(num).then(()=>{
+    const b=document.getElementById('copy-amt-btn');
+    if(b){b.textContent='✓ Copied!';setTimeout(()=>{b.textContent='Copy Amount';},2000);}
+  });
+}
 function copyMT(l,p,s){navigator.clipboard.writeText(`MT5 Login: ${l}\nPassword: ${p}\nServer: ${s}`).then(()=>alert('MT5 credentials copied!'));}
 function resetBuy(){
   _plan=null;_paymentId=null;_pollAttempts=0;
@@ -465,6 +516,10 @@ function resetBuy(){
   if(iconEl)iconEl.textContent='⏳';if(msgEl)msgEl.textContent='Waiting for your deposit…';
   if(confsWrap)confsWrap.style.display='none';if(confsBar){confsBar.style.width='0%';confsBar.style.background='var(--gold)';}
   if(txWrap)txWrap.style.display='none';if(expiryEl)expiryEl.style.display='none';
+  const qrWrap=document.getElementById('qr-wrap');if(qrWrap)qrWrap.innerHTML='';
+  const copyHint=document.getElementById('copy-hint');if(copyHint)copyHint.textContent='';
+  document.getElementById('s3-wallet').textContent='—';
+  document.getElementById('s3-amt').textContent='—';
   document.getElementById('buy-s2').style.display='none';document.getElementById('buy-s3').style.display='none';
   ['buy-err','tx-ok'].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.remove('show');});
 }

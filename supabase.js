@@ -35,17 +35,19 @@ const _Auth = {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, name, country }),
       });
-      return r.json();
+      const data = await r.json();
+      data.status = r.status;
+      return data;
     } catch(e) { return { error: 'Connection failed. Check your internet connection.' }; }
   },
 
   /* Step 2 — Verify OTP; server sets httpOnly vx_token + vx_session cookies */
-  async verifyOTP(email, otp, name, country) {
+  async verifyOTP(email, otp, name, country, password) {
     try {
       const r = await fetch(`${_API}/api/auth?action=verify-otp`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, otp, name, country }),
+        body: JSON.stringify({ email, otp, name, country, password }),
       });
       const data = await r.json();
       if (data.data?.user) {

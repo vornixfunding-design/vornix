@@ -111,6 +111,17 @@ module.exports = async (req, res) => {
         return err(res, 'GMAIL_USER and GMAIL_APP_PASSWORD are not set in Vercel environment variables.');
       }
 
+      // ── Duplicate account check ────────────────────────────
+      const { data: existingProfile } = await db()
+        .from('profiles')
+        .select('id')
+        .eq('email', email)
+        .maybeSingle();
+
+      if (existingProfile) {
+        return err(res, 'This email is already registered. Please sign in instead.', 409);
+      }
+
       // ── Resend cooldown check ──────────────────────────────
       const { data: existing } = await db()
         .from('otp_codes')
@@ -203,9 +214,16 @@ module.exports = async (req, res) => {
     if (action === 'verify-otp') {
       if (req.method !== 'POST') return err(res, 'POST required', 405);
 
-      const email = (body.email || '').toLowerCase().trim();
-      const otp   = (body.otp   || '').trim();
+      const email    = (body.email || '').toLowerCase().trim();
+      const otp      = (body.otp   || '').trim();
+      const password = body.password || null;
       if (!email || !otp) return err(res, 'Email and code required');
+
+      // Validate password if provided (required for new accounts via signup)
+      if (password !== null) {
+        const pwErr = validatePasswordStrength(password);
+        if (pwErr) return err(res, pwErr);
+      }
 
       // Fetch OTP row by email only (we compare hash below)
       const { data: otpRow, error: otpErr } = await db()
@@ -257,16 +275,24 @@ module.exports = async (req, res) => {
       const country = body.country || otpRow.country || null;
 
       if (!profile) {
+        // Hash password if provided
+        const now = new Date().toISOString();
+        const insertData = {
+          id:         generateUUID(),
+          email,
+          full_name:  name,
+          country,
+          created_at: now,
+          updated_at: now,
+        };
+        if (password) {
+          insertData.password_hash   = await bcrypt.hash(password, BCRYPT_ROUNDS);
+          insertData.password_set_at = now;
+        }
+
         const { data: newProfile, error: createErr } = await db()
           .from('profiles')
-          .insert({
-            id:         generateUUID(),
-            email,
-            full_name:  name,
-            country,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
-          })
+          .insert(insertData)
           .select()
           .single();
 
