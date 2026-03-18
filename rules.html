@@ -3,12 +3,63 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Trading Rules — VORNIX</title>
-<meta name="description" content="Every VORNIX rule clearly explained. No hidden conditions. Know exactly what is permitted on every program.">
+<title>Trading Rules &#8212; VORNIX</title>
+<meta name="description" content="Every VORNIX rule clearly explained. No hidden conditions. Know exactly what is permitted on every program before you start.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;500;600;700;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<style>
+.rules-toc{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);padding:28px 32px;margin-bottom:48px}
+.rules-toc__title{font-family:var(--ff-m);font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold-hi);margin-bottom:14px}
+.rules-toc__list{display:grid;grid-template-columns:repeat(2,1fr);gap:6px 32px}
+.rules-toc__item{font-size:13px;color:var(--t2);display:flex;align-items:center;gap:8px}
+.rules-toc__item::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--gold-hi);flex-shrink:0}
+.rules-toc__item a{color:var(--t2);text-decoration:none;transition:color .18s}
+.rules-toc__item a:hover{color:var(--gold-hi)}
+.rule-section{margin-bottom:64px}
+.rule-section__num{font-family:var(--ff-m);font-size:11px;color:var(--gold-hi);letter-spacing:2px;display:block;margin-bottom:6px}
+.rule-section__title{font-family:var(--ff-d);font-size:clamp(24px,3.2vw,38px);letter-spacing:1.5px;color:var(--white);line-height:1.05;margin-bottom:12px}
+.rule-section__intro{font-size:14.5px;color:var(--t2);line-height:1.85;max-width:760px;margin-bottom:28px}
+.rule-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:2px;margin-bottom:12px}
+.rule-card{background:var(--bg-card);border:1px solid var(--bd);padding:28px 26px;position:relative;transition:border-color .2s}
+.rule-card:hover{border-color:var(--gold-bd)}
+.rule-card::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(to right,transparent,var(--gold-bd),transparent)}
+.rule-card__tag{font-family:var(--ff-m);font-size:10px;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;display:block}
+.rule-card__tag--ok{color:var(--grn-hi)}
+.rule-card__tag--no{color:var(--red-hi)}
+.rule-card__tag--warn{color:#F59E0B}
+.rule-card__tag--info{color:var(--gold-hi)}
+.rule-card__title{font-family:var(--ff-d);font-size:18px;letter-spacing:1.5px;color:var(--white);margin-bottom:10px}
+.rule-card__body{font-size:13.5px;color:var(--t1);line-height:1.80}
+.rule-card__body strong{color:rgba(255,255,255,.90);font-weight:600}
+.rule-card__ex{margin-top:12px;background:rgba(255,255,255,.03);border-left:2px solid var(--gold-bd);padding:10px 14px;font-size:12px;color:var(--t2);line-height:1.7}
+.rule-card--wide{grid-column:1/-1}
+.rule-tbl-wrap{overflow-x:auto}
+.rule-tbl{width:100%;border-collapse:collapse;margin-top:14px}
+.rule-tbl th{font-family:var(--ff-ui);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--t3);padding:12px 16px;border-bottom:1px solid var(--bd2);text-align:left;white-space:nowrap}
+.rule-tbl td{padding:13px 16px;border-bottom:1px solid var(--bd);font-size:13px;color:var(--t1);vertical-align:top}
+.rule-tbl tr:last-child td{border-bottom:none}
+.rule-tbl tr:hover td{background:rgba(255,255,255,.018)}
+.rtd-prog{font-family:var(--ff-d);font-size:14px;letter-spacing:1px;color:var(--white)}
+.rtd-ok{color:var(--grn-hi);font-weight:600}
+.rtd-no{color:var(--red-hi);font-weight:600}
+.rtd-warn{color:#F59E0B;font-weight:600}
+.rule-div{height:1px;background:linear-gradient(to right,transparent,var(--bd2),transparent);margin:48px 0}
+.alert-box{padding:20px 24px;margin-bottom:16px}
+.alert-box--red{background:rgba(239,68,68,.05);border:1px solid rgba(239,68,68,.20)}
+.alert-box--gold{background:rgba(212,160,23,.04);border:1px solid var(--gold-bd)}
+.alert-box__head{font-family:var(--ff-ui);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px}
+.alert-box--red .alert-box__head{color:var(--red-hi)}
+.alert-box--gold .alert-box__head{color:var(--gold-hi)}
+.alert-box__body{font-size:13.5px;color:var(--t1);line-height:1.80}
+.alert-box__body strong{color:rgba(255,255,255,.90);font-weight:600}
+@media(max-width:768px){
+  .rule-grid{grid-template-columns:1fr}
+  .rule-card--wide{grid-column:auto}
+  .rules-toc__list{grid-template-columns:1fr}
+}
+</style>
 </head>
 <body>
 <canvas id="bg-canvas"></canvas>
@@ -24,7 +75,6 @@
     <li><a class="nav__link" href="academy.html">Academy</a></li>
     <li><a class="nav__link" href="technology.html">Technology</a></li>
     <li><a class="nav__link is-active" href="rules.html">Rules</a></li>
-    <li><a class="nav__link" href="how-it-works.html">How It Works</a></li>
     <li><a class="nav__link" href="about.html">About</a></li>
     <li><a class="nav__link" href="contact.html">Contact</a></li>
   </ul>
@@ -40,7 +90,6 @@
   <a class="nav__drawer-link" href="academy.html">Academy</a>
   <a class="nav__drawer-link" href="technology.html">Technology</a>
   <a class="nav__drawer-link is-active" href="rules.html">Rules</a>
-  <a class="nav__drawer-link" href="how-it-works.html">How It Works</a>
   <a class="nav__drawer-link" href="about.html">About</a>
   <a class="nav__drawer-link" href="contact.html">Contact</a>
   <a class="nav__drawer-link" href="login.html">Login &rarr;</a>
@@ -49,72 +98,416 @@
 </div>
 
 <header class="ph">
-  <span class="ph__eye">// Trading Rules</span>
-  <h1 class="ph__h">VORNIX <span class="red">RULES</span></h1>
-  <p class="ph__sub">Every rule clearly explained. No hidden conditions. Read this before starting any evaluation &mdash; know exactly what is and is not permitted.</p>
+  <span class="ph__eye">// Complete Rule Reference</span>
+  <h1 class="ph__h">TRADING <span class="red">RULES</span></h1>
+  <p class="ph__sub">Every rule applicable to every VORNIX program is defined here in full. No hidden conditions. No ambiguous clauses. No surprises. Read this document before beginning any evaluation.</p>
 </header>
 
 <section class="section">
-  <span class="s-eye">// Section 01</span>
-  <h2 class="s-head rv" style="margin-bottom:12px">CORE <span class="red">TRADING RULES</span></h2>
-  <p style="font-size:14px;color:var(--t2);margin-bottom:28px;line-height:1.7" class="rv">These rules apply to every account &mdash; evaluation and funded &mdash; unless a specific program exception is noted.</p>
-  <div class="gr-grid rv" style="margin-bottom:56px">
-    <div class="gri"><div class="gri__t">&#128201; Daily Loss Limit &mdash; Trailing</div><p class="gri__d">Calculated from the <strong>highest equity point</strong> of that trading day. If your equity reaches $10,500 on a $10,000 account with 5% daily loss &mdash; your floor becomes $9,975. Trails upward only. Resets at 00:00 server time each day.</p></div>
-    <div class="gri"><div class="gri__t">&#128721; Max Drawdown &mdash; Static</div><p class="gri__d">Calculated from the <strong>initial account balance only</strong>. Never adjusts regardless of profits. On a $10,000 account with 8% max drawdown, your absolute floor is always $9,200.</p></div>
-    <div class="gri"><div class="gri__t">&#128202; Consistency Rule</div><p class="gri__d"><strong>1-Step &amp; 2-Step:</strong> No single trade may contribute more than <strong>40%</strong> of total profit.<br><br><strong>3-Step &amp; Partial:</strong> No single trade may contribute more than <strong>15%</strong> of total profit.</p></div>
-    <div class="gri"><div class="gri__t">&#128197; Minimum Trading Days</div><p class="gri__d"><strong>1-Step:</strong> No minimum days.<br><strong>2-Step &amp; 3-Step:</strong> Minimum 3 trading days per phase.<br><strong>Partial:</strong> Minimum 5 trading days per phase.<br>A trading day = at least one trade opened and closed.</p></div>
-    <div class="gri"><div class="gri__t">&#128336; No Time Limit</div><p class="gri__d">All VORNIX evaluation programs have <strong>no time limit</strong>. Take as long as you need to pass, provided you stay within the drawdown rules. There is no expiry date.</p></div>
-    <div class="gri"><div class="gri__t">&#128200; Tradeable Instruments</div><p class="gri__d">All programs allow: <strong>Forex</strong> (major, minor and exotic pairs), <strong>Indices</strong> (US30, NAS100, SPX500, UK100, GER40), <strong>Commodities</strong> (Gold, Silver, Oil), <strong>Crypto</strong> and <strong>Stocks</strong>.</p></div>
-  </div>
 
-  <div class="section--dark" style="margin:0 calc(-1 * var(--g));padding:0 var(--g)">
-    <div style="padding:48px 0">
-      <span class="s-eye">// Section 02</span>
-      <h2 class="s-head rv" style="margin-bottom:12px">EA &amp; ALGO <span class="red">RULES</span></h2>
-      <p style="font-size:14px;color:var(--t2);margin-bottom:28px;line-height:1.7" class="rv">EA and algorithmic trading rules vary by program. Read carefully before purchasing.</p>
-      <div class="gr-grid rv" style="margin-bottom:40px">
-        <div class="gri"><div class="gri__t">&#10007; 1-Step &mdash; No EA/Algo</div><p class="gri__d">EA and algorithmic bots are <strong>not permitted</strong> on the 1-Step program. Manual trading only. Any trades executed via automated systems will be disqualified.</p></div>
-        <div class="gri"><div class="gri__t">&#10007; 2-Step &mdash; No EA/Algo</div><p class="gri__d">EA and algorithmic bots are <strong>not permitted</strong> on the 2-Step program. Manual trading only. Any trades executed via automated systems will be disqualified.</p></div>
-        <div class="gri"><div class="gri__t">&#10003; 3-Step &mdash; EA/Algo Allowed</div><p class="gri__d">EA and algorithmic trading is <strong>permitted</strong> on the 3-Step program in all phases and the funded account, provided all other rules are respected.</p></div>
-        <div class="gri"><div class="gri__t">&#10003; Partial &mdash; EA/Algo Allowed</div><p class="gri__d">EA and algorithmic trading is <strong>permitted</strong> on the Partial Payment program in all phases and the funded account, provided all other rules are respected.</p></div>
-        <div class="gri"><div class="gri__t">&#10007; Tick Scalping &amp; HFT</div><p class="gri__d">Strategies that hold trades for less than <strong>2 minutes</strong> as a primary method are not permitted on any program. This targets algorithmic exploitation only.</p></div>
-        <div class="gri"><div class="gri__t">&#9888; Latency Arbitrage</div><p class="gri__d">Any strategy exploiting platform latency, price feed delays or broker errors is prohibited across all programs. Such trades will be reversed and the account terminated.</p></div>
+<!-- TABLE OF CONTENTS -->
+<div class="rules-toc rv">
+  <div class="rules-toc__title">// Contents</div>
+  <div class="rules-toc__list">
+    <div class="rules-toc__item"><a href="#s01">01 &mdash; Drawdown &amp; Loss Rules</a></div>
+    <div class="rules-toc__item"><a href="#s07">07 &mdash; Prohibited Activities</a></div>
+    <div class="rules-toc__item"><a href="#s02">02 &mdash; Profit Targets by Program</a></div>
+    <div class="rules-toc__item"><a href="#s08">08 &mdash; Tradeable Instruments</a></div>
+    <div class="rules-toc__item"><a href="#s03">03 &mdash; Consistency Rules</a></div>
+    <div class="rules-toc__item"><a href="#s09">09 &mdash; Profit Split &amp; Withdrawals</a></div>
+    <div class="rules-toc__item"><a href="#s04">04 &mdash; Minimum Trading Days</a></div>
+    <div class="rules-toc__item"><a href="#s10">10 &mdash; Scaling Program</a></div>
+    <div class="rules-toc__item"><a href="#s05">05 &mdash; EA &amp; Algorithmic Trading</a></div>
+    <div class="rules-toc__item"><a href="#s11">11 &mdash; Account Resets</a></div>
+    <div class="rules-toc__item"><a href="#s06">06 &mdash; News Trading Rules</a></div>
+    <div class="rules-toc__item"><a href="#s12">12 &mdash; KYC &amp; Verification</a></div>
+  </div>
+</div>
+
+<!-- S01: DRAWDOWN -->
+<div class="rule-section" id="s01">
+  <span class="rule-section__num rv">// Section 01</span>
+  <div class="rule-section__title rv">DRAWDOWN &amp; LOSS <span class="red">RULES</span></div>
+  <p class="rule-section__intro rv">Loss limits are the most critical rules in any evaluation. Every VORNIX program uses two simultaneous drawdown mechanisms &mdash; a trailing daily loss limit and a static maximum drawdown. Both must be respected at all times. Breaching either one terminates the evaluation immediately with no exceptions.</p>
+  <div class="rule-grid">
+    <div class="rule-card rv">
+      <span class="rule-card__tag rule-card__tag--warn">Daily Loss Limit &mdash; Trailing</span>
+      <div class="rule-card__title">How It Is Calculated</div>
+      <div class="rule-card__body">The daily loss limit is calculated from the <strong>highest equity point reached during that trading day</strong>, not from the opening balance. The floor rises as your equity rises &mdash; it only ever moves upward, never downward. It resets at <strong>00:00 server time</strong> each day.
+      <div class="rule-card__ex"><strong>Example (1-Step, 3% daily loss, $10,000 account):</strong> Equity peaks at $10,800 during the day. Your floor becomes $10,800 &minus; 3% = <strong>$10,476</strong>. If equity drops below $10,476 at any moment, the evaluation terminates immediately, even if your balance is still above your starting value.</div></div>
+    </div>
+    <div class="rule-card rv">
+      <span class="rule-card__tag rule-card__tag--warn">Maximum Drawdown &mdash; Static</span>
+      <div class="rule-card__title">How It Is Calculated</div>
+      <div class="rule-card__body">The maximum drawdown is calculated from the <strong>initial account balance only</strong>. It is a fixed, permanent floor that never changes regardless of how much profit you generate. It applies at all times, including during open trades. Your account equity (not just balance) must stay above this floor continuously.
+      <div class="rule-card__ex"><strong>Example (1-Step, 8% max drawdown, $10,000 account):</strong> Max drawdown floor = $10,000 &minus; 8% = <strong>$9,200</strong>. Even with a $12,000 balance, your equity cannot fall below $9,200 at any point.</div></div>
+    </div>
+    <div class="rule-card rule-card--wide rv">
+      <span class="rule-card__tag rule-card__tag--info">Drawdown Limits by Program &mdash; Full Reference</span>
+      <div class="rule-tbl-wrap">
+        <table class="rule-tbl">
+          <thead><tr><th>Program</th><th>Daily Loss Limit</th><th>Max Drawdown</th><th>Daily Limit Type</th><th>Max DD Type</th></tr></thead>
+          <tbody>
+            <tr><td class="rtd-prog">&#9889; 1-Step</td><td class="rtd-no">3%</td><td class="rtd-no">8%</td><td>Trailing from daily high equity</td><td>Static from initial balance</td></tr>
+            <tr><td class="rtd-prog">&#127919; 2-Step</td><td class="rtd-no">5%</td><td class="rtd-no">10%</td><td>Trailing from daily high equity</td><td>Static from initial balance</td></tr>
+            <tr><td class="rtd-prog">&#127942; 3-Step</td><td class="rtd-no">6%</td><td class="rtd-no">12%</td><td>Trailing from daily high equity</td><td>Static from initial balance</td></tr>
+            <tr><td class="rtd-prog">&#128179; Partial</td><td class="rtd-no">6%</td><td class="rtd-no">12%</td><td>Trailing from daily high equity</td><td>Static from initial balance</td></tr>
+          </tbody>
+        </table>
       </div>
-
-      <span class="s-eye">// Section 03</span>
-      <h2 class="s-head rv" style="margin-bottom:12px">PROHIBITED <span class="red">ACTIVITIES</span></h2>
-      <p style="font-size:14px;color:var(--t2);margin-bottom:28px;line-height:1.7" class="rv">These activities result in immediate account termination. There are no warnings.</p>
-      <div class="gr-grid rv">
-        <div class="gri"><div class="gri__t">&#128683; News Trading &mdash; 3-Step &amp; Partial Only</div><p class="gri__d">Trades within <strong>5 minutes before or after</strong> a high-impact news event: profit is <strong>disqualified</strong>. Loss is <strong>fully counted</strong>. News trading is fully allowed on 1-Step and 2-Step.</p></div>
-        <div class="gri"><div class="gri__t">&#128683; Account Sharing</div><p class="gri__d">Only the registered account holder may trade. Account sharing, copy trading from external signals, or third-party access is strictly prohibited and results in immediate termination.</p></div>
-        <div class="gri"><div class="gri__t">&#128683; Opposite Account Hedging</div><p class="gri__d">Hedging between two VORNIX accounts simultaneously is prohibited. Hedging within a single account under a normal trading strategy is permitted.</p></div>
+      <div class="alert-box alert-box--gold" style="margin-top:16px">
+        <div class="alert-box__head">Both Limits Apply Simultaneously</div>
+        <div class="alert-box__body">Both drawdown rules apply at the same time. You must stay within both limits simultaneously at all times. A breach of either one terminates the evaluation. There is no grace period and no warning before termination.</div>
       </div>
     </div>
   </div>
+</div>
 
-  <div style="padding:48px 0">
-    <span class="s-eye">// Section 04</span>
-    <h2 class="s-head rv" style="margin-bottom:12px">PAYOUT &amp; <span class="red">WITHDRAWAL RULES</span></h2>
-    <div class="gr-grid rv" style="margin-bottom:28px">
-      <div class="gri"><div class="gri__t">&#128176; Fast Withdrawals</div><p class="gri__d">Profit withdrawals are available as soon as you generate profit on your funded account. No arbitrary waiting periods. Processed via cryptocurrency, Wise and bank transfer within 1&ndash;3 business days.</p></div>
-      <div class="gri"><div class="gri__t">&#128176; Profit Split</div><p class="gri__d"><strong>1-Step:</strong> 95% of all profits.<br><strong>2-Step:</strong> 90% of all profits.<br><strong>3-Step &amp; Partial:</strong> 80% rising to 90% after scaling milestones.</p></div>
-      <div class="gri"><div class="gri__t">&#128176; Payment Methods</div><p class="gri__d">Payouts via: <strong>Cryptocurrency</strong> (USDT, USDC, BTC), <strong>Wise</strong> and <strong>Bank Transfer</strong>. Processing time: 1&ndash;3 business days after approval.</p></div>
-      <div class="gri"><div class="gri__t">&#128176; Partial Payment Deduction</div><p class="gri__d">Remaining 65% of evaluation fee automatically deducted from your <strong>first profit withdrawal only</strong>. All subsequent withdrawals receive the full profit split.</p></div>
-      <div class="gri"><div class="gri__t">&#128176; Minimum Withdrawal</div><p class="gri__d">The minimum withdrawal amount is <strong>$50</strong>. There is no maximum withdrawal limit.</p></div>
-      <div class="gri"><div class="gri__t">&#128176; KYC Verification</div><p class="gri__d">Before your first payout: government-issued photo ID and proof of address. One-time process only. All subsequent payouts process without re-verification.</p></div>
+<div class="rule-div"></div>
+
+<!-- S02: PROFIT TARGETS -->
+<div class="rule-section" id="s02">
+  <span class="rule-section__num rv">// Section 02</span>
+  <div class="rule-section__title rv">PROFIT TARGETS <span class="red">BY PROGRAM</span></div>
+  <p class="rule-section__intro rv">Each evaluation program requires you to reach a specified profit target within the defined phases. Profit is calculated as a percentage of the <strong>initial account balance</strong>. Only fully closed trades count &mdash; floating (unrealised) profit does not contribute to the target. The target must be met while simultaneously respecting all drawdown and other applicable rules.</p>
+  <div class="rule-grid">
+    <div class="rule-card rv">
+      <span class="rule-card__tag rule-card__tag--ok">&#9889; 1-Step Program</span>
+      <div class="rule-card__title">Single Phase &mdash; 10% Target</div>
+      <div class="rule-card__body"><strong>Evaluation Phase:</strong> 10% profit on initial balance.<br><strong>Funded Account:</strong> No profit target &mdash; trade and withdraw freely.<br><br>No minimum trading days. No time limit. News trading fully permitted. Manual trading only &mdash; no EA or algorithmic bots.</div>
     </div>
-    <div class="callout rv">
-      <div class="callout__ttl">&#9888; Risk Disclaimer</div>
-      <p>Trading financial instruments involves significant risk of loss and is not suitable for all investors. Past performance is not indicative of future results. VORNIX evaluation accounts use simulated capital for the purpose of skill assessment. Funded accounts trade real capital subject to the profit split arrangement. Always trade responsibly.</p>
+    <div class="rule-card rv">
+      <span class="rule-card__tag rule-card__tag--ok">&#127919; 2-Step Program</span>
+      <div class="rule-card__title">Two Phases &mdash; 10% + 5%</div>
+      <div class="rule-card__body"><strong>Phase 1:</strong> 10% profit on initial balance.<br><strong>Phase 2:</strong> 5% profit on initial balance.<br><strong>Funded Account:</strong> No profit target &mdash; full trading freedom.<br><br>Minimum 3 trading days per phase. News trading permitted in both phases. Manual trading only.</div>
+    </div>
+    <div class="rule-card rv">
+      <span class="rule-card__tag rule-card__tag--ok">&#127942; 3-Step Program</span>
+      <div class="rule-card__title">Three Phases &mdash; 8% + 5% + 4%</div>
+      <div class="rule-card__body"><strong>Phase 1:</strong> 8% profit on initial balance.<br><strong>Phase 2:</strong> 5% profit on initial balance.<br><strong>Phase 3:</strong> 4% profit on initial balance.<br><strong>Funded Account:</strong> No profit target &mdash; trade freely.<br><br>Minimum 3 trading days per phase. No news trading permitted. EA/Algo bots allowed throughout.</div>
+    </div>
+    <div class="rule-card rv">
+      <span class="rule-card__tag rule-card__tag--ok">&#128179; Partial Payment Program</span>
+      <div class="rule-card__title">Three Phases &mdash; 10% + 6% + 5%</div>
+      <div class="rule-card__body"><strong>Phase 1:</strong> 10% profit on initial balance.<br><strong>Phase 2:</strong> 6% profit on initial balance.<br><strong>Phase 3:</strong> 5% profit on initial balance.<br><strong>Funded Account:</strong> No profit target.<br><br>Minimum 5 trading days per phase. No news trading. 15% consistency rule applies. EA/Algo permitted.</div>
     </div>
   </div>
+  <div class="alert-box alert-box--gold rv">
+    <div class="alert-box__head">How Profit Is Measured</div>
+    <div class="alert-box__body">Profit is measured in monetary terms against the initial balance. On a $10,000 account with a 10% target, you need <strong>$1,000 in closed profit</strong>. Only fully closed positions count. Open floating P&amp;L, swap credits, and unrealised gains do not count toward the target under any program.</div>
+  </div>
+</div>
+
+<div class="rule-div"></div>
+
+<!-- S03: CONSISTENCY -->
+<div class="rule-section" id="s03">
+  <span class="rule-section__num rv">// Section 03</span>
+  <div class="rule-section__title rv">CONSISTENCY <span class="red">RULES</span></div>
+  <p class="rule-section__intro rv">The consistency rule ensures evaluation profit is generated through repeated, structured trading rather than a single large trade. It limits the contribution any single trade can make to your total profit. On stricter programs, it also applies to the funded account itself.</p>
+  <div class="rule-grid">
+    <div class="rule-card rv">
+      <span class="rule-card__tag rule-card__tag--warn">40% Cap &mdash; 1-Step &amp; 2-Step</span>
+      <div class="rule-card__title">No Single Trade Exceeds 40% of Total Profit</div>
+      <div class="rule-card__body">On the 1-Step and 2-Step programs, no individual closed trade may contribute more than <strong>40% of your total accumulated profit</strong> at the point of evaluation pass review.
+      <div class="rule-card__ex"><strong>Example:</strong> Total profit is $1,000. No single trade may have contributed more than $400. A single $450 trade violates the consistency rule even if all other trades were within limits.</div></div>
+    </div>
+    <div class="rule-card rv">
+      <span class="rule-card__tag rule-card__tag--no">15% Cap &mdash; 3-Step &amp; Partial</span>
+      <div class="rule-card__title">No Single Trade Exceeds 15% of Total Profit</div>
+      <div class="rule-card__body">On the 3-Step and Partial programs, the cap is significantly stricter. No individual closed trade may contribute more than <strong>15% of total accumulated profit</strong>. This applies across all evaluation phases and on the funded account itself.
+      <div class="rule-card__ex"><strong>Example:</strong> Total profit is $2,000. No single trade may have contributed more than $300. A $350 trade violates the rule regardless of all other trades being within limits.</div></div>
+    </div>
+    <div class="rule-card rule-card--wide rv">
+      <span class="rule-card__tag rule-card__tag--info">Consistency Summary by Program</span>
+      <div class="rule-tbl-wrap">
+        <table class="rule-tbl">
+          <thead><tr><th>Program</th><th>Consistency Cap</th><th>Applies During Evaluation</th><th>Applies on Funded Account</th></tr></thead>
+          <tbody>
+            <tr><td class="rtd-prog">&#9889; 1-Step</td><td class="rtd-warn">40% of total profit</td><td>Evaluation phase</td><td class="rtd-ok">No restriction on funded</td></tr>
+            <tr><td class="rtd-prog">&#127919; 2-Step</td><td class="rtd-warn">40% of total profit</td><td>Both evaluation phases</td><td class="rtd-ok">No restriction on funded</td></tr>
+            <tr><td class="rtd-prog">&#127942; 3-Step</td><td class="rtd-no">15% of total profit</td><td>All three evaluation phases</td><td class="rtd-no">Active on funded account</td></tr>
+            <tr><td class="rtd-prog">&#128179; Partial</td><td class="rtd-no">15% of total profit</td><td>All three evaluation phases</td><td class="rtd-no">Active on funded account</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="rule-div"></div>
+
+<!-- S04: MINIMUM DAYS -->
+<div class="rule-section" id="s04">
+  <span class="rule-section__num rv">// Section 04</span>
+  <div class="rule-section__title rv">MINIMUM <span class="red">TRADING DAYS</span></div>
+  <p class="rule-section__intro rv">Some programs require a minimum number of trading days before an evaluation phase can pass. A trading day is any calendar day on which at least one trade is both opened and fully closed. Holding positions overnight does not create additional trading days when the calendar changes.</p>
+  <div class="rule-grid">
+    <div class="rule-card rv">
+      <span class="rule-card__tag rule-card__tag--ok">&#9889; 1-Step Program</span>
+      <div class="rule-card__title">No Minimum Trading Days</div>
+      <div class="rule-card__body">There is <strong>no minimum trading day requirement</strong> on the 1-Step program. You may pass the evaluation in as few as one trading day, provided the profit target is met and all drawdown rules are respected throughout.</div>
+    </div>
+    <div class="rule-card rv">
+      <span class="rule-card__tag rule-card__tag--warn">&#127919; 2-Step Program</span>
+      <div class="rule-card__title">3 Minimum Trading Days Per Phase</div>
+      <div class="rule-card__body">Both Phase 1 and Phase 2 each require a minimum of <strong>3 trading days</strong> before the phase can pass. You may reach the profit target before 3 days, but the phase will not be approved until 3 qualifying trading days have been recorded independently for that phase.</div>
+    </div>
+    <div class="rule-card rv">
+      <span class="rule-card__tag rule-card__tag--warn">&#127942; 3-Step Program</span>
+      <div class="rule-card__title">3 Minimum Trading Days Per Phase</div>
+      <div class="rule-card__body">All three phases each require a minimum of <strong>3 trading days</strong> independently. Each phase must satisfy its own 3-day minimum before progression to the next phase or to the funded account is permitted.</div>
+    </div>
+    <div class="rule-card rv">
+      <span class="rule-card__tag rule-card__tag--warn">&#128179; Partial Payment Program</span>
+      <div class="rule-card__title">5 Minimum Trading Days Per Phase</div>
+      <div class="rule-card__body">All three phases each require a minimum of <strong>5 trading days</strong>. This is the strictest minimum day requirement across all VORNIX programs. Each phase must independently satisfy 5 qualifying trading days before progression is permitted.</div>
+    </div>
+  </div>
+  <div class="alert-box alert-box--red rv">
+    <div class="alert-box__head">What Counts as a Trading Day</div>
+    <div class="alert-box__body">A trading day requires at least <strong>one fully completed round-trip trade</strong> opened and closed on the same calendar day. Multiple trades in a single day count as one trading day. Weekend days cannot qualify. Holding a position overnight does not create an additional trading day when the calendar changes.</div>
+  </div>
+</div>
+
+<div class="rule-div"></div>
+
+<!-- S05: EA & ALGO -->
+<div class="rule-section" id="s05">
+  <span class="rule-section__num rv">// Section 05</span>
+  <div class="rule-section__title rv">EA &amp; ALGORITHMIC <span class="red">TRADING</span></div>
+  <p class="rule-section__intro rv">Expert Advisors (EAs) and algorithmic trading are permitted on some VORNIX programs and strictly prohibited on others. The rules below define clearly which programs allow automation and which require exclusively manual trading.</p>
+  <div class="rule-grid">
+    <div class="rule-card rv">
+      <span class="rule-card__tag rule-card__tag--no">&#10007; 1-Step &mdash; EA/Algo NOT Permitted</span>
+      <div class="rule-card__title">Manual Trading Only</div>
+      <div class="rule-card__body">All trade entries and exits must be placed manually by the account holder. Expert Advisors, automated bots, algorithmic execution scripts, and copy-trading services are strictly prohibited on all 1-Step accounts. Violations result in immediate evaluation termination without refund.</div>
+    </div>
+    <div class="rule-card rv">
+      <span class="rule-card__tag rule-card__tag--no">&#10007; 2-Step &mdash; EA/Algo NOT Permitted</span>
+      <div class="rule-card__title">Manual Trading Only</div>
+      <div class="rule-card__body">The 2-Step program also requires fully manual trading in both evaluation phases and on the funded account. EA bots, automated scripts, and copy trading from external signals are all prohibited. All execution must be performed manually by the registered account holder.</div>
+    </div>
+    <div class="rule-card rv">
+      <span class="rule-card__tag rule-card__tag--ok">&#10003; 3-Step &mdash; EA/Algo Permitted</span>
+      <div class="rule-card__title">Automated Trading Allowed</div>
+      <div class="rule-card__body">EA and algorithmic trading is fully permitted on the 3-Step program across all evaluation phases and the funded account, provided all other trading rules are respected. Custom-built EAs, commercially available bots, and VPS-hosted automated systems are permitted. Tick scalping and latency arbitrage remain prohibited universally.</div>
+    </div>
+    <div class="rule-card rv">
+      <span class="rule-card__tag rule-card__tag--ok">&#10003; Partial &mdash; EA/Algo Permitted</span>
+      <div class="rule-card__title">Automated Trading Allowed</div>
+      <div class="rule-card__body">EA and algorithmic trading is fully permitted on the Partial Payment program across all evaluation phases and the funded account. The 15% consistency rule and news trading restriction remain active regardless of whether trading is automated or manual. EA users must ensure their algorithms comply with all applicable rules.</div>
+    </div>
+    <div class="rule-card rule-card--wide rv">
+      <span class="rule-card__tag rule-card__tag--no">&#10007; Universally Prohibited &mdash; All Programs</span>
+      <div class="rule-card__title">High-Frequency &amp; Exploitative Strategies</div>
+      <div class="rule-card__body">The following algorithmic practices are prohibited on all programs regardless of whether EA trading is generally permitted on that program:<br><br><strong>Tick Scalping / HFT:</strong> Any strategy whose primary execution model involves holding trades open for fewer than 2 minutes is not permitted.<br><br><strong>Latency Arbitrage:</strong> Any strategy exploiting price feed delays, platform latency differences, or data connection discrepancies between brokers is strictly prohibited. Trades identified as latency arbitrage will be reversed and the account permanently terminated without refund.<br><br><strong>Platform Exploitation:</strong> Any automated tool designed to exploit platform pricing errors, off-market quotes, or stale prices is prohibited across all accounts and programs.</div>
+    </div>
+  </div>
+</div>
+
+<div class="rule-div"></div>
+
+<!-- S06: NEWS TRADING -->
+<div class="rule-section" id="s06">
+  <span class="rule-section__num rv">// Section 06</span>
+  <div class="rule-section__title rv">NEWS TRADING <span class="red">RULES</span></div>
+  <p class="rule-section__intro rv">News trading rules vary by program. Two programs permit news trading freely. Two programs apply asymmetric restrictions around high-impact economic events. The rules below define precisely which programs restrict news trading and the exact consequences for trades placed within restricted windows.</p>
+  <div class="rule-grid">
+    <div class="rule-card rv">
+      <span class="rule-card__tag rule-card__tag--ok">&#10003; 1-Step &mdash; News Trading Fully Permitted</span>
+      <div class="rule-card__title">No News Restrictions</div>
+      <div class="rule-card__body">The 1-Step program has <strong>no restrictions on news trading</strong>. You may open, hold, and close positions at any time, including immediately before, during, or after high-impact economic data releases. All trades are counted equally for the profit target regardless of when they are placed relative to news events.</div>
+    </div>
+    <div class="rule-card rv">
+      <span class="rule-card__tag rule-card__tag--ok">&#10003; 2-Step &mdash; News Trading Fully Permitted</span>
+      <div class="rule-card__title">No News Restrictions</div>
+      <div class="rule-card__body">The 2-Step program has <strong>no restrictions on news trading</strong> in either evaluation phase or on the funded account. High-impact news event trades are treated identically to all other trades. Profits count in full and losses count in full, with no special handling.</div>
+    </div>
+    <div class="rule-card rv">
+      <span class="rule-card__tag rule-card__tag--no">&#10007; 3-Step &mdash; News Trading Restricted</span>
+      <div class="rule-card__title">5-Minute Window Rule &mdash; All Phases &amp; Funded</div>
+      <div class="rule-card__body">Trading within a <strong>5-minute window before or after any high-impact news event</strong> triggers asymmetric treatment on the 3-Step program:<br><br>&bull; Trade <strong>in profit</strong> at review: profit is <strong>fully disqualified and removed</strong> from your total.<br>&bull; Trade <strong>in loss</strong> at review: loss is <strong>fully counted</strong> against your drawdown limits.<br><br>This rule applies to every evaluation phase and remains active on the funded account.
+      <div class="rule-card__ex">High-impact events include: NFP, CPI, FOMC decisions, interest rate announcements, GDP releases, and other Tier-1 economic data. Use an economic calendar to identify restricted windows before placing any trade.</div></div>
+    </div>
+    <div class="rule-card rv">
+      <span class="rule-card__tag rule-card__tag--no">&#10007; Partial &mdash; News Trading Restricted</span>
+      <div class="rule-card__title">5-Minute Window Rule &mdash; All Phases &amp; Funded</div>
+      <div class="rule-card__body">The Partial program applies the same asymmetric news restriction as the 3-Step program. Trading within <strong>5 minutes before or after a high-impact news event</strong>:<br><br>&bull; Trade <strong>in profit</strong>: profit is <strong>fully disqualified</strong>.<br>&bull; Trade <strong>in loss</strong>: loss is <strong>fully counted</strong>.<br><br>This rule is active across all three evaluation phases and on the funded account. EA users on the Partial program must ensure their algorithms do not execute trades during news windows.</div>
+    </div>
+  </div>
+</div>
+
+<div class="rule-div"></div>
+
+<!-- S07: PROHIBITED -->
+<div class="rule-section" id="s07">
+  <span class="rule-section__num rv">// Section 07</span>
+  <div class="rule-section__title rv">PROHIBITED <span class="red">ACTIVITIES</span></div>
+  <p class="rule-section__intro rv">The following activities are strictly prohibited across all VORNIX programs and accounts. Violation of any rule in this section results in <strong>immediate and permanent account termination</strong> with no warnings, no appeals, and no refund. These rules apply to all evaluations, funded accounts, and any future accounts associated with the same trader.</p>
+  <div class="rule-grid">
+    <div class="rule-card rv">
+      <span class="rule-card__tag rule-card__tag--no">&#10007; Account Sharing</span>
+      <div class="rule-card__title">Single User &mdash; No Third-Party Access</div>
+      <div class="rule-card__body">Only the individual whose name, identification, and payment are registered may trade the account. The following are all prohibited arrangements:<br><br>&bull; Allowing another person to log in and trade on your behalf<br>&bull; Receiving automated signals from a third-party service executing trades on your account<br>&bull; Granting API access to an external party or service<br>&bull; Any arrangement where a third party controls, influences, or executes trades on your account in any manner</div>
+    </div>
+    <div class="rule-card rv">
+      <span class="rule-card__tag rule-card__tag--no">&#10007; Cross-Account Hedging</span>
+      <div class="rule-card__title">No Opposing Positions Across VORNIX Accounts</div>
+      <div class="rule-card__body">Hedging between two or more VORNIX accounts simultaneously is prohibited. You may not hold a long position on one VORNIX account and a short position on a different VORNIX account for the same instrument at the same time. <strong>This applies even if both accounts are registered under the same name.</strong><br><br>Normal hedging within a single account as part of a legitimate trading strategy is permitted, subject to all other applicable rules.</div>
+    </div>
+    <div class="rule-card rv">
+      <span class="rule-card__tag rule-card__tag--no">&#10007; Exploitative Strategies</span>
+      <div class="rule-card__title">Arbitrage, Manipulation &amp; Platform Exploitation</div>
+      <div class="rule-card__body">Any strategy profiting from broker pricing errors, platform connectivity issues, data feed delays, or any platform anomaly rather than genuine market analysis is prohibited. This includes:<br><br>&bull; Latency arbitrage and price feed exploitation<br>&bull; Tick scalping as a primary strategy (trades regularly held under 2 minutes)<br>&bull; Grid strategies designed to exploit platform pricing mechanics<br>&bull; Martingale systems with excessive, unmanaged position accumulation<br>&bull; Any strategy structured to systematically abuse the evaluation system</div>
+    </div>
+    <div class="rule-card rv">
+      <span class="rule-card__tag rule-card__tag--no">&#10007; Identity Fraud</span>
+      <div class="rule-card__title">Accurate Identity Required on All Accounts</div>
+      <div class="rule-card__body">All registrations must use accurate personal information matching the individual making the purchase. The following are all prohibited:<br><br>&bull; Registering under a false name or identity<br>&bull; Using another individual's payment method without their explicit authorisation<br>&bull; Submitting false or altered documentation during KYC verification<br>&bull; Creating multiple accounts to bypass risk management rules, evaluation limits, or per-person restrictions<br><br>Accounts associated with fraudulent registration will be permanently terminated and referred for further action.</div>
+    </div>
+  </div>
+</div>
+
+<div class="rule-div"></div>
+
+<!-- S08: INSTRUMENTS -->
+<div class="rule-section" id="s08">
+  <span class="rule-section__num rv">// Section 08</span>
+  <div class="rule-section__title rv">TRADEABLE <span class="red">INSTRUMENTS</span></div>
+  <p class="rule-section__intro rv">All VORNIX programs support the same complete range of tradeable instruments. There are no instrument restrictions between programs &mdash; all asset classes are available equally across 1-Step, 2-Step, 3-Step, and Partial.</p>
+  <div class="rule-grid">
+    <div class="rule-card rv">
+      <span class="rule-card__tag rule-card__tag--ok">Forex &mdash; All Pairs</span>
+      <div class="rule-card__title">Majors, Minors &amp; Exotics</div>
+      <div class="rule-card__body">All forex currency pairs are tradeable on all programs. This includes all major pairs (EUR/USD, GBP/USD, USD/JPY, AUD/USD, USD/CHF, USD/CAD, NZD/USD), all minor cross pairs, and all exotic currency pairs listed on the MT4/MT5 platform.</div>
+    </div>
+    <div class="rule-card rv">
+      <span class="rule-card__tag rule-card__tag--ok">Indices</span>
+      <div class="rule-card__title">Major Global Indices</div>
+      <div class="rule-card__body">Available indices include: US30 (Dow Jones), NAS100 (NASDAQ 100), SPX500 (S&amp;P 500), UK100 (FTSE 100), GER40 (DAX 40), FRA40 (CAC 40), JPN225 (Nikkei 225), and all additional major indices listed on the platform.</div>
+    </div>
+    <div class="rule-card rv">
+      <span class="rule-card__tag rule-card__tag--ok">Commodities</span>
+      <div class="rule-card__title">Metals &amp; Energy</div>
+      <div class="rule-card__body"><strong>Metals:</strong> Gold (XAU/USD), Silver (XAG/USD), Platinum, Copper.<br><strong>Energy:</strong> Crude Oil WTI (USOIL), Crude Oil Brent (UKOIL), Natural Gas.<br><br>Market-hours restrictions may apply for specific instruments during low-liquidity sessions such as the Asian session for US-listed instruments.</div>
+    </div>
+    <div class="rule-card rv">
+      <span class="rule-card__tag rule-card__tag--ok">Cryptocurrency &amp; Stock CFDs</span>
+      <div class="rule-card__title">Digital Assets &amp; Equity CFDs</div>
+      <div class="rule-card__body"><strong>Cryptocurrency:</strong> BTC/USD, ETH/USD, and major crypto pairs available as CFDs. Crypto CFDs may carry wider spreads and higher margin requirements than forex pairs.<br><br><strong>Stocks:</strong> Major US and international stock CFDs available on MT4/MT5. Check the platform instrument list for the full current range of available equity CFDs.</div>
+    </div>
+  </div>
+</div>
+
+<div class="rule-div"></div>
+
+<!-- S09: PROFIT SPLIT -->
+<div class="rule-section" id="s09">
+  <span class="rule-section__num rv">// Section 09</span>
+  <div class="rule-section__title rv">PROFIT SPLIT &amp; <span class="red">WITHDRAWALS</span></div>
+  <p class="rule-section__intro rv">Profit withdrawals are available as soon as you generate profit on your funded account. There are no arbitrary waiting periods between profit generation and withdrawal eligibility. Processing is completed within 1 to 3 business days following approval of your withdrawal request.</p>
+  <div class="rule-grid">
+    <div class="rule-card rv">
+      <span class="rule-card__tag rule-card__tag--info">Profit Split by Program</span>
+      <div class="rule-card__title">How Profits Are Distributed</div>
+      <div class="rule-tbl-wrap">
+        <table class="rule-tbl">
+          <thead><tr><th>Program</th><th>Your Split</th><th>Starting Split</th><th>Maximum Split</th></tr></thead>
+          <tbody>
+            <tr><td class="rtd-prog">&#9889; 1-Step</td><td class="rtd-ok">95%</td><td class="rtd-ok">95% from day one</td><td class="rtd-ok">95%</td></tr>
+            <tr><td class="rtd-prog">&#127919; 2-Step</td><td class="rtd-ok">90%</td><td class="rtd-ok">90% from day one</td><td class="rtd-ok">90%</td></tr>
+            <tr><td class="rtd-prog">&#127942; 3-Step</td><td class="rtd-ok">80&ndash;90%</td><td>80% initially</td><td class="rtd-ok">90% after scaling</td></tr>
+            <tr><td class="rtd-prog">&#128179; Partial</td><td class="rtd-ok">80&ndash;90%</td><td>80% initially *</td><td class="rtd-ok">90% after scaling</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="alert-box alert-box--gold" style="margin-top:14px">
+        <div class="alert-box__head">* Partial Program &mdash; First Withdrawal Deduction</div>
+        <div class="alert-box__body">On the Partial Payment program, the remaining 65% of the evaluation fee (which was not paid upfront) is automatically deducted from your <strong>first profit withdrawal only</strong>. All subsequent withdrawals receive the full profit split with no deduction. The deduction is capped at the actual withdrawal amount.</div>
+      </div>
+    </div>
+    <div class="rule-card rv">
+      <span class="rule-card__tag rule-card__tag--info">Payment Methods &amp; Processing Times</span>
+      <div class="rule-card__title">How Withdrawals Are Processed</div>
+      <div class="rule-card__body"><strong>Supported withdrawal methods:</strong><br><br>&bull; <strong>Cryptocurrency (Crypto):</strong> USDT (TRC-20 and ERC-20 networks), USDC, BTC &mdash; typically processed within 24 hours.<br>&bull; <strong>Wise:</strong> International bank transfer via the Wise platform &mdash; 1 to 3 business days.<br>&bull; <strong>Bank Wire Transfer:</strong> Standard international SWIFT wire transfer &mdash; 2 to 5 business days depending on receiving bank location.<br><br><strong>Processing time:</strong> 1 to 3 business days after withdrawal request approval.<br><strong>Minimum withdrawal amount:</strong> $50 USD equivalent.<br><strong>Maximum withdrawal amount:</strong> No upper limit imposed by VORNIX.</div>
+    </div>
+  </div>
+</div>
+
+<div class="rule-div"></div>
+
+<!-- S10: SCALING -->
+<div class="rule-section" id="s10">
+  <span class="rule-section__num rv">// Section 10</span>
+  <div class="rule-section__title rv">SCALING <span class="red">PROGRAM</span></div>
+  <p class="rule-section__intro rv">All VORNIX funded accounts include an automatic scaling program. As you demonstrate consistent profitability on your funded account, your capital allocation increases automatically &mdash; without any separate application, approval process, or additional fee required.</p>
+  <div class="rule-grid">
+    <div class="rule-card rule-card--wide rv">
+      <span class="rule-card__tag rule-card__tag--ok">Automatic 25% Allocation Increase</span>
+      <div class="rule-card__title">How the Scaling Program Works</div>
+      <div class="rule-card__body">Every time you generate <strong>10% cumulative profit</strong> on your funded account, your account allocation automatically increases by <strong>25%</strong>.<br><br><strong>Scaling example:</strong> You begin with a $20,000 funded account. After generating 10% profit ($2,000 in closed profit), your allocation increases to $25,000. After the next 10% profit cycle on the $25,000 account, your allocation increases further to $31,250 &mdash; and so on.<br><br><strong>Maximum allocation:</strong> $100,000. No funded account under the standard program exceeds this limit. Your allocation will stop scaling once you reach $100,000.<br><br>Automatic scaling applies to all four evaluation programs. There is no additional fee, no separate application, and no processing delay &mdash; the new allocation is applied automatically upon reaching the 10% cumulative profit milestone.</div>
+    </div>
+  </div>
+</div>
+
+<div class="rule-div"></div>
+
+<!-- S11: RESETS -->
+<div class="rule-section" id="s11">
+  <span class="rule-section__num rv">// Section 11</span>
+  <div class="rule-section__title rv">ACCOUNT <span class="red">RESETS</span></div>
+  <p class="rule-section__intro rv">If your evaluation account is terminated due to a rule breach, you may purchase a reset at a discounted fee to continue your attempt. A reset reinstates your account at the same phase where the breach occurred, with the same initial balance and all original program parameters.</p>
+  <div class="rule-grid">
+    <div class="rule-card rule-card--wide rv">
+      <span class="rule-card__tag rule-card__tag--info">Reset Policy &mdash; Complete Details</span>
+      <div class="rule-card__title">Restart Without Paying the Full Fee Again</div>
+      <div class="rule-card__body"><strong>What a reset includes:</strong><br>&bull; Account reinstated at the specific phase where the rule breach occurred.<br>&bull; Initial balance restored to the original evaluation starting balance for that account size.<br>&bull; All prior trading history from the terminated attempt is cleared completely.<br>&bull; The same program rules that applied on the original purchase continue to apply on the reset.<br><br><strong>What a reset does not include:</strong><br>&bull; Any profit generated during the previous attempt is not carried over to the reset account.<br>&bull; Resets cannot be applied to funded accounts &mdash; funded accounts that are terminated cannot be reset under any circumstances.<br>&bull; A reset does not change the program type, account size, or any rule parameters.<br><br><strong>Pricing:</strong> Reset fees are discounted relative to the original evaluation fee and vary by program and account size. Contact the VORNIX support team for current reset pricing on your specific account.</div>
+    </div>
+  </div>
+</div>
+
+<div class="rule-div"></div>
+
+<!-- S12: KYC -->
+<div class="rule-section" id="s12">
+  <span class="rule-section__num rv">// Section 12</span>
+  <div class="rule-section__title rv">KYC &amp; <span class="red">VERIFICATION</span></div>
+  <p class="rule-section__intro rv">Know Your Customer (KYC) identity verification is required before your first funded account profit withdrawal. The process is completed once and applies permanently to your account. Once verified, all future withdrawals proceed without any additional verification steps.</p>
+  <div class="rule-grid">
+    <div class="rule-card rv">
+      <span class="rule-card__tag rule-card__tag--info">Required Documents</span>
+      <div class="rule-card__title">What You Need to Submit</div>
+      <div class="rule-card__body"><strong>1. Government-issued photo identification:</strong><br>Passport, national identity card, or government-issued driving licence. Must clearly show your full legal name, a current photograph, and the document's expiry date. Expired documents are not accepted.<br><br><strong>2. Proof of residential address:</strong><br>A utility bill (gas, electricity, water, or internet), bank statement, or government-issued letter dated within the last 90 days, clearly showing your full legal name and current residential address.<br><br>All documents must be submitted in clear digital format (photograph or scanned copy). Blurred, cropped, obscured, or digitally altered documents will not be accepted and will require resubmission.</div>
+    </div>
+    <div class="rule-card rv">
+      <span class="rule-card__tag rule-card__tag--ok">One-Time Verification</span>
+      <div class="rule-card__title">Complete Once &mdash; Withdraw Without Restriction</div>
+      <div class="rule-card__body">KYC verification is a <strong>one-time process only</strong>. Once your identity and address have been successfully verified by the VORNIX compliance team:<br><br>&bull; All future withdrawals on all your VORNIX accounts process without any further verification requirements.<br>&bull; Verification status is permanently tied to your registered email address and identity on file.<br>&bull; Additional funded accounts registered under the same verified identity do not require re-verification.<br><br><strong>When KYC is required:</strong> Before your first profit withdrawal on a funded account only. KYC verification is not required to purchase, begin, or complete an evaluation. It only becomes required at the point of your first payout request.</div>
+    </div>
+  </div>
+</div>
+
+<div class="rule-div"></div>
+
+<!-- DISCLAIMER -->
+<div class="callout rv">
+  <div class="callout__ttl">Risk Disclaimer &amp; Important Legal Notice</div>
+  <p>Trading financial instruments involves significant risk of loss and is not suitable for all investors. Past performance is not indicative of future results. VORNIX evaluation accounts use simulated capital for the purpose of assessing trader skill and consistency. Funded accounts involve real capital subject to the profit-sharing arrangement described in the programme terms and conditions. You should not risk money you cannot afford to lose. Always read the full Terms and Conditions before purchasing any evaluation programme. VORNIX reserves the right to amend these rules with reasonable prior notice to active account holders. This rules document is provided for informational reference only &mdash; the legally binding version is the Terms and Conditions document available in full on request.</p>
+</div>
+
+<div style="margin-top:40px;display:flex;gap:14px;flex-wrap:wrap" class="rv">
+  <button class="btn-p" onclick="location.href='evaluations.html'">View All Programs &rarr;</button>
+  <button class="btn-s" onclick="location.href='signup.html'">Begin Your Evaluation</button>
+</div>
+
 </section>
 
 <footer class="footer">
   <div class="footer__grid">
     <div><div class="footer__brand-name">VORN<span>IX</span></div><p class="footer__brand-desc">Transparent rules. No hidden conditions. No surprises.</p></div>
     <div class="footer__col"><h4>Evaluations</h4><ul><li><a href="evaluations.html#one">1-Step</a></li><li><a href="evaluations.html#two">2-Step</a></li><li><a href="evaluations.html#three">3-Step</a></li><li><a href="evaluations.html#partial">Partial</a></li></ul></div>
-    <div class="footer__col"><h4>Company</h4><ul><li><a href="academy.html">Academy</a></li><li><a href="technology.html">Technology</a></li><li><a href="how-it-works.html">How It Works</a></li><li><a href="about.html">About</a></li></ul></div>
+    <div class="footer__col"><h4>Company</h4><ul><li><a href="academy.html">Academy</a></li><li><a href="technology.html">Technology</a></li><li><a href="about.html">About</a></li><li><a href="contact.html">Contact</a></li></ul></div>
     <div class="footer__col"><h4>Legal</h4><ul><li><a href="#">Terms &amp; Conditions</a></li><li><a href="#">Privacy Policy</a></li><li><a href="#">Risk Disclaimer</a></li><li><a href="#">Refund Policy</a></li></ul></div>
   </div>
   <div class="footer__bottom">
