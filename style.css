@@ -1188,7 +1188,10 @@ img { display: block; max-width: 100%; }
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .rv, .rv-f, .rv-s { transition: none !important; opacity: 1 !important; transform: none !important; }
-  * { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+  .hiw-num-circle, .eval-card, .mstat-card, .pv-card, .j-card, .tp-card, .prob-card,
+  .testi-card, .if-benefit, .plan-card-home, .tc-card, .tcard {
+    animation: none !important; transition: none !important;
+  }
 }
 
 /* ── PHASE 2 RESPONSIVE ───────────────────────────────────────────── */
