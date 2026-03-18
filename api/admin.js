@@ -348,11 +348,14 @@ module.exports = async (req, res) => {
         }
       }
 
+      // Only select columns guaranteed to exist in the payments schema.
+      // Optional columns (deposit_address, network) are derived from the
+      // metadata JSON field to avoid "column does not exist" DB errors.
       let q = supabaseAdmin
         .from('payments')
         .select(`
           id, created_at, gateway_status, amount, currency, metadata,
-          deposit_address, tx_hash, user_id,
+          user_id,
           challenges!challenge_id ( id, plan, account_size, status,
             profiles!user_id ( id, email, full_name ) )
         `, { count: 'exact' })
@@ -367,14 +370,16 @@ module.exports = async (req, res) => {
       const { data, error, count } = await q;
       if (error) {
         console.error('[admin] payments query error:', error.message, error);
-        return err(res, error.message);
+        return err(res, `Payments query failed: ${error.message}`, 500);
       }
 
-      // Derive `network` from metadata (stored as metadata.network) since the
-      // payments table has no dedicated network column.  Fall back to currency.
+      // Safely derive optional fields from the metadata JSON so the response
+      // contract stays stable even if the DB schema lacks dedicated columns.
       const payments = (data || []).map(({ metadata, ...rest }) => ({
         ...rest,
         network: metadata?.network || rest.currency || null,
+        tx_hash: metadata?.tx_hash || metadata?.txHash || null,
+        deposit_address: metadata?.deposit_address || null,
       }));
 
       return ok(res, { payments, total: count || 0, page, limit });
