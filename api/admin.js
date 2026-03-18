@@ -351,7 +351,7 @@ module.exports = async (req, res) => {
       let q = supabaseAdmin
         .from('payments')
         .select(`
-          id, created_at, gateway_status, amount, currency, network,
+          id, created_at, gateway_status, amount, currency, metadata,
           deposit_address, tx_hash, user_id,
           challenges!challenge_id ( id, plan, account_size, status,
             profiles!user_id ( id, email, full_name ) )
@@ -370,7 +370,14 @@ module.exports = async (req, res) => {
         return err(res, error.message);
       }
 
-      return ok(res, { payments: data || [], total: count || 0, page, limit });
+      // Derive `network` from metadata (stored as metadata.network) since the
+      // payments table has no dedicated network column.  Fall back to currency.
+      const payments = (data || []).map(({ metadata, ...rest }) => ({
+        ...rest,
+        network: metadata?.network || rest.currency || null,
+      }));
+
+      return ok(res, { payments, total: count || 0, page, limit });
     }
 
     return err(res, `Unknown admin action: ${action}`, 404);
