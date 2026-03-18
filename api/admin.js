@@ -353,8 +353,8 @@ module.exports = async (req, res) => {
         .select(`
           id, created_at, gateway_status, amount, currency, network,
           deposit_address, tx_hash, user_id,
-          challenges ( id, plan, account_size, status,
-            profiles ( id, email, full_name ) )
+          challenges!challenge_id ( id, plan, account_size, status,
+            profiles!user_id ( id, email, full_name ) )
         `, { count: 'exact' })
         .range(offset, offset+limit-1)
         .order('created_at', { ascending: false });
@@ -365,7 +365,10 @@ module.exports = async (req, res) => {
       if (userIdFilter) q = q.in('user_id', userIdFilter);
 
       const { data, error, count } = await q;
-      if (error) return err(res, error.message);
+      if (error) {
+        console.error('[admin] payments query error:', error.message, error);
+        return err(res, error.message);
+      }
 
       return ok(res, { payments: data || [], total: count || 0, page, limit });
     }
