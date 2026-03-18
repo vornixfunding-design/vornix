@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Instant Funding — VORNIX</title>
+<meta name="description" content="Start with just 35% upfront. Get funded, trade real capital, pay the rest from your first profit withdrawal. VORNIX Instant Funding.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;500;600;700;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+.if-band-hero{background:var(--bg);border-bottom:1px solid var(--bd2);position:relative;overflow:hidden}
+.if-band-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 55% at 50% 0%,rgba(212,160,23,.10) 0%,transparent 60%),radial-gradient(ellipse 40% 40% at 90% 80%,rgba(16,185,129,.05) 0%,transparent 50%);pointer-events:none}
+.if-band-hero::after{content:'';position:absolute;inset:0;background:linear-gradient(rgba(255,255,255,.015) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.015) 1px,transparent 1px);background-size:60px 60px;opacity:.5;pointer-events:none}
+</style>
+</head>
+<body>
+<canvas id="bg-canvas"></canvas>
+<div id="bg-veil"></div>
+
+<!-- NAV -->
+<nav class="nav" id="main-nav">
+  <div class="nav__logo" onclick="location.href='index.html'" role="button" tabindex="0">
+    <svg class="nav__logo-svg" viewBox="0 0 172 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs><linearGradient id="lg-w" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FFF" stop-opacity=".95"/><stop offset="100%" stop-color="#8890AA"/></linearGradient><linearGradient id="lg-r" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#E8001A"/><stop offset="100%" stop-color="#7A0008"/></linearGradient><linearGradient id="lg-g" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#22B972"/><stop offset="100%" stop-color="#0E5E3A"/></linearGradient><filter id="glow-r" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="1" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+      <g filter="url(#glow-r)"><rect x="1" y="14" width="5" height="13" fill="url(#lg-r)" rx=".3"/><line x1="3.5" y1="8" x2="3.5" y2="14" stroke="#B8000F" stroke-width="1.2" opacity=".7"/><line x1="3.5" y1="27" x2="3.5" y2="32" stroke="#B8000F" stroke-width="1.2" opacity=".5"/><rect x="9" y="18" width="5" height="7" fill="rgba(255,255,255,.08)" rx=".3"/><line x1="11.5" y1="13" x2="11.5" y2="18" stroke="rgba(255,255,255,.1)" stroke-width="1.2"/><line x1="11.5" y1="25" x2="11.5" y2="29" stroke="rgba(255,255,255,.08)" stroke-width="1.2"/><rect x="17" y="11" width="5" height="14" fill="url(#lg-g)" rx=".3"/><line x1="19.5" y1="6" x2="19.5" y2="11" stroke="#22B972" stroke-width="1.2" opacity=".6"/><line x1="19.5" y1="25" x2="19.5" y2="30" stroke="#22B972" stroke-width="1.2" opacity=".5"/></g>
+      <polyline points="3.5,26 11.5,22 19.5,14" stroke="#B8000F" stroke-width=".8" opacity=".4" stroke-dasharray="2,2"/>
+      <path d="M30 7L38 31L46 7" stroke="url(#lg-w)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <ellipse cx="56.5" cy="19" rx="7" ry="12" stroke="url(#lg-w)" stroke-width="2.7" fill="none"/>
+      <path d="M68 7v24M68 7h9c3 0 5 2.5 5 6s-2 6-5 6H68M76 19l7.5 12" stroke="url(#lg-w)" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <path d="M88 31V7L102 31V7" stroke="url(#lg-w)" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <line x1="108" y1="7" x2="108" y2="31" stroke="url(#lg-w)" stroke-width="2.7" stroke-linecap="round"/>
+      <path d="M114 7l13 24M127 7l-13 24" stroke="url(#lg-r)" stroke-width="2.8" stroke-linecap="round" filter="url(#glow-r)"/>
+      <line x1="30" y1="36" x2="127" y2="36" stroke="rgba(184,0,15,.10)" stroke-width=".8"/>
+      <line x1="30" y1="36" x2="72" y2="36" stroke="rgba(184,0,15,.65)" stroke-width="1.4"/>
+      <text x="133" y="16" font-family="'Barlow Condensed',sans-serif" font-size="6" fill="#6B7A9E" letter-spacing="1.5">PROP</text>
+      <text x="133" y="26" font-family="'Barlow Condensed',sans-serif" font-size="6" fill="#6B7A9E" letter-spacing="1.5">FIRM</text>
+    </svg>
+  </div>
+  <ul class="nav__links" role="list">
+    <li><a class="nav__link" href="index.html">Home</a></li>
+    <li><a class="nav__link" href="evaluations.html">Evaluations</a></li>
+    <li><a class="nav__link is-active" href="instant-funding.html">Instant Funding</a></li>
+    <li><a class="nav__link" href="academy.html">Academy</a></li>
+    <li><a class="nav__link" href="technology.html">Technology</a></li>
+    <li><a class="nav__link" href="rules.html">Rules</a></li>
+    <li><a class="nav__link" href="how-it-works.html">How It Works</a></li>
+    <li><a class="nav__link" href="about.html">About</a></li>
+    <li><a class="nav__link" href="contact.html">Contact</a></li>
+  </ul>
+  <div class="nav__right">
+    <a href="login.html" class="nav__login">Login</a>
+    <button class="nav__cta" onclick="location.href='signup.html'">Get Funded</button>
+  </div>
+  <button class="nav__ham" id="nav-ham" onclick="navToggle()" aria-label="Toggle menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="nav__drawer" id="nav-drawer">
+  <a class="nav__drawer-link" href="index.html">Home</a>
+  <a class="nav__drawer-link" href="evaluations.html">Evaluations</a>
+  <a class="nav__drawer-link is-active" href="instant-funding.html">Instant Funding</a>
+  <a class="nav__drawer-link" href="academy.html">Academy</a>
+  <a class="nav__drawer-link" href="technology.html">Technology</a>
+  <a class="nav__drawer-link" href="rules.html">Rules</a>
+  <a class="nav__drawer-link" href="how-it-works.html">How It Works</a>
+  <a class="nav__drawer-link" href="about.html">About</a>
+  <a class="nav__drawer-link" href="contact.html">Contact</a>
+  <a class="nav__drawer-link" href="login.html">Login &rarr;</a>
+  <button class="nav__drawer-cta" onclick="location.href='signup.html'">Get Funded &rarr;</button>
+  <p class="nav__drawer-foot">VORNIX &mdash; STRUCTURE TRADING AS A PROFESSION</p>
+</div>
+
+<!-- HERO -->
+<div class="if-band-hero">
+  <div class="if-hero">
+    <div class="rv">
+      <div class="if-hero__badge">Lowest Entry. Real Capital.</div>
+      <h1 class="if-hero__h1">
+        START FOR LESS.
+        <span>EARN MORE.</span>
+      </h1>
+      <p class="if-hero__desc">Pay only <strong>35% of the evaluation fee upfront</strong>. Complete your evaluation. Access real funded capital. The remaining 65% is deducted automatically from your first profit withdrawal &mdash; no additional out-of-pocket payment, ever.</p>
+      <div class="if-hero__ctas">
+        <button class="btn-hero-p" onclick="location.href='signup.html?plan=partial'">Start Instant Funding &rarr;</button>
+        <button class="btn-hero-o" onclick="location.href='evaluations.html'">Compare All Programs</button>
+      </div>
+      <div class="if-hero__trust">
+        <div class="if-hero__trust-item">35% Upfront Only</div>
+        <div class="if-hero__trust-item">No Extra Payments</div>
+        <div class="if-hero__trust-item">Up to 90% Split</div>
+        <div class="if-hero__trust-item">$1K &ndash; $100K</div>
+      </div>
+    </div>
+    <div class="if-pricing-panel rv rv-d2">
+      <div class="if-pp-header">// Upfront Cost &mdash; Instant Funding</div>
+      <div class="if-pp-row">
+        <div><div class="if-pp-size">$1,000</div><div class="if-pp-sub">Account size</div></div>
+        <div style="text-align:right"><div class="if-pp-price">$7</div><div class="if-pp-sub">35% upfront</div></div>
+      </div>
+      <div class="if-pp-row">
+        <div><div class="if-pp-size">$2,500</div><div class="if-pp-sub">Account size</div></div>
+        <div style="text-align:right"><div class="if-pp-price">$12</div><div class="if-pp-sub">35% upfront</div></div>
+      </div>
+      <div class="if-pp-row">
+        <div><div class="if-pp-size">$5,000</div><div class="if-pp-sub">Account size</div></div>
+        <div style="text-align:right"><div class="if-pp-price">$19</div><div class="if-pp-sub">35% upfront</div></div>
+      </div>
+      <div class="if-pp-row">
+        <div><div class="if-pp-size">$10,000</div><div class="if-pp-sub">Account size</div></div>
+        <div style="text-align:right"><div class="if-pp-price">$33</div><div class="if-pp-sub">35% upfront</div></div>
+      </div>
+      <div class="if-pp-row">
+        <div><div class="if-pp-size">$25,000</div><div class="if-pp-sub">Account size</div></div>
+        <div style="text-align:right"><div class="if-pp-price">$68</div><div class="if-pp-sub">35% upfront</div></div>
+      </div>
+      <div class="if-pp-row">
+        <div><div class="if-pp-size">$50,000</div><div class="if-pp-sub">Account size</div></div>
+        <div style="text-align:right"><div class="if-pp-price">$105</div><div class="if-pp-sub">35% upfront</div></div>
+      </div>
+      <div class="if-pp-row">
+        <div><div class="if-pp-size">$100,000</div><div class="if-pp-sub">Account size</div></div>
+        <div style="text-align:right"><div class="if-pp-price">$171</div><div class="if-pp-sub">35% upfront</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STATS STRIP -->
+<div class="home-strip">
+  <div class="home-strip-i rv"><div class="home-strip-i__n"><span>35</span>%</div><div class="home-strip-i__l">Upfront Only</div></div>
+  <div class="home-strip-i rv"><div class="home-strip-i__n"><span>65</span>%</div><div class="home-strip-i__l">From First Payout</div></div>
+  <div class="home-strip-i rv"><div class="home-strip-i__n"><span>80</span>&ndash;<span>90</span>%</div><div class="home-strip-i__l">Profit Split</div></div>
+  <div class="home-strip-i rv"><div class="home-strip-i__n">$<span>100</span>K</div><div class="home-strip-i__l">Max Capital</div></div>
+</div>
+
+<!-- BENEFITS -->
+<div class="band-b">
+  <div class="home-section">
+    <div class="h-eye rv">// Why Instant Funding</div>
+    <div class="h-display rv" style="margin-bottom:14px">Lower barrier. <span class="hl">Real opportunity.</span></div>
+    <p class="h-lead rv" style="margin-bottom:44px">The Instant Funding model removes the biggest obstacle for talented traders &mdash; the full upfront cost. Start for less, prove your skill, earn from your first withdrawal.</p>
+    <div class="if-benefits">
+      <div class="if-benefit rv rv-d1">
+        <div class="if-benefit__icon">💰</div>
+        <div class="if-benefit__title">Minimal Upfront</div>
+        <p class="if-benefit__desc">Pay only 35% of the evaluation fee today. As little as $7 to access a $1,000 funded account. No large capital commitment required before you prove your edge.</p>
+      </div>
+      <div class="if-benefit rv rv-d2">
+        <div class="if-benefit__icon">🎯</div>
+        <div class="if-benefit__title">Earn to Pay</div>
+        <p class="if-benefit__desc">The remaining 65% is deducted automatically from your very first profit withdrawal. You pay the balance from profits you have already earned &mdash; not from your own pocket.</p>
+      </div>
+      <div class="if-benefit rv rv-d3">
+        <div class="if-benefit__icon">📈</div>
+        <div class="if-benefit__title">Real Capital Access</div>
+        <p class="if-benefit__desc">Access $1,000 to $100,000 in real funded capital. Up to 90% profit split. Fast withdrawals. Automatic 25% scaling every 10% profit cycle &mdash; the same as standard programs.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<div class="band-a">
+  <div class="home-section">
+    <div class="h-eye rv">// How Instant Funding Works</div>
+    <div class="h-display rv" style="margin-bottom:14px">Three steps to <span class="hl">funded capital.</span></div>
+    <p class="h-lead rv" style="margin-bottom:52px">The same structured evaluation model &mdash; with a smarter payment structure.</p>
+    <div class="hiw-grid" style="grid-template-columns:repeat(3,1fr)">
+      <div class="hiw-step rv rv-d1">
+        <div class="hiw-num-circle">01</div>
+        <div class="hiw-title">Pay 35% Upfront</div>
+        <p class="hiw-desc">Choose your account size. Pay only 35% of the total evaluation fee today. The rest is deferred until your first profit withdrawal.</p>
+        <span class="hiw-tag">As low as $7</span>
+      </div>
+      <div class="hiw-step rv rv-d2">
+        <div class="hiw-num-circle">02</div>
+        <div class="hiw-title">Pass 3-Phase Eval</div>
+        <p class="hiw-desc">Complete three evaluation phases with strict but fair rules. 10%+6%+5% targets. 5% daily loss limit. 10% max drawdown. Minimum 5 trading days per phase.</p>
+        <span class="hiw-tag">Fair. Transparent. Strict.</span>
+      </div>
+      <div class="hiw-step rv rv-d3">
+        <div class="hiw-num-circle">03</div>
+        <div class="hiw-title">Trade &amp; Earn</div>
+        <p class="hiw-desc">Get funded. Trade your account. When your first profit withdrawal is processed, the remaining 65% of the fee is automatically deducted. No surprises.</p>
+        <span class="hiw-tag">Balance paid from profits</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- RULES -->
+<div class="band-c">
+  <div class="home-section">
+    <div class="h-eye rv">// Program Rules</div>
+    <div class="h-display rv" style="margin-bottom:14px">Know the <span class="hl">rules before you start.</span></div>
+    <p class="h-lead rv" style="margin-bottom:40px">The Instant Funding program uses our most structured evaluation to protect both traders and the firm. Stricter rules, lower upfront cost &mdash; a fair exchange.</p>
+    <div class="rules rv" style="max-width:780px;margin:0 auto 32px">
+      <div class="rc"><div class="rc__icon">🎯</div><div class="rc__val rc__val--g">10%</div><div class="rc__lbl">Phase 1 Target</div></div>
+      <div class="rc"><div class="rc__icon">🎯</div><div class="rc__val rc__val--g">6%</div><div class="rc__lbl">Phase 2 Target</div></div>
+      <div class="rc"><div class="rc__icon">🎯</div><div class="rc__val rc__val--g">5%</div><div class="rc__lbl">Phase 3 Target</div></div>
+      <div class="rc"><div class="rc__icon">📉</div><div class="rc__val rc__val--r">5%</div><div class="rc__lbl">Daily Loss Limit</div><div class="rc__note">Trailing from day high</div></div>
+      <div class="rc"><div class="rc__icon">🛑</div><div class="rc__val rc__val--r">10%</div><div class="rc__lbl">Max Drawdown</div><div class="rc__note">Static from initial</div></div>
+      <div class="rc"><div class="rc__icon">📅</div><div class="rc__val">5 Days</div><div class="rc__lbl">Min Trading Days</div><div class="rc__note">Per phase &mdash; stricter</div></div>
+    </div>
+    <div style="max-width:780px;margin:0 auto;display:flex;flex-direction:column;gap:10px">
+      <div class="callout callout-gold rv"><div class="callout__ttl">💳 35% Upfront — How It Works</div><p>Pay <strong>35% upfront</strong>. Complete all three evaluation phases successfully. Once funded and your first profit withdrawal is processed, the remaining <strong>65% is automatically deducted</strong> from that withdrawal. There is no additional payment required ever &mdash; it comes entirely from profits you have already earned.</p></div>
+      <div class="callout rv"><div class="callout__ttl">📊 15% Consistency Rule</div><p>No single profitable trade may exceed <strong>15% of total accumulated profit</strong>. Example: total profit $1,000 &rarr; no single trade may have contributed more than $150. This applies in all phases and the funded account.</p></div>
+      <div class="callout rv"><div class="callout__ttl">📰 No News Trading</div><p>Any trade opened within <strong>5 minutes before or after a high-impact news event</strong>: if in profit &mdash; profit is <strong>disqualified</strong>. If in loss &mdash; loss is <strong>fully counted</strong>. Plan your trades around economic calendar events.</p></div>
+    </div>
+    <div class="flags rv" style="max-width:780px;margin:32px auto 0">
+      <span class="flag flag-gold">★ 35% Upfront Only</span>
+      <span class="flag flag-ok">✓ EA / Algo Allowed</span>
+      <span class="flag flag-nt">5 Min. Days / Phase</span>
+      <span class="flag flag-no">✗ No News Trading</span>
+      <span class="flag flag-no">15% Consistency Cap</span>
+    </div>
+  </div>
+</div>
+
+<!-- PRICING TABLE -->
+<div class="band-b">
+  <div class="home-section">
+    <div class="h-eye rv">// Pricing</div>
+    <div class="h-display rv" style="margin-bottom:14px">Instant Funding <span class="hl">pricing.</span></div>
+    <p class="h-lead rv" style="margin-bottom:32px">All amounts shown are the <strong>35% upfront fee</strong>. The remaining 65% is deducted from your first profit withdrawal &mdash; zero additional out-of-pocket cost.</p>
+    <div class="tbl-wrap rv">
+      <table class="tbl">
+        <thead>
+          <tr>
+            <th>Account Size</th>
+            <th>Upfront Today (35%)</th>
+            <th>From Profits (65%)</th>
+            <th>Total Fee</th>
+            <th>Profit Split</th>
+            <th>Daily Loss</th>
+            <th>Max DD</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="tc-acc">$1,000</td><td class="tc-up">$7</td><td class="tc-dim">$13</td><td class="tc-dim">$20</td><td class="tc-spl">80&rarr;90%</td><td>5% Trailing</td><td>10% Static</td><td><button class="tbl-btn" onclick="location.href='signup.html?plan=partial&amp;size=1000'">Begin &rarr;</button></td></tr>
+          <tr><td class="tc-acc">$2,500</td><td class="tc-up">$12</td><td class="tc-dim">$23</td><td class="tc-dim">$35</td><td class="tc-spl">80&rarr;90%</td><td>5% Trailing</td><td>10% Static</td><td><button class="tbl-btn" onclick="location.href='signup.html?plan=partial&amp;size=2500'">Begin &rarr;</button></td></tr>
+          <tr><td class="tc-acc">$5,000</td><td class="tc-up">$19</td><td class="tc-dim">$36</td><td class="tc-dim">$55</td><td class="tc-spl">80&rarr;90%</td><td>5% Trailing</td><td>10% Static</td><td><button class="tbl-btn" onclick="location.href='signup.html?plan=partial&amp;size=5000'">Begin &rarr;</button></td></tr>
+          <tr><td class="tc-acc">$10,000</td><td class="tc-up">$33</td><td class="tc-dim">$62</td><td class="tc-dim">$95</td><td class="tc-spl">80&rarr;90%</td><td>5% Trailing</td><td>10% Static</td><td><button class="tbl-btn" onclick="location.href='signup.html?plan=partial&amp;size=10000'">Begin &rarr;</button></td></tr>
+          <tr><td class="tc-acc">$25,000</td><td class="tc-up">$68</td><td class="tc-dim">$127</td><td class="tc-dim">$195</td><td class="tc-spl">80&rarr;90%</td><td>5% Trailing</td><td>10% Static</td><td><button class="tbl-btn" onclick="location.href='signup.html?plan=partial&amp;size=25000'">Begin &rarr;</button></td></tr>
+          <tr><td class="tc-acc">$50,000</td><td class="tc-up">$105</td><td class="tc-dim">$194</td><td class="tc-dim">$299</td><td class="tc-spl">80&rarr;90%</td><td>5% Trailing</td><td>10% Static</td><td><button class="tbl-btn" onclick="location.href='signup.html?plan=partial&amp;size=50000'">Begin &rarr;</button></td></tr>
+          <tr><td class="tc-acc">$100,000</td><td class="tc-up">$171</td><td class="tc-dim">$318</td><td class="tc-dim">$489</td><td class="tc-spl">80&rarr;90%</td><td>5% Trailing</td><td>10% Static</td><td><button class="tbl-btn" onclick="location.href='signup.html?plan=partial&amp;size=100000'">Begin &rarr;</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- COMPARISON -->
+<div class="band-a">
+  <div class="home-section">
+    <div class="h-eye rv">// Model Comparison</div>
+    <div class="h-display rv" style="margin-bottom:14px">Instant Funding vs <span class="hl">Standard Challenge.</span></div>
+    <p class="h-lead rv" style="margin-bottom:40px">Both models lead to funded capital and real payouts. Choose based on your preference for payment structure and evaluation intensity.</p>
+    <div class="if-compare">
+      <div class="if-compare-col rv rv-d1">
+        <div class="if-compare-col__head">Standard Challenge</div>
+        <div class="if-compare-row"><span>&rarr;</span>Full fee paid upfront before starting</div>
+        <div class="if-compare-row"><span>&rarr;</span>1, 2, or 3-phase evaluation</div>
+        <div class="if-compare-row"><span>&rarr;</span>Up to 95% profit split (1-Step)</div>
+        <div class="if-compare-row"><span>&rarr;</span>News trading allowed (1-Step &amp; 2-Step)</div>
+        <div class="if-compare-row"><span>&rarr;</span>EA/Algo allowed (3-Step)</div>
+        <div class="if-compare-row"><span>&rarr;</span>Lower daily loss limits (3&ndash;6%)</div>
+        <div class="if-compare-row"><span>&rarr;</span>Best for: Traders with available capital</div>
+      </div>
+      <div class="if-compare-col if-compare-col--highlight rv rv-d2">
+        <div class="if-compare-col__head">★ Instant Funding</div>
+        <div class="if-compare-row"><span>✓</span>Only 35% paid today &mdash; 65% from profits</div>
+        <div class="if-compare-row"><span>✓</span>3-phase evaluation (structured)</div>
+        <div class="if-compare-row"><span>✓</span>Up to 90% profit split</div>
+        <div class="if-compare-row"><span>✓</span>EA/Algo bots permitted</div>
+        <div class="if-compare-row"><span>✓</span>Stricter rules to balance lower cost</div>
+        <div class="if-compare-row"><span>✓</span>5% daily loss &mdash; 10% max drawdown</div>
+        <div class="if-compare-row"><span>✓</span>Best for: Traders minimising upfront risk</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FINAL CTA -->
+<div class="cta-section">
+  <div class="cta-section__eye">Start Today</div>
+  <h2 class="cta-section__h rv">Your edge. <span>Our capital.</span></h2>
+  <p class="cta-section__sub rv">Start with as little as $7. Pass your evaluation. Access real capital. Pay the balance from what you earn.</p>
+  <div class="cta-section__btns rv">
+    <button class="btn-hero-p" onclick="location.href='signup.html?plan=partial'">Start Instant Funding &rarr;</button>
+    <button class="btn-hero-o" onclick="location.href='evaluations.html'">Compare All Programs</button>
+  </div>
+  <div class="cta-section__disclaimer rv">From $7 upfront &bull; Account sizes $1K to $100K &bull; 80&ndash;90% profit split &bull; 65% paid from profits</div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer__grid">
+    <div><div class="footer__brand-name">VORN<span>IX</span></div><p class="footer__brand-desc">Instant Funding with minimal upfront cost. Capital up to $100K. Up to 90% profit split.</p></div>
+    <div class="footer__col"><h4>Programs</h4><ul><li><a href="evaluations.html#one">1-Step</a></li><li><a href="evaluations.html#two">2-Step</a></li><li><a href="evaluations.html#three">3-Step</a></li><li><a href="instant-funding.html">Instant Funding</a></li></ul></div>
+    <div class="footer__col"><h4>Platform</h4><ul><li><a href="how-it-works.html">How It Works</a></li><li><a href="rules.html">Rules</a></li><li><a href="technology.html">Technology</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+    <div class="footer__col"><h4>Legal</h4><ul><li><a href="#">Terms</a></li><li><a href="#">Privacy</a></li><li><a href="#">Risk Warning</a></li><li><a href="#">Refund Policy</a></li></ul></div>
+  </div>
+  <div class="footer__bottom">
+    <span class="footer__copy">&copy; 2025 VORNIX. All rights reserved.</span>
+    <div class="footer__legal"><a href="#">Terms</a><a href="#">Privacy</a><a href="#">Risk</a></div>
+  </div>
+</footer>
+
+<script>
+window.addEventListener('scroll',()=>document.getElementById('main-nav').classList.toggle('scrolled',scrollY>20),{passive:true});
+let _open=false;
+function navToggle(){_open=!_open;document.getElementById('nav-ham').classList.toggle('is-open',_open);document.getElementById('nav-ham').setAttribute('aria-expanded',_open);document.getElementById('nav-drawer').classList.toggle('is-open',_open);document.body.style.overflow=_open?'hidden':'';}
+window.addEventListener('resize',()=>{if(innerWidth>=1100&&_open)navToggle();},{passive:true});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&_open)navToggle();});
+const _obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');_obs.unobserve(e.target);}}),{threshold:.06,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.rv').forEach(el=>_obs.observe(el));
+</script>
+<script src="app.js"></script>
+</body>
+</html>
