@@ -1214,3 +1214,41 @@ img { display: block; max-width: 100%; }
   .cta-section__btns { flex-direction: column; align-items: center; }
   .hero__trust { gap: 12px; }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   PREMIUM REDESIGN ADDITIONS — v2
+   ═══════════════════════════════════════════════════════════ */
+
+/* Vision section */
+.vision-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:36px}
+.vision-card{background:linear-gradient(135deg,rgba(255,255,255,.04),rgba(255,255,255,.02));border:1px solid var(--bd2);border-radius:var(--r);padding:32px 28px;position:relative;overflow:hidden;transition:border-color var(--tr-base),transform var(--tr-base)}
+.vision-card:hover{border-color:var(--gold-bd);transform:translateY(-3px)}
+.vision-card__num{font-family:var(--ff-d);font-size:64px;letter-spacing:-1px;color:rgba(212,160,23,.12);position:absolute;top:12px;right:20px;line-height:1}
+.vision-card__phase{font-family:var(--ff-ui);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gold-hi);margin-bottom:12px}
+.vision-card__h{font-family:var(--ff-d);font-size:28px;letter-spacing:.5px;color:var(--white);margin-bottom:12px;line-height:1.1}
+.vision-card__p{font-size:14px;color:var(--t2);line-height:1.7}
+.vision-card__badge{display:inline-flex;align-items:center;gap:6px;margin-top:16px;font-family:var(--ff-ui);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-hi);background:rgba(212,160,23,.1);border:1px solid rgba(212,160,23,.2);padding:6px 14px;border-radius:2px}
+.vision-card__badge::before{content:'●';animation:blink 1.4s ease-in-out infinite;font-size:8px}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.vision-card--coming{border-color:rgba(212,160,23,.2)}
+
+/* Benefits grid */
+.benefits-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:36px}
+.benefit-card{background:rgba(255,255,255,.03);border:1px solid var(--bd);border-radius:var(--r-sm);padding:28px 24px;transition:all var(--tr-base)}
+.benefit-card:hover{background:rgba(255,255,255,.055);border-color:var(--bd2);transform:translateY(-2px)}
+.benefit-card__icon{font-size:28px;margin-bottom:14px}
+.benefit-card__h{font-family:var(--ff-ui);font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--white);margin-bottom:10px;font-weight:700}
+.benefit-card__p{font-size:13px;color:var(--t2);line-height:1.65}
+
+/* Section eyebrow improvements */
+.s-eye{font-family:var(--ff-m);font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--gold-hi);display:block;margin-bottom:10px}
+
+/* Responsive */
+@media(max-width:900px){
+  .vision-cards{grid-template-columns:1fr}
+  .benefits-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:600px){
+  .benefits-grid{grid-template-columns:1fr}
+  .vision-card__num{font-size:44px}
+}
