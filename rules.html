@@ -9,6 +9,14 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;500;600;700;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<style>
+.rules-overview-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:32px;max-width:860px;margin-left:auto;margin-right:auto}
+.ro-item{background:rgba(255,255,255,.04);border:1px solid var(--bd2);border-radius:var(--r-sm);padding:16px 20px;text-align:left;display:flex;flex-direction:column;gap:6px}
+.ro-item__icon{font-size:20px}
+.ro-item__label{font-family:var(--ff-ui);font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--t2)}
+.ro-item__val{font-family:var(--ff-d);font-size:22px;letter-spacing:1px;color:var(--gold-hi)}
+@media(max-width:700px){.rules-overview-strip{grid-template-columns:repeat(2,1fr)}}
+</style>
 </head>
 <body>
 <canvas id="bg-canvas"></canvas>
@@ -24,7 +32,6 @@
     <li><a class="nav__link" href="academy.html">Academy</a></li>
     <li><a class="nav__link" href="technology.html">Technology</a></li>
     <li><a class="nav__link is-active" href="rules.html">Rules</a></li>
-    <li><a class="nav__link" href="how-it-works.html">How It Works</a></li>
     <li><a class="nav__link" href="about.html">About</a></li>
     <li><a class="nav__link" href="contact.html">Contact</a></li>
   </ul>
@@ -40,7 +47,6 @@
   <a class="nav__drawer-link" href="academy.html">Academy</a>
   <a class="nav__drawer-link" href="technology.html">Technology</a>
   <a class="nav__drawer-link is-active" href="rules.html">Rules</a>
-  <a class="nav__drawer-link" href="how-it-works.html">How It Works</a>
   <a class="nav__drawer-link" href="about.html">About</a>
   <a class="nav__drawer-link" href="contact.html">Contact</a>
   <a class="nav__drawer-link" href="login.html">Login &rarr;</a>
@@ -51,7 +57,13 @@
 <header class="ph">
   <span class="ph__eye">// Trading Rules</span>
   <h1 class="ph__h">VORNIX <span class="red">RULES</span></h1>
-  <p class="ph__sub">Every rule clearly explained. No hidden conditions. Read this before starting any evaluation &mdash; know exactly what is and is not permitted.</p>
+  <p class="ph__sub">Every rule clearly explained. No hidden conditions. Read this before starting any evaluation — know exactly what is and is not permitted on each program.</p>
+  <div class="rules-overview-strip rv">
+    <div class="ro-item"><span class="ro-item__icon">⚡</span><span class="ro-item__label">1-Step: Manual Only</span><span class="ro-item__val">95% Split</span></div>
+    <div class="ro-item"><span class="ro-item__icon">🎯</span><span class="ro-item__label">2-Step: Manual Only</span><span class="ro-item__val">90% Split</span></div>
+    <div class="ro-item"><span class="ro-item__icon">🏆</span><span class="ro-item__label">3-Step: EA Allowed</span><span class="ro-item__val">80→90%</span></div>
+    <div class="ro-item"><span class="ro-item__icon">💳</span><span class="ro-item__label">Partial: EA Allowed</span><span class="ro-item__val">35% Up</span></div>
+  </div>
 </header>
 
 <section class="section">
@@ -107,6 +119,32 @@
       <div class="callout__ttl">&#9888; Risk Disclaimer</div>
       <p>Trading financial instruments involves significant risk of loss and is not suitable for all investors. Past performance is not indicative of future results. VORNIX evaluation accounts use simulated capital for the purpose of skill assessment. Funded accounts trade real capital subject to the profit split arrangement. Always trade responsibly.</p>
     </div>
+    <div style="padding:48px 0 0">
+      <span class="s-eye">// Quick Reference</span>
+      <h2 class="s-head rv" style="margin-bottom:24px">PROGRAM <span class="red">COMPARISON</span></h2>
+      <div class="tbl-wrap rv">
+        <table class="tbl">
+          <thead>
+            <tr>
+              <th>Rule</th>
+              <th style="color:var(--gold-hi)">1-Step</th>
+              <th style="color:#93C5FD">2-Step</th>
+              <th style="color:var(--red-hi)">3-Step</th>
+              <th style="color:var(--grn-hi)">Partial</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td class="tc-ph">Consistency Cap</td><td>40%</td><td>40%</td><td class="tc-red">15%</td><td class="tc-red">15%</td></tr>
+            <tr><td class="tc-ph">News Trading</td><td class="tc-grn">Allowed</td><td class="tc-grn">Allowed</td><td class="tc-red">Prohibited</td><td class="tc-red">Prohibited</td></tr>
+            <tr><td class="tc-ph">EA / Algo Bots</td><td class="tc-red">Prohibited</td><td class="tc-red">Prohibited</td><td class="tc-grn">Allowed</td><td class="tc-grn">Allowed</td></tr>
+            <tr><td class="tc-ph">Min. Trading Days</td><td class="tc-gold">None</td><td>3 per phase</td><td>3 per phase</td><td>5 per phase</td></tr>
+            <tr><td class="tc-ph">Time Limit</td><td class="tc-gold">None</td><td class="tc-gold">None</td><td class="tc-gold">None</td><td class="tc-gold">None</td></tr>
+            <tr><td class="tc-ph">Daily Loss</td><td>3% Trailing</td><td>5% Trailing</td><td>6% Trailing</td><td>5% Trailing</td></tr>
+            <tr><td class="tc-ph">Max Drawdown</td><td>8% Static</td><td>10% Static</td><td>12% Static</td><td>10% Static</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -114,7 +152,7 @@
   <div class="footer__grid">
     <div><div class="footer__brand-name">VORN<span>IX</span></div><p class="footer__brand-desc">Transparent rules. No hidden conditions. No surprises.</p></div>
     <div class="footer__col"><h4>Evaluations</h4><ul><li><a href="evaluations.html#one">1-Step</a></li><li><a href="evaluations.html#two">2-Step</a></li><li><a href="evaluations.html#three">3-Step</a></li><li><a href="evaluations.html#partial">Partial</a></li></ul></div>
-    <div class="footer__col"><h4>Company</h4><ul><li><a href="academy.html">Academy</a></li><li><a href="technology.html">Technology</a></li><li><a href="how-it-works.html">How It Works</a></li><li><a href="about.html">About</a></li></ul></div>
+    <div class="footer__col"><h4>Company</h4><ul><li><a href="academy.html">Academy</a></li><li><a href="technology.html">Technology</a></li><li><a href="evaluations.html">Evaluations</a></li><li><a href="about.html">About</a></li></ul></div>
     <div class="footer__col"><h4>Legal</h4><ul><li><a href="#">Terms &amp; Conditions</a></li><li><a href="#">Privacy Policy</a></li><li><a href="#">Risk Disclaimer</a></li><li><a href="#">Refund Policy</a></li></ul></div>
   </div>
   <div class="footer__bottom">
